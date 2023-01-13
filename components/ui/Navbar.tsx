@@ -26,7 +26,7 @@ export const Navbar = () => {
 
         <Box flex={1} />
 
-        <Box className="fadeIn">
+        <Box className="fadeIn" sx={{ display: { xs: "none", sm: "flex" } }}>
           <NextLink href="/products" passHref legacyBehavior>
             <Link sx={{mr: "10px"}}>
               <Button color={asPath === "/products" ? "primary" : "info"}>
@@ -66,7 +66,7 @@ export const Navbar = () => {
           <AccountCircle />
         </IconButton>
 
-        <IconButton size="large" color="info">
+        <IconButton sx={{ display: { xs: "flex", sm: "none" } }} size="large" color="info">
           <MenuOutlined />
         </IconButton>
 
