@@ -10,25 +10,33 @@ import {
   Link,
   Button,
 } from "@mui/material";
-import { AccountCircle, MenuOutlined} from '@mui/icons-material';
+import { AccountCircle, MenuOutlined } from "@mui/icons-material";
 
 export const Navbar = () => {
-  const {asPath} = useRouter()
+  const { asPath } = useRouter();
 
   return (
     <AppBar position="static">
       <Toolbar>
         <IconButton>
-          <Typography variant="h2" color="white">
-            LOGO
-          </Typography>
+          <NextLink href="/" passHref legacyBehavior>
+            <Link sx={{ mr: "10px" }}>
+              <Button>LOGO</Button>
+            </Link>
+          </NextLink>
         </IconButton>
 
         <Box flex={1} />
 
         <Box className="fadeIn" sx={{ display: { xs: "none", sm: "flex" } }}>
+          <NextLink href="/" passHref legacyBehavior>
+            <Link sx={{ mr: "10px" }}>
+              <Button color={asPath === "/" ? "primary" : "info"}>Inicio</Button>
+            </Link>
+          </NextLink>
+
           <NextLink href="/products" passHref legacyBehavior>
-            <Link sx={{mr: "10px"}}>
+            <Link sx={{ mr: "10px" }}>
               <Button color={asPath === "/products" ? "primary" : "info"}>
                 Productos
               </Button>
@@ -36,7 +44,7 @@ export const Navbar = () => {
           </NextLink>
 
           <NextLink href="/services" passHref legacyBehavior>
-            <Link sx={{mr: "10px"}}>
+            <Link sx={{ mr: "10px" }}>
               <Button color={asPath === "/services" ? "primary" : "info"}>
                 Servicios
               </Button>
@@ -44,7 +52,7 @@ export const Navbar = () => {
           </NextLink>
 
           <NextLink href="/blog" passHref legacyBehavior>
-            <Link sx={{mr: "10px"}}>
+            <Link sx={{ mr: "10px" }}>
               <Button color={asPath === "/blog" ? "primary" : "info"}>
                 Novedades
               </Button>
@@ -66,10 +74,13 @@ export const Navbar = () => {
           <AccountCircle />
         </IconButton>
 
-        <IconButton sx={{ display: { xs: "flex", sm: "none" } }} size="large" color="info">
+        <IconButton
+          sx={{ display: { xs: "flex", sm: "none" } }}
+          size="large"
+          color="info"
+        >
           <MenuOutlined />
         </IconButton>
-
       </Toolbar>
     </AppBar>
   );
