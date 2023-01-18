@@ -66,7 +66,7 @@ export const lightTheme = createTheme({
           ":hover": {
             backgroundColor: "rgba(255,255,255, 1)",
             transition: "all 0.3s ease-in-out",
-            color: "green"
+            color: "#388e3c"
           },
         },
       },
@@ -78,8 +78,11 @@ export const lightTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          boxShadow: "0px 5px 5px rgb(48,212,33)",
+          boxShadow: "5px 5px 5px 0px rgb(48,212,33)",
           borderRadius: "10px",
+          ":hover": {
+            boxShadow: "0px 0px 5px 6px rgba(48,212,33,0.75)",
+          }
         },
       },
     },

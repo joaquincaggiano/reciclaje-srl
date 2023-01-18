@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import Head from "next/head";
-import { Navbar, SideMenu } from "../ui";
+import { Navbar, SideMenu, Footer } from "../ui";
 
 interface Props {
   title: string;
@@ -44,8 +44,7 @@ export const MainLayout: FC<Props> = ({
         {children}
       </main>
 
-      {/* Footer */}
-      <footer>{/* TODO: mi custom footer */}</footer>
+      <Footer />
     </>
   );
 };
