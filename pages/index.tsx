@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-
+import {useEffect} from 'react'
 import { MainLayout } from "../components/layouts";
 import { CardServices } from "@/components/services";
 
@@ -8,11 +8,15 @@ import { Typography, Divider, Box } from "@mui/material";
 import { content } from "@/utils";
 
 const HomePage: NextPage = () => {
+  useEffect(() => {
+    
+  })
   return (
     <MainLayout
       title={content.home.title}
       pageDescription={content.home.metaHeader}
     >
+
       <Typography
         variant="h1"
         component="h1"
