@@ -1,22 +1,22 @@
 import { NextPage } from "next";
-import {useEffect} from 'react'
+import { useEffect } from "react";
 import { MainLayout } from "../components/layouts";
 import { CardServices } from "@/components/services";
 
 import { Carrousel } from "@/components/ui";
-import { Typography, Divider, Box } from "@mui/material";
+import { Typography, Divider, Box, Grid } from "@mui/material";
 import { content } from "@/utils";
 
+// database sin conexion a mongo
+import { seedDatabase } from "@/database";
+
 const HomePage: NextPage = () => {
-  useEffect(() => {
-    
-  })
+  useEffect(() => {});
   return (
     <MainLayout
       title={content.home.title}
-      pageDescription={content.home.metaHeader}
+      metaHeader={content.home.metaHeader}
     >
-
       <Typography
         variant="h1"
         component="h1"
@@ -30,13 +30,10 @@ const HomePage: NextPage = () => {
       <Divider sx={{ mt: 5 }} />
 
       <Typography variant="h2" sx={{ textAlign: "center", my: 2 }}>
-      {content.home.descriptionTitle}
-
+        {content.home.descriptionTitle}
       </Typography>
 
-      <Typography variant="body1">
-      {content.home.descriptionInfo}
-      </Typography>
+      <Typography variant="body1">{content.home.descriptionInfo}</Typography>
 
       <Divider sx={{ mt: 5 }} />
 
@@ -44,20 +41,21 @@ const HomePage: NextPage = () => {
         Servicios
       </Typography>
 
-      <Box
-        display="flex"
-        justifyContent="space-evenly"
-        alignItems="center"
-        sx={{ flexDirection: { xs: "column", sm: "row", flexWrap: "wrap" } }}
+      <Grid
+        container
+        spacing={4}
+        sx={{flexDirection: { xs: "column", sm: "row" }, flexWrap: "wrap" }}
       >
-        {content.services.datosServices.map((svc, i)=>{
-          return <CardServices
-          title={content.services.datosServices[i].title}
-          description={content.services.datosServices[i].description}
-          image={content.services.datosServices[i].serviceImage}
-        />
+        {seedDatabase.initialData.services.map((svc, i) => {
+          return (
+            <CardServices
+              title={svc.title}
+              description={svc.description}
+              image={svc.serviceImage}
+            />
+          );
         })}
-      </Box>
+      </Grid>
 
       <Divider sx={{ mt: 5 }} />
 

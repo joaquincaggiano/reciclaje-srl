@@ -4,7 +4,7 @@ import {content} from "../../utils";
 
 const ContactPage: NextPage = () => {
   return (
-    <MainLayout title={content.contact.title} pageDescription={content.contact.pageDescription}>
+    <MainLayout title={content.contact.title} metaHeader={content.contact.metaHeader}>
         <div>ContactPage</div>
     </MainLayout>
   )

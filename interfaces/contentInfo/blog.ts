@@ -2,7 +2,7 @@ export interface IBlog {
     title: string
     metaHeader: string
     imageFullUrl?: string
-    datosBlog: BlogInfo[]
+    // datosBlog: BlogInfo[]
 }
 
 export interface BlogInfo {

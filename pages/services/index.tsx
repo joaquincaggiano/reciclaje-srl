@@ -1,9 +1,11 @@
 import { MainLayout } from "@/components/layouts";
+import { NextPage } from "next";
+
 import { content } from "@/utils";
 
-const ServicesPage = () => {
+const ServicesPage: NextPage = () => {
   return (
-    <MainLayout title={content.services.title} pageDescription={content.services.pageDescription}>
+    <MainLayout title={content.services.title} metaHeader={content.services.metaHeader}>
         <div>ServicesPage</div>
     </MainLayout>
   )

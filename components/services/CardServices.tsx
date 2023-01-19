@@ -1,31 +1,49 @@
-import { Card, CardActions, CardContent, CardMedia, Button, Typography  } from "@mui/material";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Button,
+  Typography,
+  CardActionArea,
+  Grid,
+} from "@mui/material";
 import { FC } from "react";
 
 interface Props {
-    title: string;
-    description: string;
-    image: string;
+  title: string;
+  description: string;
+  image: string;
 }
 
-export const CardServices: FC<Props> = ({title, description, image}) => {
+export const CardServices: FC<Props> = ({ title, description, image }) => {
   return (
-    <Card sx={{ maxWidth: 345, border: "1px solid #388e3c", mb: {xs: 4, md: 0} }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        image={image}
-        title={title}
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {description}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" sx={{color: "black"}}>Ver más</Button>
-      </CardActions>
-    </Card>
-  )
-}
+    <Grid
+      item
+      xs={12}
+      md={4}
+      display="flex"
+      justifyContent="space-evenly"
+      alignItems="center"
+    >
+      <Card sx={{ width: 320, minHeight: 370 }}>
+        <CardActionArea>
+          <CardMedia component="img" height="200" image={image} alt={title} />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {title}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {description.slice(0, 70) + "..."}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          <Button size="small" color="primary">
+            Ver más
+          </Button>
+        </CardActions>
+      </Card>
+    </Grid>
+  );
+};

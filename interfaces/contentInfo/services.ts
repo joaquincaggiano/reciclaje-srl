@@ -2,7 +2,7 @@ export interface IServices {
     title: string
     metaHeader: string
     imageFullUrl?: string
-    datosServices: ServicesInfo[]
+    // datosServices: ServicesInfo[]
 }
 
 export interface ServicesInfo {

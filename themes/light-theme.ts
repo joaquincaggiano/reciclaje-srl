@@ -80,6 +80,7 @@ export const lightTheme = createTheme({
         root: {
           boxShadow: "5px 5px 5px 0px rgb(48,212,33)",
           borderRadius: "10px",
+          border: "2px solid #388e3c ",
           ":hover": {
             boxShadow: "0px 0px 5px 6px rgba(48,212,33,0.75)",
           }

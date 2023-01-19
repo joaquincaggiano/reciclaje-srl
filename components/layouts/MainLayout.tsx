@@ -4,7 +4,7 @@ import { Navbar, SideMenu, Footer } from "../ui";
 
 interface Props {
   title: string;
-  pageDescription: string;
+  metaHeader: string;
   imageFullUrl?: string;
   children: ReactNode
 }
@@ -12,7 +12,7 @@ interface Props {
 export const MainLayout: FC<Props> = ({
   children,
   title,
-  pageDescription,
+  metaHeader,
   imageFullUrl,
 }) => {
   return (
@@ -20,10 +20,10 @@ export const MainLayout: FC<Props> = ({
       <Head>
         <title>{title}</title>
 
-        <meta name="description" content={pageDescription} />
+        <meta name="description" content={metaHeader} />
 
         <meta name="og:title" content={title} />
-        <meta name="og:description" content={pageDescription} />
+        <meta name="og:description" content={metaHeader} />
 
         {imageFullUrl && <meta name="og:image" content={imageFullUrl} />}
       </Head>
