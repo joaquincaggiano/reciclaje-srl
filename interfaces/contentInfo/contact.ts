@@ -1,6 +1,6 @@
 export interface IContact {
     title: string
-    pageDescription: string
+    metaHeader: string
     imageFullUrl?: string
     datosContacto: DatosContacto
 }

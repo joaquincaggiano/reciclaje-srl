@@ -11,7 +11,7 @@ const HomePage: NextPage = () => {
   return (
     <MainLayout
       title={content.home.title}
-      pageDescription={content.home.pageDescription}
+      pageDescription={content.home.metaHeader}
     >
       <Typography
         variant="h1"
@@ -26,24 +26,12 @@ const HomePage: NextPage = () => {
       <Divider sx={{ mt: 5 }} />
 
       <Typography variant="h2" sx={{ textAlign: "center", my: 2 }}>
-        Descripción general de la empresa
+      {content.home.descriptionTitle}
+
       </Typography>
 
       <Typography variant="body1">
-        Dolore proident veniam ad adipisicing qui mollit voluptate pariatur
-        cupidatat. Reprehenderit do consectetur voluptate id enim mollit eiusmod
-        mollit aute amet nisi. Exercitation labore fugiat in labore aliquip enim
-        culpa officia. Sint aliquip velit labore aliqua cillum. Enim aliqua
-        dolor dolor anim excepteur magna ea et dolore ullamco voluptate esse
-        occaecat proident. Elit irure Lorem aute excepteur esse nulla
-        reprehenderit ea duis Lorem excepteur et labore. Labore non aliquip
-        irure non incididunt incididunt magna anim sit do tempor quis.Laborum in
-        dolor dolor dolore duis ea exercitation sit ut veniam est. Dolore eu
-        reprehenderit sit consectetur sint sint in proident commodo laborum qui.
-        Deserunt est qui qui dolore. Consequat consectetur nulla in pariatur.
-        Laboris cillum velit enim laboris ea nulla veniam magna occaecat. Quis
-        sit exercitation qui duis ex elit qui voluptate minim tempor ipsum
-        nostrud.
+      {content.home.descriptionInfo}
       </Typography>
 
       <Divider sx={{ mt: 5 }} />
@@ -58,21 +46,13 @@ const HomePage: NextPage = () => {
         alignItems="center"
         sx={{ flexDirection: { xs: "column", sm: "row", flexWrap: "wrap" } }}
       >
-        <CardServices
-          title="Servicio 1"
-          description="Pequeña descripción servicio 1"
-          image="https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"
+        {content.services.datosServices.map((svc, i)=>{
+          return <CardServices
+          title={content.services.datosServices[i].title}
+          description={content.services.datosServices[i].description}
+          image={content.services.datosServices[i].serviceImage}
         />
-        <CardServices
-          title="Servicio 2"
-          description="Pequeña descripción servicio 2"
-          image="https://pbs.twimg.com/media/CWgztjyUsAAWLFm?format=jpg&name=medium"
-        />
-        <CardServices
-          title="Servicio 3"
-          description="Pequeña descripción servicio 3"
-          image="https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"
-        />
+        })}
       </Box>
 
       <Divider sx={{ mt: 5 }} />

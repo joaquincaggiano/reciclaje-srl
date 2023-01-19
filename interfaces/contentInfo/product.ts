@@ -1,6 +1,6 @@
 export interface IProduct {
     title: string
-    pageDescription: string
+    metaHeader: string
     imageFullUrl?: string
     datosProducto: ProductsInfo[]
 }

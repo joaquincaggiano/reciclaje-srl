@@ -3,7 +3,7 @@ import { Content } from "@/interfaces";
 export const content: Content = {
   contact: {
     title: "contacto",
-    pageDescription: "contactate con nosotros",
+    metaHeader: "contactate con nosotros",
     imageFullUrl: "",
     datosContacto: {
       whatsapp: "",
@@ -12,28 +12,31 @@ export const content: Content = {
   },
   services: {
     title: "Services",
-    pageDescription: "Nuestros servicios",
+    metaHeader: "Nuestros servicios",
     imageFullUrl: "",
     datosServices: [
       {
         title: "Molienda",
         description:
           "Velit non sit tempor labore est in quis pariatur cillum id ea non tempor anim.",
+          serviceImage: "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"
       },
       {
         title: "Micronizado",
         description: "Non non consectetur ad laboris aliquip.",
+        serviceImage: "https://pbs.twimg.com/media/CWgztjyUsAAWLFm?format=jpg&name=medium"
       },
       {
         title: "Estrudado",
         description:
           "Exercitation sunt cupidatat pariatur ex culpa duis occaecat magna qui aliqua velit pariatur.",
+          serviceImage: "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"
       },
     ],
   },
   products: {
     title: "Productos",
-    pageDescription: "Todos nuestros productos diponibles",
+    metaHeader: "Todos nuestros productos diponibles",
     imageFullUrl: "",
     datosProducto: [
       { title: "producto1", description: "Lorem qui ut mollit officia qui." },
@@ -44,7 +47,7 @@ export const content: Content = {
   },
   blog: {
     title: "Novedades",
-    pageDescription: "Enterate de las últimas novedades",
+    metaHeader: "Enterate de las últimas novedades",
     imageFullUrl: "",
     datosBlog: [
       {
@@ -69,6 +72,8 @@ export const content: Content = {
   },
   home: {
     title: "JAVI- SRL",
-    pageDescription: "Reciclable de plástico",
+    metaHeader: "Reciclable de plástico",
+    descriptionTitle: "Descripción general de la empresa",
+    descriptionInfo: "Dolore proident veniam ad adipisicing qui mollit voluptate pariatur cupidatat. Reprehenderit do consectetur voluptate id enim mollit eiusmod mollit aute amet nisi. Exercitation labore fugiat in labore aliquip enim culpa officia. Sint aliquip velit labore aliqua cillum. Enim aliqua dolor dolor anim excepteur magna ea et dolore ullamco voluptate esse occaecat proident. Elit irure Lorem aute excepteur esse nulla reprehenderit ea duis Lorem excepteur et labore. Labore non aliquip irure non incididunt incididunt magna anim sit do tempor quis.Laborum in dolor dolor dolore duis ea exercitation sit ut veniam est. Dolore eu reprehenderit sit consectetur sint sint in proident commodo laborum qui. Deserunt est qui qui dolore. Consequat consectetur nulla in pariatur. Laboris cillum velit enim laboris ea nulla veniam magna occaecat. Quis sit exercitation qui duis ex elit qui voluptate minim tempor ipsum nostrud."
   },
 };

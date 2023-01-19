@@ -1,5 +1,7 @@
 export interface IHome {
     title: string
-    pageDescription: string
-    imageFullUrl?: string
+    metaHeader: string
+    imageFullUrl?: string,
+    descriptionTitle: string,
+    descriptionInfo: string
 }
