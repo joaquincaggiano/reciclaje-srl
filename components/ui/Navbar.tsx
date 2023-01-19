@@ -21,7 +21,7 @@ export const Navbar = () => {
         <IconButton>
           <NextLink href="/" passHref legacyBehavior>
             <Link sx={{ mr: "10px" }}>
-              <Button>LOGO</Button>
+              LOGO
             </Link>
           </NextLink>
         </IconButton>

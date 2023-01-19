@@ -1,7 +1,11 @@
 import Carousel from "react-material-ui-carousel";
 import { Item } from "./Item";
-import { images } from "@/utils";
 import { ArrowBackIosNewOutlined, ArrowForwardIosOutlined } from "@mui/icons-material";
+
+const images = [
+  "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+  "https://pbs.twimg.com/media/CWgztjyUsAAWLFm?format=jpg&name=medium",
+];
 
 export const Carrousel = () => {
 
