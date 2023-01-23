@@ -7,6 +7,9 @@ import { Carrousel } from "@/components/ui";
 import { Typography, Divider, Box, Grid } from "@mui/material";
 import { content } from "@/utils";
 
+import LogRocket from 'logrocket';
+LogRocket.init('3z8dd4/reciclaje-srl');
+
 // database sin conexion a mongo
 import { seedDatabase } from "@/database";
 
