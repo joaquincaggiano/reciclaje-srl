@@ -1,8 +1,10 @@
-interface SeedProduct {
+import { ICategory, IColor } from "@/interfaces"
+
+interface SeedProducts {
   title: string;
-  description: string;
-  image: string;
-  slug: string;
+  images: string[];
+  colors: IColor[];
+  category: ICategory
 }
 
 interface SeedService {
@@ -26,7 +28,7 @@ interface SeedService {
 // }
 
 interface SeedData {
-    products: SeedProduct[];
+    products: SeedProducts[];
   // users: SeedUser[];
   services: SeedService[];
 //   blog: SeedBlog[]
@@ -35,47 +37,47 @@ interface SeedData {
 export const initialData: SeedData = {
   products: [
     {
-      title: "producto 1",
-      description: "Lorem qui ut mollit officia qui.",
-      image:
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
-      slug: "product_1",
+      title: "Molienda Alto Impacto",
+      images:[
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"],
+      colors: ["Blanco", "Gris"],
+      category: "Molienda",
     },
     {
-      title: "producto 2",
-      description: "Lorem qui ut mollit officia qui.",
-      image:
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
-      slug: "product_2",
+      title: "Molienda ABS",
+      images:[
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"],
+      colors: ["Blanco", "Gris", "Negro"],
+      category: "Molienda",
     },
     {
-      title: "producto 3",
-      description: "Lorem qui ut mollit officia qui.",
-      image:
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
-      slug: "product_3",
+      title: "Molienda Polipropileno",
+      images:[
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"],
+      colors: ["Negro", "Gris", "Transparente"],
+      category: "Molienda",
     },
     {
-        title: "producto 4",
-        description: "Lorem qui ut mollit officia qui.",
-        image:
-          "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
-        slug: "product_4",
-      },
-      {
-        title: "producto 5",
-        description: "Lorem qui ut mollit officia qui.",
-        image:
-          "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
-        slug: "product_5",
-      },
-      {
-        title: "producto 6",
-        description: "Lorem qui ut mollit officia qui.",
-        image:
-          "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
-        slug: "product_6",
-      },
+      title: "Polietileno de roto moldeo",
+      images:[
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"],
+      colors: ["Blanco", "Amarillo", "Verde", "Azul", "Rojo", "Negro"],
+      category: "Polietileno",
+    },
+    {
+      title: "Polietileno estrudado de baja intensidad",
+      images:[
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"],
+      colors: ["Caramelo", "Negro"],
+      category: "Polietileno",
+    },
+    {
+      title: "Polietileno estrudado de alta intensidad",
+      images:[
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"],
+      colors: ["Caramelo", "Negro"],
+      category: "Polietileno",
+    },
   ],
   services:  
   [

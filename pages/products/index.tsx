@@ -36,7 +36,7 @@ const ProductsPage: NextPage = () => {
         </Typography>
       </Box>
 
-      <Divider sx={{ mb: 5}} />
+      <Divider sx={{ mb: 5 }} />
 
       <Grid container spacing={4}>
         {seedDatabase.initialData.products.map((product, i) => {
@@ -55,16 +55,19 @@ const ProductsPage: NextPage = () => {
                   <CardMedia
                     component="img"
                     height="200"
-                    image={product.image}
+                    image={product.images[0]}
                     alt={product.title}
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                       {product.title}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {product.description}
-                    </Typography>
+                    <Typography variant="body1">Colores disponibles:</Typography>
+                    <Box display="flex" justifyContent="space-evenly" alignItems="center">
+                      {product.colors.map((color, i) => {
+                        return <Typography key={i}>{color}</Typography>;
+                      })}
+                    </Box>
                   </CardContent>
                 </CardActionArea>
                 <CardActions>
