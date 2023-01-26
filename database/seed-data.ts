@@ -1,16 +1,16 @@
-import { ICategory, IColor } from "@/interfaces"
+import { ICategory, IColor } from "@/interfaces";
 
 interface SeedProducts {
   title: string;
   images: string[];
   colors: IColor[];
-  category: ICategory
+  category: ICategory;
 }
 
 interface SeedService {
-    title: string
-    description: string,
-    serviceImage: string
+  title: string;
+  description: string;
+  images: string[];
 }
 
 // interface SeedBlog {
@@ -28,78 +28,86 @@ interface SeedService {
 // }
 
 interface SeedData {
-    products: SeedProducts[];
-  // users: SeedUser[];
+  products: SeedProducts[];
   services: SeedService[];
-//   blog: SeedBlog[]
+  // users: SeedUser[];
+  //   blog: SeedBlog[]
 }
 
 export const initialData: SeedData = {
   products: [
     {
       title: "Molienda Alto Impacto",
-      images:[
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"],
+      images: [
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+      ],
       colors: ["Blanco", "Gris"],
       category: "Molienda",
     },
     {
       title: "Molienda ABS",
-      images:[
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"],
+      images: [
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+      ],
       colors: ["Blanco", "Gris", "Negro"],
       category: "Molienda",
     },
     {
       title: "Molienda Polipropileno",
-      images:[
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"],
+      images: [
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+      ],
       colors: ["Negro", "Gris", "Transparente"],
       category: "Molienda",
     },
     {
       title: "Polietileno de roto moldeo",
-      images:[
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"],
+      images: [
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+      ],
       colors: ["Blanco", "Amarillo", "Verde", "Azul", "Rojo", "Negro"],
       category: "Polietileno",
     },
     {
       title: "Polietileno estrudado de baja intensidad",
-      images:[
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"],
+      images: [
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+      ],
       colors: ["Caramelo", "Negro"],
       category: "Polietileno",
     },
     {
       title: "Polietileno estrudado de alta intensidad",
-      images:[
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium"],
+      images: [
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+      ],
       colors: ["Caramelo", "Negro"],
       category: "Polietileno",
     },
   ],
-  services:  
-  [
-      {
-        title: "Molienda",
-        description:
-          "Velit non sit tempor labore est in quis pariatur cillum id ea non tempor anim.",
-        serviceImage:
-          "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
-      },
-      {
-        title: "Micronizado",
-        description: "Non non consectetur ad laboris aliquip.",
-        serviceImage:
-          "https://pbs.twimg.com/media/CWgztjyUsAAWLFm?format=jpg&name=medium",
-      },
-      {
-        title: "Estrudado",
-        description:
-          "Exercitation sunt cupidatat pariatur ex culpa duis occaecat magna qui aliqua velit pariatur.",
-        serviceImage:
-          "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
-      },
-    ]
+  services: [
+    {
+      title: "Molienda",
+      description:
+        "Velit non sit tempor labore est in quis pariatur cillum id ea non tempor anim.",
+      images: [
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+      ],
+    },
+    {
+      title: "Micronizado",
+      description: "Non non consectetur ad laboris aliquip.",
+      images: [
+        "https://pbs.twimg.com/media/CWgztjyUsAAWLFm?format=jpg&name=medium",
+      ],
+    },
+    {
+      title: "Estrudado",
+      description:
+        "Exercitation sunt cupidatat pariatur ex culpa duis occaecat magna qui aliqua velit pariatur.",
+      images: [
+        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+      ],
+    },
+  ],
 };

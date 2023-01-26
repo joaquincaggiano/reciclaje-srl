@@ -16,8 +16,6 @@ import {
 
 import { useProducts } from "@/hooks";
 
-// database sin conexion a mongo
-import { seedDatabase } from "@/database";
 import { FullScreenLoading } from "@/components/ui";
 
 const ProductsPage: NextPage = () => {
