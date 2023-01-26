@@ -11,9 +11,10 @@ export const content: Content = {
     },
   },
   services: {
-    title: "Services",
+    title: "Servicios",
     metaHeader: "Nuestros servicios",
     imageFullUrl: "",
+    serviceDescription: "Adipisicing excepteur adipisicing officia aliqua cupidatat qui nostrud mollit.",
     // datosServices: [
     //   {
     //     title: "Molienda",
