@@ -13,12 +13,12 @@ interface SeedService {
   images: string[];
 }
 
-// interface SeedBlog {
-//     title: string
-//     description: string
-//     info: string
-//     image?: string
-// }
+interface SeedBlog {
+  title: string;
+  description: string;
+  info: string;
+  images?: string[];
+}
 
 // interface SeedUser {
 //     name     : string;
@@ -30,8 +30,8 @@ interface SeedService {
 interface SeedData {
   products: SeedProducts[];
   services: SeedService[];
+  blog: SeedBlog[];
   // users: SeedUser[];
-  //   blog: SeedBlog[]
 }
 
 export const initialData: SeedData = {
@@ -109,6 +109,50 @@ export const initialData: SeedData = {
       images: [
         "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
       ],
+    },
+  ],
+  blog: [
+    {
+      title: "Noticia1",
+      images: ["https://img.interempresas.net/fotos/2928562.jpeg"],
+      description:
+        "Ipsum aute ipsum est enim nisi velit ea exercitation sunt ex et fugiat incididunt anim.",
+      info: "Sit ut dolore aute magna enim adipisicing incididunt ex aliquip ea dolore ea id. Culpa veniam id exercitation veniam nisi enim dolor cupidatat. Pariatur adipisicing anim et elit veniam sunt nisi mollit Lorem commodo sit. Et veniam elit est deserunt ipsum nisi commodo.",
+    },
+    {
+      title: "Noticia2",
+      images: ["https://img.interempresas.net/fotos/2928562.jpeg"],
+      description:
+        "Ipsum aute ipsum est enim nisi velit ea exercitation sunt ex et fugiat incididunt anim.",
+      info: "Sit ut dolore aute magna enim adipisicing incididunt ex aliquip ea dolore ea id. Culpa veniam id exercitation veniam nisi enim dolor cupidatat. Pariatur adipisicing anim et elit veniam sunt nisi mollit Lorem commodo sit. Et veniam elit est deserunt ipsum nisi commodo.",
+    },
+    {
+      title: "Noticia3",
+      images: ["https://img.interempresas.net/fotos/2928562.jpeg"],
+      description:
+        "Ipsum aute ipsum est enim nisi velit ea exercitation sunt ex et fugiat incididunt anim.",
+      info: "Sit ut dolore aute magna enim adipisicing incididunt ex aliquip ea dolore ea id. Culpa veniam id exercitation veniam nisi enim dolor cupidatat. Pariatur adipisicing anim et elit veniam sunt nisi mollit Lorem commodo sit. Et veniam elit est deserunt ipsum nisi commodo.",
+    },
+    {
+      title: "Noticia4",
+      images: ["https://img.interempresas.net/fotos/2928562.jpeg"],
+      description:
+        "Ipsum aute ipsum est enim nisi velit ea exercitation sunt ex et fugiat incididunt anim.",
+      info: "Sit ut dolore aute magna enim adipisicing incididunt ex aliquip ea dolore ea id. Culpa veniam id exercitation veniam nisi enim dolor cupidatat. Pariatur adipisicing anim et elit veniam sunt nisi mollit Lorem commodo sit. Et veniam elit est deserunt ipsum nisi commodo.",
+    },
+    {
+      title: "Noticia5",
+      images: ["https://img.interempresas.net/fotos/2928562.jpeg"],
+      description:
+        "Ipsum aute ipsum est enim nisi velit ea exercitation sunt ex et fugiat incididunt anim.",
+      info: "Sit ut dolore aute magna enim adipisicing incididunt ex aliquip ea dolore ea id. Culpa veniam id exercitation veniam nisi enim dolor cupidatat. Pariatur adipisicing anim et elit veniam sunt nisi mollit Lorem commodo sit. Et veniam elit est deserunt ipsum nisi commodo.",
+    },
+    {
+      title: "Noticia6",
+      images: ["https://img.interempresas.net/fotos/2928562.jpeg"],
+      description:
+        "Ipsum aute ipsum est enim nisi velit ea exercitation sunt ex et fugiat incididunt anim.",
+      info: "Sit ut dolore aute magna enim adipisicing incididunt ex aliquip ea dolore ea id. Culpa veniam id exercitation veniam nisi enim dolor cupidatat. Pariatur adipisicing anim et elit veniam sunt nisi mollit Lorem commodo sit. Et veniam elit est deserunt ipsum nisi commodo.",
     },
   ],
 };
