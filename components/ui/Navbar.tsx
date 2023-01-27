@@ -18,20 +18,18 @@ export const Navbar = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <IconButton>
-          <NextLink href="/" passHref legacyBehavior>
-            <Link sx={{ mr: "10px" }}>
-              LOGO
-            </Link>
-          </NextLink>
-        </IconButton>
+        <NextLink href="/" passHref legacyBehavior>
+          <Link sx={{ mr: "10px", color: "white", fontSize: "20px" }}>TODO-REC</Link>
+        </NextLink>
 
         <Box flex={1} />
 
         <Box className="fadeIn" sx={{ display: { xs: "none", sm: "flex" } }}>
           <NextLink href="/" passHref legacyBehavior>
             <Link sx={{ mr: "10px" }}>
-              <Button color={asPath === "/" ? "primary" : "info"}>Inicio</Button>
+              <Button color={asPath === "/" ? "primary" : "info"}>
+                Inicio
+              </Button>
             </Link>
           </NextLink>
 
