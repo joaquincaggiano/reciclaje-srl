@@ -1,13 +1,19 @@
 import { CategoryOutlined, NewspaperOutlined, PhoneOutlined, PrecisionManufacturing } from "@mui/icons-material";
 import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 
+import { useContext } from 'react';
+import {UiContext} from "../../context/ui"
+
 export const SideMenu = () => {
+
+  const { isMenuOpen, toggleSideMenu } = useContext( UiContext );
+
   return (
     <Drawer
-      open={false}
+      open={isMenuOpen}
       anchor="right"
       sx={{ backdropFilter: "blur(4px)", transition: "all 0.5s ease-out" }}
-      // onClose={toggleSideMenu}
+      onClose={toggleSideMenu}
     >
       <Box sx={{ width: 250, paddingTop: 3 }}>
         <List>

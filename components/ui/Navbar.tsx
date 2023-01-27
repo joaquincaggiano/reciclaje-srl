@@ -12,8 +12,14 @@ import {
 } from "@mui/material";
 import { AccountCircle, MenuOutlined } from "@mui/icons-material";
 
+
+import { useContext } from 'react';
+import { UiContext } from '../../context/ui';
+
 export const Navbar = () => {
   const { asPath } = useRouter();
+
+  const { toggleSideMenu } = useContext( UiContext );
 
   return (
     <AppBar position="static">
@@ -76,8 +82,10 @@ export const Navbar = () => {
           sx={{ display: { xs: "flex", sm: "none" } }}
           size="large"
           color="info"
+          onClick={toggleSideMenu}
         >
-          <MenuOutlined />
+          <MenuOutlined 
+           onClick={toggleSideMenu}/>
         </IconButton>
       </Toolbar>
     </AppBar>

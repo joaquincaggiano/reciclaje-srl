@@ -73,7 +73,7 @@ const BlogPage: NextPage = () => {
       <Grid container spacing={4} display="flex" justifyContent="space-evenly" alignItems="center">
         {data!.map((blog, i) => {
           return (
-            <Grid item>
+            <Grid item key={i}>
               <Card sx={{ maxWidth: 345 }}>
                 <CardHeader
                   avatar={
