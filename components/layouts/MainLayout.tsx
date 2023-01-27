@@ -39,6 +39,7 @@ export const MainLayout: FC<Props> = ({
           margin: "80px auto",
           maxWidth: "1440px",
           padding: "0px 30px",
+          minHeight: "65vh"
         }}
       >
         {children}

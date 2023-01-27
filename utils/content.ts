@@ -2,12 +2,12 @@ import { Content } from "@/interfaces";
 
 export const content: Content = {
   contact: {
-    title: "contacto",
-    metaHeader: "contactate con nosotros",
+    title: "Contacto",
+    metaHeader: "Contáctate con nosotros",
     imageFullUrl: "",
     datosContacto: {
-      whatsapp: "",
-      email: "",
+      whatsapp: "341-1234567",
+      email: "alguien@gmail.com",
     },
   },
   services: {
@@ -71,7 +71,7 @@ export const content: Content = {
     // ],
   },
   home: {
-    title: "JAVI- SRL",
+    title: "TODO - REC",
     metaHeader: "Reciclable de plástico",
     descriptionTitle: "Descripción general de la empresa",
     descriptionInfo:

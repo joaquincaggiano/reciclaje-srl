@@ -22,14 +22,14 @@ const HomePage: NextPage = () => {
         component="h1"
         sx={{ textAlign: "center", mb: 2 }}
       >
-        Título
+        {content.home.title}
       </Typography>
 
       <Carrousel />
 
       <Divider sx={{ mt: 5 }} />
 
-      <Typography variant="h2" sx={{ textAlign: "center", my: 2 }}>
+      <Typography variant="h2" sx={{ textAlign: "center", my: 2, fontSize: "34px" }}>
         {content.home.descriptionTitle}
       </Typography>
 
@@ -37,8 +37,8 @@ const HomePage: NextPage = () => {
 
       <Divider sx={{ mt: 5 }} />
 
-      <Typography variant="h2" sx={{ textAlign: "center", my: 2 }}>
-        Servicios
+      <Typography variant="h2" sx={{ textAlign: "center", my: 2, fontSize: "34px"}}>
+        {content.services.title}
       </Typography>
 
       <Grid
@@ -51,7 +51,7 @@ const HomePage: NextPage = () => {
             <CardServices
               title={svc.title}
               description={svc.description}
-              image={svc.serviceImage}
+              image={svc.images[0]}
             />
           );
         })}
