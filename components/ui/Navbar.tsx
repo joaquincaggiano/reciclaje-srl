@@ -84,8 +84,7 @@ export const Navbar = () => {
           color="info"
           onClick={toggleSideMenu}
         >
-          <MenuOutlined 
-           onClick={toggleSideMenu}/>
+          <MenuOutlined />
         </IconButton>
       </Toolbar>
     </AppBar>
