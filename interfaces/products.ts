@@ -4,8 +4,8 @@ export interface IProductSchema {
     images: string[];
     colors: IColor[];
     category: ICategory
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
 
 }
 

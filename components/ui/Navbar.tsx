@@ -5,12 +5,11 @@ import {
   AppBar,
   IconButton,
   Toolbar,
-  Typography,
   Box,
   Link,
   Button,
 } from "@mui/material";
-import { AccountCircle, MenuOutlined } from "@mui/icons-material";
+import { MenuOutlined } from "@mui/icons-material";
 
 
 import { useContext } from 'react';
@@ -74,12 +73,7 @@ export const Navbar = () => {
 
         <Box flex={1} />
 
-        <IconButton size="large" color="info">
-          <AccountCircle />
-        </IconButton>
-
         <IconButton
-          sx={{ display: { xs: "flex", sm: "none" } }}
           size="large"
           color="info"
           onClick={toggleSideMenu}

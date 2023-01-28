@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import { ICategory, IColor } from "@/interfaces";
 
 interface SeedProducts {
@@ -20,21 +21,35 @@ interface SeedBlog {
   images?: string[];
 }
 
-// interface SeedUser {
-//     name     : string;
-//     email    : string;
-//     password : string;
-//     role     : 'admin'
-// }
+interface SeedUser {
+    name     : string;
+    email    : string;
+    password : string;
+    role     : 'admin'
+}
 
 interface SeedData {
   products: SeedProducts[];
   services: SeedService[];
   blog: SeedBlog[];
-  // users: SeedUser[];
+  users: SeedUser[];
 }
 
 export const initialData: SeedData = {
+  users: [
+    {
+      name     : "Joaquín",
+      email    : "joaquincaggiano@gmail.com",
+      password : bcrypt.hashSync('J04qu1nD3v'),
+      role     : "admin",
+    },
+    {
+      name     : "Cata",
+      email    : "cataquarleri@gmail.com",
+      password : bcrypt.hashSync('C4t4QD3v'),
+      role     : "admin",
+    },
+  ],
   products: [
     {
       title: "Molienda Alto Impacto",

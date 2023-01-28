@@ -4,6 +4,6 @@ export interface IBlogSchema {
     images: string[];
     description: string;
     info: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
