@@ -13,10 +13,7 @@ import { seedDatabase } from "@/database";
 const HomePage: NextPage = () => {
   useEffect(() => {});
   return (
-    <MainLayout
-      title={content.home.title}
-      metaHeader={content.home.metaHeader}
-    >
+    <MainLayout title={content.home.title} metaHeader={content.home.metaHeader}>
       <Typography
         variant="h1"
         component="h1"
@@ -29,7 +26,10 @@ const HomePage: NextPage = () => {
 
       <Divider sx={{ mt: 5 }} />
 
-      <Typography variant="h2" sx={{ textAlign: "center", my: 2, fontSize: "34px" }}>
+      <Typography
+        variant="h2"
+        sx={{ textAlign: "center", my: 2, fontSize: "34px" }}
+      >
         {content.home.descriptionTitle}
       </Typography>
 
@@ -37,14 +37,17 @@ const HomePage: NextPage = () => {
 
       <Divider sx={{ mt: 5 }} />
 
-      <Typography variant="h2" sx={{ textAlign: "center", my: 2, fontSize: "34px"}}>
+      <Typography
+        variant="h2"
+        sx={{ textAlign: "center", my: 2, fontSize: "34px" }}
+      >
         {content.services.title}
       </Typography>
 
       <Grid
         container
         spacing={4}
-        sx={{flexDirection: { xs: "column", sm: "row" }, flexWrap: "wrap" }}
+        sx={{ flexDirection: { xs: "column", sm: "row" }, flexWrap: "wrap" }}
       >
         {seedDatabase.initialData.services.map((svc, i) => {
           return (
