@@ -1,13 +1,24 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "@/context";
 
 import { AuthLayout } from "@/components/layouts";
-
 import { validations } from "@/utils";
 
 import { ErrorOutline } from "@mui/icons-material";
-import { Box, Button, Chip, Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  // Divider,
+  Grid,
+  // Link,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 import { useForm } from "react-hook-form";
+// import axios from "axios";
+import { useRouter } from "next/router";
 
 type FormData = {
   email: string;
@@ -15,6 +26,11 @@ type FormData = {
 };
 
 const LoginPage = () => {
+
+  const router = useRouter()
+
+  const {loginUser} = useContext(AuthContext)
+
   const {
     register,
     handleSubmit,
@@ -23,15 +39,25 @@ const LoginPage = () => {
 
   const [showError, setShowError] = useState(false);
 
-  const onLoginUser = ({ email, password }: FormData) => {
+  const onLoginUser = async({email, password}: FormData) => {
     setShowError(false);
-    console.log(email, password);
-  };
+
+    const isValidLogin = await loginUser(email, password);
+    console.log(isValidLogin)
+
+    if(!isValidLogin) {
+      setShowError(true);
+      setTimeout(() => setShowError(false), 3000);
+      return
+    }
+
+    router.replace("/")
+  }
 
   return (
     <AuthLayout title="Login">
       <form onSubmit={handleSubmit(onLoginUser)} noValidate>
-        <Box sx={{ width: 350, padding: "10px 20px", textAlign: "center" }}>
+        <Box sx={{ width: 350, padding: "10px 20px" }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="h1" component="h1">
@@ -56,7 +82,7 @@ const LoginPage = () => {
                   required: "Este campo es requerido",
                   validate: validations.isEmail,
                 })}
-                error={!!errors.email}
+                error={!!errors.email} //el !! hace que sea un valor booleano
                 helperText={errors.email?.message}
               />
             </Grid>
@@ -82,13 +108,7 @@ const LoginPage = () => {
                 className="circular-btn"
                 size="large"
                 fullWidth
-                sx={{
-                  border: "1px solid #4caf50",
-                  "&:hover": {
-                    color: "white",
-                    backgroundColor: "#4caf50",
-                  },
-                }}
+                sx={{border: "1px solid #4caf50", "&:hover": {backgroundColor: "#4caf50", color: "white"}}}
               >
                 Ingresar
               </Button>
@@ -113,13 +133,14 @@ const LoginPage = () => {
                     fullWidth
                     color="primary"
                     sx={{ mb: 1 }}
-                    // onClick={() => signIn(provider.id)}
+                    onClick={() => signIn(provider.id)}
                   >
                     {provider.name}
                   </Button>
                 );
               })}
             </Grid> */}
+
           </Grid>
         </Box>
       </form>
