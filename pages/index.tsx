@@ -55,6 +55,7 @@ const HomePage: NextPage = () => {
               title={svc.title}
               description={svc.description}
               image={svc.images[0]}
+              key={i}
             />
           );
         })}

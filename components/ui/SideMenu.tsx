@@ -1,3 +1,8 @@
+import { useContext } from "react";
+import { AuthContext, UiContext } from "@/context";
+
+import { useRouter } from "next/router";
+
 import {
   AccountCircleOutlined,
   CategoryOutlined,
@@ -19,11 +24,22 @@ import {
   ListSubheader,
 } from "@mui/material";
 
-import { useContext } from "react";
-import { UiContext } from "../../context/ui";
-
 export const SideMenu = () => {
   const { isMenuOpen, toggleSideMenu } = useContext(UiContext);
+  const { logOut, isLoggedIn } = useContext(AuthContext);
+
+  const router = useRouter();
+
+  const logOutUser = () => {
+    toggleSideMenu();
+    logOut();
+    router.push("/");
+  };
+
+  const navigateTo = (url: string) => {
+    toggleSideMenu();
+    router.push(url);
+  };
 
   return (
     <Drawer
@@ -34,87 +50,113 @@ export const SideMenu = () => {
     >
       <Box sx={{ width: 250, paddingTop: 1 }}>
         <List>
-          <ListItem button sx={{display: {xs: "flex", md: "none"}}}>
+          <ListItem
+            button
+            sx={{ display: { xs: "flex", md: "none" } }}
+            onClick={() => navigateTo("/products")}
+          >
             <ListItemIcon>
               <CategoryOutlined />
             </ListItemIcon>
             <ListItemText primary={"Productos"} />
           </ListItem>
 
-          <ListItem button sx={{display: {xs: "flex", md: "none"}}}>
+          <ListItem
+            button
+            sx={{ display: { xs: "flex", md: "none" } }}
+            onClick={() => navigateTo("/services")}
+          >
             <ListItemIcon>
               <PrecisionManufacturing />
             </ListItemIcon>
+
             <ListItemText primary={"Servicios"} />
           </ListItem>
 
-          <ListItem button sx={{display: {xs: "flex", md: "none"}}}>
+          <ListItem
+            button
+            sx={{ display: { xs: "flex", md: "none" } }}
+            onClick={() => navigateTo("/blog")}
+          >
             <ListItemIcon>
               <NewspaperOutlined />
             </ListItemIcon>
             <ListItemText primary={"Novedades"} />
           </ListItem>
 
-          <ListItem button sx={{display: {xs: "flex", md: "none"}}}>
+          <ListItem
+            button
+            sx={{ display: { xs: "flex", md: "none" } }}
+            onClick={() => navigateTo("/contact")}
+          >
             <ListItemIcon>
               <PhoneOutlined />
             </ListItemIcon>
             <ListItemText primary={"Contacto"} />
           </ListItem>
 
-          <Divider sx={{display: {xs: "flex", md: "none"}}}/>
+          <Divider sx={{ display: { xs: "flex", md: "none" } }} />
 
-          <ListItem button>
-            <ListItemIcon>
-              <AccountCircleOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Perfil"} />
-          </ListItem>
+          {!isLoggedIn && (
+            <ListItem button onClick={() => navigateTo("/auth/login")}>
+              <ListItemIcon>
+                <VpnKeyOutlined />
+              </ListItemIcon>
+              <ListItemText primary={"Ingresar"} />
+            </ListItem>
+          )}
 
-          <ListItem button>
-            <ListItemIcon>
-              <VpnKeyOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Ingresar"} />
-          </ListItem>
+          {isLoggedIn && (
+            <>
+              {/* <ListItem button onClick={() => navigateTo("/profile")}>
+                <ListItemIcon>
+                  <AccountCircleOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Perfil"} />
+              </ListItem> */}
 
-          <ListItem button>
-            <ListItemIcon>
-              <LoginOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Salir"} />
-          </ListItem>
+              <ListSubheader>Admin Panel</ListSubheader>
 
-          <Divider />
-          <ListSubheader>Admin Panel</ListSubheader>
+              <Divider />
 
-          <ListItem button>
-            <ListItemIcon>
-              <DashboardOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Dashboard"} />
-          </ListItem>
+              <ListItem button>
+                <ListItemIcon>
+                  <DashboardOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Dashboard"} />
+              </ListItem>
 
-          <ListItem button>
-            <ListItemIcon>
-              <CategoryOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Productos"} />
-          </ListItem>
+              <ListItem button>
+                <ListItemIcon>
+                  <CategoryOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Productos"} />
+              </ListItem>
 
-          <ListItem button>
-            <ListItemIcon>
-              <PrecisionManufacturing />
-            </ListItemIcon>
-            <ListItemText primary={"Servicios"} />
-          </ListItem>
+              <ListItem button>
+                <ListItemIcon>
+                  <PrecisionManufacturing />
+                </ListItemIcon>
+                <ListItemText primary={"Servicios"} />
+              </ListItem>
 
-          <ListItem button>
-            <ListItemIcon>
-              <NewspaperOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Blog"} />
-          </ListItem>
+              <ListItem button>
+                <ListItemIcon>
+                  <NewspaperOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Blog"} />
+              </ListItem>
+
+              <Divider />
+
+              <ListItem button onClick={logOutUser}>
+                <ListItemIcon>
+                  <LoginOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Salir"} />
+              </ListItem>
+            </>
+          )}
         </List>
       </Box>
     </Drawer>
