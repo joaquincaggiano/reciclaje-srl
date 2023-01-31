@@ -9,7 +9,7 @@ interface ContextProps {
     user?: IUser;
 
     loginUser: (email: string, password: string) => Promise<boolean>;
-    // logout: () => void;
+    logOut: () => void;
 }
 
 

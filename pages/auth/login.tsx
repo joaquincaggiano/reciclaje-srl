@@ -43,7 +43,7 @@ const LoginPage = () => {
     setShowError(false);
 
     const isValidLogin = await loginUser(email, password);
-    console.log(isValidLogin)
+    // console.log(isValidLogin)
 
     if(!isValidLogin) {
       setShowError(true);

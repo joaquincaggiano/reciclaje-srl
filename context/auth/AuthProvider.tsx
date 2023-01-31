@@ -26,6 +26,10 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [])
 
   const checkToken = async() => {
+    if (!Cookies.get("token")) {
+      return;
+    }
+
     try {
       const {data} = await axios.get("/api/user/validate-token");
       const {token, user} = data;
@@ -53,36 +57,14 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   }
 
-  // const logOut = () => {
-    
-  // }
-
-  // const { data, status } = useSession();
-
-  // useEffect(() => {
-  //   if (status === "authenticated") {
-  //     dispatch({ type: "[Auth] - Login", payload: data?.user as IUser });
-  //   }
-  // }, [status, data]);
-
-  // const loginUser = async (
-  //   email: string,
-  //   password: string
-  // ): Promise<boolean> => {
-  //   try {
-  //     const { data } = await axios.post("/api/user/login", { email, password });
-  //     const { token, user } = data;
-  //     Cookies.set("token", token);
-  //     dispatch({ type: "[Auth] - Login", payload: user });
-  //     return true;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // };
-
-  // const logOut = () => {
-  //   signOut();
-  // };
+  const logOut = () => {
+    try {
+      dispatch({type: "[Auth] - Logout"});
+      Cookies.remove("token");
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <AuthContext.Provider
@@ -91,8 +73,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
 
         // Methods
         loginUser,
-        // registerUser,
-        // logOut,
+        logOut,
       }}
     >
       {children}
