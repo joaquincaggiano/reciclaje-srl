@@ -3,10 +3,10 @@ import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(req: NextRequest) {
-  const session = getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  console.log("SESSION",session)
+  const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+  // console.log("SESSION", session);
 
-  if (session === null) {
+  if (!session) {
     const url = req.nextUrl.clone();
     url.pathname = "/auth/login";
 
@@ -17,5 +17,11 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/dashboard", "/admin/products", "/admin/services", "/admin/blog", "/admin/users"],
+  matcher: [
+    "/admin/dashboard",
+    "/admin/products",
+    "/admin/services",
+    "/admin/blog",
+    "/admin/users",
+  ],
 };
