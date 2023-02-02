@@ -1,6 +1,11 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "@/context";
 
+import { GetServerSideProps } from "next";
+
+// NextAuth
+import { getSession, signIn } from "next-auth/react";
+
 import { AuthLayout } from "@/components/layouts";
 import { validations } from "@/utils";
 
@@ -42,16 +47,17 @@ const LoginPage = () => {
   const onLoginUser = async({email, password}: FormData) => {
     setShowError(false);
 
-    const isValidLogin = await loginUser(email, password);
-    // console.log(isValidLogin)
+    // const isValidLogin = await loginUser(email, password);
 
-    if(!isValidLogin) {
-      setShowError(true);
-      setTimeout(() => setShowError(false), 3000);
-      return
-    }
+    // if(!isValidLogin) {
+    //   setShowError(true);
+    //   setTimeout(() => setShowError(false), 3000);
+    //   return
+    // }
 
-    router.replace("/")
+    // router.replace("/")
+
+    await signIn("credentials", { email, password });
   }
 
   return (
@@ -147,5 +153,28 @@ const LoginPage = () => {
     </AuthLayout>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  // query,
+}) => {
+  const session = await getSession({ req });
+
+  // const { p = "/" } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
+
 
 export default LoginPage;

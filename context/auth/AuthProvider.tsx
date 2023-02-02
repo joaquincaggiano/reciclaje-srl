@@ -68,12 +68,13 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const logOut = () => {
-    try {
-      dispatch({type: "[Auth] - Logout"});
-      Cookies.remove("token");
-    } catch (error) {
-      console.log(error)
-    }
+    // try {
+    //   dispatch({type: "[Auth] - Logout"});
+    //   Cookies.remove("token");
+    // } catch (error) {
+    //   console.log(error)
+    // }
+    signOut();
   }
 
   return (

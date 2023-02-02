@@ -10,7 +10,7 @@ declare module "next-auth" {
 }
 
 export const authOptions: NextAuthOptions = {
-  // Configure one or more authentication providers
+  // Configure one or more authentication providers 
   providers: [
     // ...add more providers here
 
@@ -42,7 +42,7 @@ export const authOptions: NextAuthOptions = {
   // Custom Pages
   pages: {
     signIn: "/auth/login",
-    newUser: "/auth/register",
+    // newUser: "/auth/register",
   },
 
   // Callbacks
@@ -60,22 +60,27 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, account, user }) {
       // console.log({ token, account, user });
 
-      if (account) {
-        token.accessToken = account.access_token
-
-        switch (account.type) {
-          case "oauth":
-            token.user = await dbUsers.oAUthToDbUser(
-              user?.email || "",
-              user?.name || ""
-            );
-            break;
-
-          case "credentials":
-            token.user = user;
-            break;
-        }
+      if(account?.type === "credentials") {
+        token.accessToken = account.access_token;
+        token.user = user;
       }
+
+      // if (account) {
+      //   token.accessToken = account.access_token
+
+      //   switch (account.type) {
+      //     // case "oauth":
+      //     //   token.user = await dbUsers.oAUthToDbUser(
+      //     //     user?.email || "",
+      //     //     user?.name || ""
+      //     //   );
+      //     //   break;
+
+      //     case "credentials":
+      //       token.user = user;
+      //       break;
+      //   }
+      // }
 
       return token;
     },
