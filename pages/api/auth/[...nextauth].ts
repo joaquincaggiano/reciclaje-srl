@@ -1,10 +1,15 @@
-import NextAuth from "next-auth";
-// import GithubProvider from "next-auth/providers/github";
+import NextAuth, {NextAuthOptions} from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 import { dbUsers } from "../../../database";
+ 
+declare module "next-auth" {
+  interface Session {
+    accessToken?: string;
+  }
+}
 
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     // ...add more providers here
@@ -23,9 +28,8 @@ export default NextAuth({
           placeholder: "Contraseña",
         },
       },
-      async authorize(credentials) {
+      async authorize(credentials):Promise<any> {
         console.log({ credentials });
-        // return { name: 'Juan', correo: 'juan@google.com', role: 'admin' };
 
         return await dbUsers.checkUserEmailPassword(
           credentials!.email,
@@ -33,11 +37,6 @@ export default NextAuth({
         );
       },
     }),
-
-    // GithubProvider({
-    //   clientId: process.env.GITHUB_ID,
-    //   clientSecret: process.env.GITHUB_SECRET,
-    // }),
   ],
 
   // Custom Pages
@@ -62,7 +61,7 @@ export default NextAuth({
       // console.log({ token, account, user });
 
       if (account) {
-        token.accessToken = account.access_token;
+        token.accessToken = account.access_token
 
         switch (account.type) {
           case "oauth":
@@ -84,10 +83,12 @@ export default NextAuth({
     async session({ session, token, user }) {
       // console.log({ session, token, user });
 
-      session.accessToken = token.accessToken;
+      session.accessToken = token.accessToken as any;
       session.user = token.user as any;
 
       return session;
     },
   },
-});
+};
+
+export default NextAuth(authOptions)

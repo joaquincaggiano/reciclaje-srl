@@ -9,8 +9,11 @@ import { content } from "@/utils";
 
 // database sin conexion a mongo
 import { seedDatabase } from "@/database";
+import { useServices } from "@/hooks/useServices";
 
 const HomePage: NextPage = () => {
+  const { services, isLoading } = useServices("/services");
+
   useEffect(() => {});
   return (
     <MainLayout title={content.home.title} metaHeader={content.home.metaHeader}>
@@ -49,7 +52,7 @@ const HomePage: NextPage = () => {
         spacing={4}
         sx={{ flexDirection: { xs: "column", sm: "row" }, flexWrap: "wrap" }}
       >
-        {seedDatabase.initialData.services.map((svc, i) => {
+        {services.map((svc, i) => {
           return (
             <CardServices
               title={svc.title}

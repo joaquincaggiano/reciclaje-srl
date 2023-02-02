@@ -1,6 +1,7 @@
 import mongoose, { Schema, model, Model } from "mongoose";
 import { IProductSchema } from "@/interfaces";
 
+
 const productSchema = new Schema(
   {
     title: { type: String, required: true, default: "" },
