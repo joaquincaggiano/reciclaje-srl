@@ -1,9 +1,11 @@
-import React from 'react'
+import { MainLayout } from "@/components/layouts"
 
-const services = () => {
+const Services = () => {
   return (
-    <div>services</div>
+    <MainLayout title="Services-Dashboard" metaHeader="Administración de los servicios">
+      <div>Services</div>
+    </MainLayout>
   )
 }
 
-export default services
+export default Services;

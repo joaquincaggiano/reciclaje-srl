@@ -1,9 +1,11 @@
-import React from 'react'
+import { MainLayout } from "@/components/layouts"
 
-const products = () => {
+const Products = () => {
   return (
-    <div>products</div>
+    <MainLayout title="Products-Dashboard" metaHeader="Administración de los productos">
+      <div>Products</div>
+    </MainLayout>
   )
 }
 
-export default products
+export default Products;

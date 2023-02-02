@@ -7,6 +7,7 @@ import {
   AccountCircleOutlined,
   CategoryOutlined,
   DashboardOutlined,
+  GroupOutlined,
   LoginOutlined,
   NewspaperOutlined,
   PhoneOutlined,
@@ -50,6 +51,19 @@ export const SideMenu = () => {
     >
       <Box sx={{ width: 250, paddingTop: 1 }}>
         <List>
+          {!isLoggedIn && (
+            <>
+              <ListItem button onClick={() => navigateTo("/auth/login")}>
+                <ListItemIcon>
+                  <VpnKeyOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Ingresar"} />
+              </ListItem>
+
+              <Divider />
+            </>
+          )}
+
           <ListItem
             button
             sx={{ display: { xs: "flex", md: "none" } }}
@@ -97,15 +111,6 @@ export const SideMenu = () => {
 
           <Divider sx={{ display: { xs: "flex", md: "none" } }} />
 
-          {!isLoggedIn && (
-            <ListItem button onClick={() => navigateTo("/auth/login")}>
-              <ListItemIcon>
-                <VpnKeyOutlined />
-              </ListItemIcon>
-              <ListItemText primary={"Ingresar"} />
-            </ListItem>
-          )}
-
           {isLoggedIn && (
             <>
               {/* <ListItem button onClick={() => navigateTo("/profile")}>
@@ -117,30 +122,35 @@ export const SideMenu = () => {
 
               <ListSubheader>Admin Panel</ListSubheader>
 
-              <Divider />
-
-              <ListItem button>
+              <ListItem button onClick={() => navigateTo("/admin/dashboard")}>
                 <ListItemIcon>
                   <DashboardOutlined />
                 </ListItemIcon>
                 <ListItemText primary={"Dashboard"} />
               </ListItem>
 
-              <ListItem button>
+              <ListItem button onClick={() => navigateTo("/admin/products")}>
                 <ListItemIcon>
                   <CategoryOutlined />
                 </ListItemIcon>
                 <ListItemText primary={"Productos"} />
               </ListItem>
 
-              <ListItem button>
+              <ListItem button onClick={() => navigateTo("/admin/services")}>
                 <ListItemIcon>
                   <PrecisionManufacturing />
                 </ListItemIcon>
                 <ListItemText primary={"Servicios"} />
               </ListItem>
 
-              <ListItem button>
+              <ListItem button onClick={() => navigateTo("/admin/users")}>
+                <ListItemIcon>
+                  <GroupOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Users"} />
+              </ListItem>
+
+              <ListItem button onClick={() => navigateTo("/admin/blog")}>
                 <ListItemIcon>
                   <NewspaperOutlined />
                 </ListItemIcon>

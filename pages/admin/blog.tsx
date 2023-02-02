@@ -1,9 +1,11 @@
-import React from 'react'
+import { MainLayout } from "@/components/layouts"
 
-const blog = () => {
+const Blog = () => {
   return (
-    <div>blog</div>
+    <MainLayout title="Blog-Dashboard" metaHeader="Administración del Blog">
+      <div>blog</div>
+    </MainLayout>
   )
 }
 
-export default blog
+export default Blog;

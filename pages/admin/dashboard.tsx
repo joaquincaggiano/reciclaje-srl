@@ -1,9 +1,11 @@
-import React from 'react'
+import { MainLayout } from "@/components/layouts"
 
-const dashboard = () => {
+const Dashboard = () => {
   return (
-    <div>dashboard</div>
+    <MainLayout title="Dashboard General" metaHeader="Mantenimiento general del dashboard">
+      <div>Dashboard</div>
+    </MainLayout>
   )
 }
 
-export default dashboard
+export default Dashboard;

@@ -1,9 +1,11 @@
-import React from 'react'
+import { MainLayout } from "@/components/layouts"
 
-const users = () => {
+const Users = () => {
   return (
-    <div>users</div>
+    <MainLayout title="Users-Dashboard" metaHeader="Administración de los usuarios">
+      <div>Users</div>
+    </MainLayout>
   )
 }
 
-export default users
+export default Users;
