@@ -7,6 +7,8 @@ import {
   Grid,
   TextField,
   Typography,
+  CardMedia,
+  Link,
 } from "@mui/material";
 import {
   EmailOutlined,
@@ -29,12 +31,16 @@ export const Footer = () => {
         }}
       >
         <Grid item>
-          <IconButton>
-            <NextLink href="/" passHref legacyBehavior>
-              {/* <HomeOutlined sx={{ fontSize: 100 }} /> */}
-              <Typography sx={{ fontSize: 70 }}>LOGO</Typography>
-            </NextLink>
-          </IconButton>
+          <NextLink href="/" passHref legacyBehavior>
+            <Link>
+              <CardMedia 
+                component="img"
+                height="200"
+                image="/todo-rec-logo-2.png"
+                alt="Logo Todo-Rec"
+              />        
+            </Link>
+          </NextLink>
         </Grid>
 
         <Grid
