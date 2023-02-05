@@ -65,6 +65,7 @@ const Products = () => {
           startIcon={<AddOutlined />}
           color="secondary"
           href="/admin/products/new"
+          sx={{ color: "white", backgroundColor: "#4caf50" }}
         >
           Crear producto
         </Button>

@@ -13,6 +13,8 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 
 import {
+  BorderColorOutlined,
+  EditOutlined,
   // DriveFileRenameOutline,
   SaveOutlined,
   UploadOutlined,
@@ -37,6 +39,7 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Typography,
 } from "@mui/material";
 import { Product } from "@/models";
 
@@ -69,6 +72,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const [isSaving, setIsSaving] = useState(false);
 
   const router = useRouter();
+  console.log(router.asPath)
 
   // const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -149,6 +153,19 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   return (
     <MainLayout title="Producto1" metaHeader="Editar producto">
+      {
+        router.asPath === "/admin/products/new" ? (
+          <Box display="flex" justifyContent="flex-start" alignItems="center">
+            <Typography variant="h1" sx={{mr: 1}}>Crear Producto</Typography>
+            <BorderColorOutlined />
+          </Box>
+        ) : (
+          <Box display="flex" justifyContent="flex-start" alignItems="center">
+            <Typography variant="h1" sx={{mr: 1}}>Editar Producto</Typography>
+            <BorderColorOutlined />
+          </Box>
+        )
+      }
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" justifyContent="end" sx={{ mb: 1 }}>
           <Button
@@ -244,7 +261,9 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 label="Es necesario al menos 1 imagen"
                 color="error"
                 variant="outlined"
-                sx={{display: getValues("images").length < 1 ? "flex" : "none"}}
+                sx={{
+                  display: getValues("images").length < 1 ? "flex" : "none",
+                }}
               />
 
               <Grid container spacing={2}>
