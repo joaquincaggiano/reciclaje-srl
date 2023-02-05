@@ -4,7 +4,12 @@ import useSWR from "swr";
 
 import { CounterInfo } from "@/components/admin";
 import { MainLayout } from "@/components/layouts";
-import { AccessTimeOutlined, CategoryOutlined, NewspaperOutlined, PrecisionManufacturing } from "@mui/icons-material";
+import {
+  AccessTimeOutlined,
+  CategoryOutlined,
+  NewspaperOutlined,
+  PrecisionManufacturing,
+} from "@mui/icons-material";
 import { Grid, Typography } from "@mui/material";
 
 import { DashboardCounterResponse } from "@/interfaces";
@@ -52,7 +57,9 @@ const DashboardPage = () => {
           subTitle={"Productos"}
         />
         <CounterInfo
-          icon={<PrecisionManufacturing color="warning" sx={{ fontSize: 40 }} />}
+          icon={
+            <PrecisionManufacturing color="warning" sx={{ fontSize: 40 }} />
+          }
           title={numbersOfServices}
           subTitle={"Servicios"}
         />

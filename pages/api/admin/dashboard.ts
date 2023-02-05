@@ -20,5 +20,7 @@ export default async function handler(
 
   await db.disconnect();
 
-  res.status(200).json({numbersOfProducts, numbersOfServices, numbersOfBlogs})
+  res
+    .status(200)
+    .json({ numbersOfProducts, numbersOfServices, numbersOfBlogs });
 }

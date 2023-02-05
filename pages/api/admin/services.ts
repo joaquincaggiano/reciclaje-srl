@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { db } from "@/database";
-import { Product } from "@/models";
-import { IProductSchema } from "../../../interfaces";
+import { Service } from "@/models";
+import { IServiceSchema } from "../../../interfaces";
 
-type Data = { message: string } | IProductSchema[];
+type Data = { message: string } | IServiceSchema[];
 
 export default function handler(
   req: NextApiRequest,
@@ -11,17 +11,17 @@ export default function handler(
 ) {
   switch (req.method) {
     case "GET":
-      return getProducts(req, res);
+      return getServices(req, res);
 
     default:
       return res.status(400).json({ message: "Bad Request" });
   }
 }
 
-const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+const getServices = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   await db.connect();
-  const products = await Product.find().sort("asc").lean();
+  const services = await Service.find().sort("asc").lean();
   await db.disconnect();
 
-  res.status(200).json(products);
+  res.status(200).json(services);
 };
