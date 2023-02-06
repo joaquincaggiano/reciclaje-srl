@@ -4,9 +4,10 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 
 import { MainLayout } from "../../../components/layouts";
-import { IProductSchema } from "../../../interfaces";
+import { IBlogSchema } from "../../../interfaces";
+import { Blog } from "@/models";
 
-import { dbProducts } from "@/database";
+import { dbBlogs } from "@/database";
 
 import { useForm } from "react-hook-form";
 
@@ -20,55 +21,33 @@ import {
 import {
   Box,
   Button,
-  capitalize,
   Card,
   CardActions,
   CardMedia,
-  Checkbox,
   Chip,
   Divider,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
   FormLabel,
   Grid,
-  Radio,
-  RadioGroup,
   TextField,
   Typography,
 } from "@mui/material";
-import { Product } from "@/models";
-
-const validCategories = ["Polietileno", "Molienda"];
-const validColors = [
-  "Blanco",
-  "Gris",
-  "Negro",
-  "Transparente",
-  "Caramelo",
-  "Amarillo",
-  "Verde",
-  "Azul",
-  "Rojo",
-];
 
 interface FormData {
   _id?: string;
   title: string;
   images: string[];
-  colors: string[];
-  category: string;
+  description: string;
+  info: string;
 }
 
 interface Props {
-  product: IProductSchema;
+  blog: IBlogSchema;
 }
 
-const ProductAdminPage: FC<Props> = ({ product }) => {
+const BlogAdminPage: FC<Props> = ({ blog }) => {
   const [isSaving, setIsSaving] = useState(false);
 
   const router = useRouter();
-  console.log(router.asPath);
 
   // const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -78,21 +57,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     formState: { errors },
     getValues,
     setValue,
-  } = useForm<FormData>({ defaultValues: product });
-
-  const onChangeColor = (color: string) => {
-    const currentColors = getValues("colors");
-
-    if (currentColors.includes(color)) {
-      return setValue(
-        "colors",
-        currentColors.filter((c) => c !== color),
-        { shouldValidate: true }
-      );
-    }
-
-    setValue("colors", [...currentColors, color], { shouldValidate: true });
-  };
+  } = useForm<FormData>({ defaultValues: blog });
 
   // const onFilesSelected = async (e: ChangeEvent<HTMLInputElement>) => {
   //   if (!e.target.files || e.target.files.length === 0) {
@@ -131,13 +96,13 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
     try {
       const { data } = await axios({
-        url: "/api/admin/products",
+        url: "/api/admin/blog",
         method: form._id ? "PUT" : "POST",
         data: form,
       });
 
       if (!form._id) {
-        router.replace(`/admin/products/${form.title}`);
+        router.replace(`/admin/blog/${form.title}`);
       } else {
         setIsSaving(false);
       }
@@ -149,24 +114,22 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   return (
     <MainLayout
-      title={product.title}
+      title={blog.title}
       metaHeader={
-        router.asPath === "/admin/products/new"
-          ? "Crear producto"
-          : "Editar producto"
+        router.asPath === "/admin/blog/new" ? "Crear blog" : "Editar blog"
       }
     >
-      {router.asPath === "/admin/products/new" ? (
+      {router.asPath === "/admin/blog/new" ? (
         <Box display="flex" justifyContent="flex-start" alignItems="center">
           <Typography variant="h1" sx={{ mr: 1 }}>
-            Crear Producto
+            Crear blog
           </Typography>
           <BorderColorOutlined />
         </Box>
       ) : (
         <Box display="flex" justifyContent="flex-start" alignItems="center">
           <Typography variant="h1" sx={{ mr: 1 }}>
-            Editar Producto
+            Editar blog
           </Typography>
           <BorderColorOutlined />
         </Box>
@@ -200,41 +163,33 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               helperText={errors.title?.message}
             />
 
-            <Divider sx={{ my: 1 }} />
+            <TextField
+              label="Información"
+              variant="filled"
+              fullWidth
+              sx={{ mb: 1 }}
+              {...register("info", {
+                required: "Este campo es requerido",
+                minLength: { value: 10, message: "Mínimo 10 caracteres" },
+              })}
+              error={!!errors.info}
+              helperText={errors.info?.message}
+            />
 
-            <FormControl sx={{ mb: 1 }}>
-              <FormLabel>Categoría</FormLabel>
-              <RadioGroup
-                row
-                value={getValues("category")}
-                onChange={(e) =>
-                  setValue("category", e.target.value, { shouldValidate: true })
-                }
-              >
-                {validCategories.map((category) => (
-                  <FormControlLabel
-                    key={category}
-                    value={category}
-                    control={<Radio color="secondary" />}
-                    label={capitalize(category)}
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl>
+            <TextField
+              label="Descripción"
+              variant="filled"
+              fullWidth
+              sx={{ mb: 1 }}
+              {...register("description", {
+                required: "Este campo es requerido",
+                minLength: { value: 10, message: "Mínimo 10 caracteres" },
+              })}
+              error={!!errors.description}
+              helperText={errors.description?.message}
+            />
 
-            <FormGroup>
-              <FormLabel>Colores</FormLabel>
-              {validColors.map((color) => (
-                <FormControlLabel
-                  key={color}
-                  control={
-                    <Checkbox checked={getValues("colors").includes(color)} />
-                  }
-                  label={color}
-                  onChange={() => onChangeColor(color)}
-                />
-              ))}
-            </FormGroup>
+            {/* <Divider sx={{ my: 1 }} /> */}
           </Grid>
 
           {/* Imagenes */}
@@ -272,7 +227,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               />
 
               <Grid container spacing={2}>
-                {product.images.map((img) => (
+                {blog.images.map((img) => (
                   <Grid item xs={4} sm={3} key={img}>
                     <Card>
                       <CardMedia
@@ -301,21 +256,21 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { title = "" } = query;
 
-  let product: IProductSchema | null;
+  let blog: IBlogSchema | null;
 
   if (title === "new") {
-    const tempProduct = JSON.parse(JSON.stringify(new Product()));
-    delete tempProduct._id;
-    tempProduct.images = ["img1.jpg"];
-    product = tempProduct;
+    const tempBlog = JSON.parse(JSON.stringify(new Blog()));
+    delete tempBlog._id;
+    tempBlog.images = ["img1.jpg"];
+    blog = tempBlog;
   } else {
-    product = await dbProducts.getProductByTitle(title.toString());
+    blog = await dbBlogs.getBlogByTitle(title.toString());
   }
 
-  if (!product) {
+  if (!blog) {
     return {
       redirect: {
-        destination: "/admin/products",
+        destination: "/admin/blog",
         permanent: false,
       },
     };
@@ -323,9 +278,9 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   return {
     props: {
-      product,
+      blog,
     },
   };
 };
 
-export default ProductAdminPage;
+export default BlogAdminPage;

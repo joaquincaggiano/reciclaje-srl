@@ -4,9 +4,10 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 
 import { MainLayout } from "../../../components/layouts";
-import { IProductSchema } from "../../../interfaces";
+import { IServiceSchema } from "../../../interfaces";
+import { Service } from "@/models";
 
-import { dbProducts } from "@/database";
+import { dbServices } from "@/database";
 
 import { useForm } from "react-hook-form";
 
@@ -37,38 +38,22 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Product } from "@/models";
-
-const validCategories = ["Polietileno", "Molienda"];
-const validColors = [
-  "Blanco",
-  "Gris",
-  "Negro",
-  "Transparente",
-  "Caramelo",
-  "Amarillo",
-  "Verde",
-  "Azul",
-  "Rojo",
-];
 
 interface FormData {
   _id?: string;
   title: string;
   images: string[];
-  colors: string[];
-  category: string;
+  description: string;
 }
 
 interface Props {
-  product: IProductSchema;
+  service: IServiceSchema;
 }
 
-const ProductAdminPage: FC<Props> = ({ product }) => {
+const ServiceAdminPage: FC<Props> = ({ service }) => {
   const [isSaving, setIsSaving] = useState(false);
 
   const router = useRouter();
-  console.log(router.asPath);
 
   // const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -78,21 +63,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     formState: { errors },
     getValues,
     setValue,
-  } = useForm<FormData>({ defaultValues: product });
-
-  const onChangeColor = (color: string) => {
-    const currentColors = getValues("colors");
-
-    if (currentColors.includes(color)) {
-      return setValue(
-        "colors",
-        currentColors.filter((c) => c !== color),
-        { shouldValidate: true }
-      );
-    }
-
-    setValue("colors", [...currentColors, color], { shouldValidate: true });
-  };
+  } = useForm<FormData>({ defaultValues: service });
 
   // const onFilesSelected = async (e: ChangeEvent<HTMLInputElement>) => {
   //   if (!e.target.files || e.target.files.length === 0) {
@@ -131,13 +102,13 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
     try {
       const { data } = await axios({
-        url: "/api/admin/products",
+        url: "/api/admin/services",
         method: form._id ? "PUT" : "POST",
         data: form,
       });
 
       if (!form._id) {
-        router.replace(`/admin/products/${form.title}`);
+        router.replace(`/admin/services/${form.title}`);
       } else {
         setIsSaving(false);
       }
@@ -149,24 +120,24 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   return (
     <MainLayout
-      title={product.title}
+      title={service.title}
       metaHeader={
-        router.asPath === "/admin/products/new"
-          ? "Crear producto"
-          : "Editar producto"
+        router.asPath === "/admin/services/new"
+          ? "Crear servicio"
+          : "Editar servicio"
       }
     >
-      {router.asPath === "/admin/products/new" ? (
+      {router.asPath === "/admin/services/new" ? (
         <Box display="flex" justifyContent="flex-start" alignItems="center">
           <Typography variant="h1" sx={{ mr: 1 }}>
-            Crear Producto
+            Crear servicio
           </Typography>
           <BorderColorOutlined />
         </Box>
       ) : (
         <Box display="flex" justifyContent="flex-start" alignItems="center">
           <Typography variant="h1" sx={{ mr: 1 }}>
-            Editar Producto
+            Editar servicio
           </Typography>
           <BorderColorOutlined />
         </Box>
@@ -200,41 +171,21 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               helperText={errors.title?.message}
             />
 
-            <Divider sx={{ my: 1 }} />
+            <TextField
+              label="Descripción"
+              variant="filled"
+              fullWidth
+              sx={{ mb: 1 }}
+              {...register("description", {
+                required: "Este campo es requerido",
+                minLength: { value: 10, message: "Mínimo 10 caracteres" },
+              })}
+              error={!!errors.description}
+              helperText={errors.description?.message}
+            />
 
-            <FormControl sx={{ mb: 1 }}>
-              <FormLabel>Categoría</FormLabel>
-              <RadioGroup
-                row
-                value={getValues("category")}
-                onChange={(e) =>
-                  setValue("category", e.target.value, { shouldValidate: true })
-                }
-              >
-                {validCategories.map((category) => (
-                  <FormControlLabel
-                    key={category}
-                    value={category}
-                    control={<Radio color="secondary" />}
-                    label={capitalize(category)}
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl>
+            {/* <Divider sx={{ my: 1 }} /> */}
 
-            <FormGroup>
-              <FormLabel>Colores</FormLabel>
-              {validColors.map((color) => (
-                <FormControlLabel
-                  key={color}
-                  control={
-                    <Checkbox checked={getValues("colors").includes(color)} />
-                  }
-                  label={color}
-                  onChange={() => onChangeColor(color)}
-                />
-              ))}
-            </FormGroup>
           </Grid>
 
           {/* Imagenes */}
@@ -272,7 +223,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               />
 
               <Grid container spacing={2}>
-                {product.images.map((img) => (
+                {service.images.map((img) => (
                   <Grid item xs={4} sm={3} key={img}>
                     <Card>
                       <CardMedia
@@ -301,21 +252,21 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { title = "" } = query;
 
-  let product: IProductSchema | null;
+  let service: IServiceSchema | null;
 
   if (title === "new") {
-    const tempProduct = JSON.parse(JSON.stringify(new Product()));
-    delete tempProduct._id;
-    tempProduct.images = ["img1.jpg"];
-    product = tempProduct;
+    const tempService = JSON.parse(JSON.stringify(new Service()));
+    delete tempService._id;
+    tempService.images = ["img1.jpg"];
+    service = tempService;
   } else {
-    product = await dbProducts.getProductByTitle(title.toString());
+    service = await dbServices.getServiceByTitle(title.toString());
   }
 
-  if (!product) {
+  if (!service) {
     return {
       redirect: {
-        destination: "/admin/products",
+        destination: "/admin/services",
         permanent: false,
       },
     };
@@ -323,9 +274,9 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   return {
     props: {
-      product,
+      service,
     },
   };
 };
 
-export default ProductAdminPage;
+export default ServiceAdminPage;

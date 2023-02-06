@@ -1,9 +1,12 @@
 import { MainLayout } from "@/components/layouts";
 
+import NextLink from "next/link";
+
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import useSWR from "swr";
 import { IBlogSchema } from "@/interfaces";
-import { CardMedia, Grid } from "@mui/material";
+import { Box, Button, CardMedia, Grid, Link } from "@mui/material";
+import { AddOutlined } from "@mui/icons-material";
 
 const columns: GridColDef[] = [
   {
@@ -20,7 +23,18 @@ const columns: GridColDef[] = [
       );
     },
   },
-  { field: "title", headerName: "Titulo", width: 300 },
+  {
+    field: "title",
+    headerName: "Titulo",
+    width: 300,
+    renderCell: ({ row }: GridRenderCellParams) => {
+      return (
+        <NextLink href={`/admin/blog/${row.title}`} passHref>
+          <Link underline="always">{row.title}</Link>
+        </NextLink>
+      );
+    },
+  },
   { field: "info", headerName: "Información", width: 450 },
   { field: "description", headerName: "Descripción", width: 450 },
 ];
@@ -42,6 +56,18 @@ const Blog = () => {
 
   return (
     <MainLayout title="Blog-Dashboard" metaHeader="Administración del Blog">
+
+      <Box display="flex" justifyContent="end" sx={{ mb: 2 }}>
+        <Button
+          startIcon={<AddOutlined />}
+          color="secondary"
+          href="/admin/blog/new"
+          sx={{ color: "white", backgroundColor: "#4caf50" }}
+        >
+          Crear blog
+        </Button>
+      </Box>
+
       <Grid container className="fadeIn">
         <Grid item xs={12} sx={{ height: 650, width: "100%" }}>
           <DataGrid
