@@ -1,11 +1,11 @@
-import { useState } from "react";
+// import { useState } from "react";
 
 import { NextPage } from "next";
 
 import { MainLayout } from "@/components/layouts";
 import { content } from "@/utils";
 
-import useSWR from "swr";
+// import useSWR from "swr";
 
 import {
   Card,
@@ -21,56 +21,58 @@ import {
   Grid,
   Divider,
 } from "@mui/material";
+import { BlogList } from "@/components/blog";
 
-import {
-  Share as ShareIcon,
-  ExpandMore as ExpandMoreIcon,
-} from "@mui/icons-material";
+// import {
+//   Share as ShareIcon,
+//   ExpandMore as ExpandMoreIcon,
+// } from "@mui/icons-material";
 
-import { styled } from "@mui/material/styles";
-import { red } from "@mui/material/colors";
-import { IBlogSchema } from "../../interfaces";
+// import { styled } from "@mui/material/styles";
+// import { red } from "@mui/material/colors";
 
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
+// interface ExpandMoreProps extends IconButtonProps {
+//   expand: boolean;
+// }
 
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
+// const ExpandMore = styled((props: ExpandMoreProps) => {
+//   const { expand, ...other } = props;
+//   return <IconButton {...other} />;
+// })(({ theme, expand }) => ({
+//   transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+//   marginLeft: "auto",
+//   transition: theme.transitions.create("transform", {
+//     duration: theme.transitions.duration.shortest,
+//   }),
+// }));
 
 const BlogPage: NextPage = () => {
-  const { data, error } = useSWR<IBlogSchema[]>("/api/blog");
+  // const { data, error } = useSWR<IBlogSchema[]>("/api/blog");
 
-  const [expanded, setExpanded] = useState(false);
+  // const [expanded, setExpanded] = useState(false);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  // const handleExpandClick = () => {
+  //   setExpanded(!expanded);
+  // };
 
-  if (!error && !data) {
-    return <></>;
-  }
+  // if (!error && !data) {
+  //   return <></>;
+  // }
 
-  if (error) {
-    console.log(error);
-    return <Typography>Error al cargar la información</Typography>;
-  }
-
-  console.log(data);
+  // if (error) {
+  //   console.log(error);
+  //   return <Typography>Error al cargar la información</Typography>;
+  // }
 
   return (
     <MainLayout title={content.blog.title} metaHeader={content.blog.metaHeader}>
       <Typography variant="h1" sx={{textAlign: "center", mb: 2}}>{content.blog.title}</Typography>
+
       <Divider sx={{mb:5}}/>
-      <Grid container spacing={4} display="flex" justifyContent="space-evenly" alignItems="center">
+
+      <BlogList />
+
+      {/* <Grid container spacing={4} display="flex" justifyContent="space-evenly" alignItems="center">
         {data!.map((blog, i) => {
           return (
             <Grid item key={i}>
@@ -117,7 +119,7 @@ const BlogPage: NextPage = () => {
             </Grid>
           );
         })}
-      </Grid>
+      </Grid> */}
     </MainLayout>
   );
 };
