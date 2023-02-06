@@ -51,7 +51,6 @@ export const Footer = () => {
         >
           <TextField
             sx={{ backgroundColor: "white", width: "60%", borderRadius: "8px" }}
-            color="info"
             type="email"
             label="Correo"
             variant="filled"

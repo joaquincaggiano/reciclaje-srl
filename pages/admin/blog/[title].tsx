@@ -167,6 +167,8 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
               label="Información"
               variant="filled"
               fullWidth
+              multiline
+              maxRows={3}
               sx={{ mb: 1 }}
               {...register("info", {
                 required: "Este campo es requerido",
@@ -180,6 +182,8 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
               label="Descripción"
               variant="filled"
               fullWidth
+              multiline
+              maxRows={3}
               sx={{ mb: 1 }}
               {...register("description", {
                 required: "Este campo es requerido",

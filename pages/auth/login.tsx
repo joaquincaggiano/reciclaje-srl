@@ -22,8 +22,6 @@ import {
 } from "@mui/material";
 
 import { useForm } from "react-hook-form";
-// import axios from "axios";
-import { useRouter } from "next/router";
 
 type FormData = {
   email: string;
@@ -32,9 +30,9 @@ type FormData = {
 
 const LoginPage = () => {
 
-  const router = useRouter()
+  // const router = useRouter()
 
-  const {loginUser} = useContext(AuthContext)
+  // const {loginUser} = useContext(AuthContext)
 
   const {
     register,
@@ -47,17 +45,12 @@ const LoginPage = () => {
   const onLoginUser = async({email, password}: FormData) => {
     setShowError(false);
 
-    // const isValidLogin = await loginUser(email, password);
+    await signIn("credentials", { email, password });
+    // const isValidLogin = await signIn("credentials", { email, password });
 
     // if(!isValidLogin) {
     //   setShowError(true);
-    //   setTimeout(() => setShowError(false), 3000);
-    //   return
     // }
-
-    // router.replace("/")
-
-    await signIn("credentials", { email, password });
   }
 
   return (
@@ -69,6 +62,7 @@ const LoginPage = () => {
               <Typography variant="h1" component="h1">
                 Iniciar Sesión
               </Typography>
+
               <Chip
                 label="No reconocemos ese usuario / contraseña"
                 color="error"
@@ -76,6 +70,7 @@ const LoginPage = () => {
                 className="fadeIn"
                 sx={{ display: showError ? "flex" : "none" }}
               />
+              
             </Grid>
 
             <Grid item xs={12}>
@@ -119,33 +114,6 @@ const LoginPage = () => {
                 Ingresar
               </Button>
             </Grid>
-
-            {/* <Grid
-              item
-              xs={12}
-              display="flex"
-              flexDirection="column"
-              justifyContent="end"
-            >
-              <Divider sx={{ width: "100%", mb: 2 }} />
-              {Object.values(providers).map((provider: any) => {
-                if (provider.id === "credentials")
-                  return <div key="credentials"></div>;
-
-                return (
-                  <Button
-                    key={provider.id}
-                    variant="outlined"
-                    fullWidth
-                    color="primary"
-                    sx={{ mb: 1 }}
-                    onClick={() => signIn(provider.id)}
-                  >
-                    {provider.name}
-                  </Button>
-                );
-              })}
-            </Grid> */}
 
           </Grid>
         </Box>

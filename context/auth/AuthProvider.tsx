@@ -29,28 +29,6 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       dispatch({type: "[Auth] - Login", payload: data?.user as IUser})
     }
   }, [status, data])
-
-
-  // useEffect(() => {
-  //   checkToken();
-  // }, [])
-
-  // const checkToken = async() => {
-  //   if (!Cookies.get("token")) {
-  //     return;
-  //   }
-
-  //   try {
-  //     const {data} = await axios.get("/api/user/validate-token");
-  //     const {token, user} = data;
-
-  //     Cookies.set("token", token);
-  //     dispatch({type: "[Auth] - Login", payload: user})
-
-  //   } catch (error) {
-  //     Cookies.remove("token")
-  //   }
-  // }
   
   const loginUser = async(email: string, password: string): Promise<boolean> => {
     try {
@@ -68,12 +46,6 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const logOut = () => {
-    // try {
-    //   dispatch({type: "[Auth] - Logout"});
-    //   Cookies.remove("token");
-    // } catch (error) {
-    //   console.log(error)
-    // }
     signOut();
   }
 

@@ -1,14 +1,12 @@
 import { NextPage } from "next";
 import { useEffect } from "react";
 import { MainLayout } from "../components/layouts";
-import { CardServices } from "@/components/services";
+import { CardServicesHome } from "@/components/services";
 
 import { Carrousel } from "@/components/ui";
 import { Typography, Divider, Box, Grid } from "@mui/material";
 import { content } from "@/utils";
 
-// database sin conexion a mongo
-import { seedDatabase } from "@/database";
 import { useServices } from "@/hooks/useServices";
 
 const HomePage: NextPage = () => {
@@ -54,7 +52,7 @@ const HomePage: NextPage = () => {
       >
         {services.map((svc, i) => {
           return (
-            <CardServices
+            <CardServicesHome
               title={svc.title}
               description={svc.description}
               image={svc.images[0]}

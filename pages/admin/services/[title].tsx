@@ -175,6 +175,8 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
               label="Descripción"
               variant="filled"
               fullWidth
+              multiline
+              maxRows={3}
               sx={{ mb: 1 }}
               {...register("description", {
                 required: "Este campo es requerido",
