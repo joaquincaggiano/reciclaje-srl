@@ -276,38 +276,34 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             <Divider sx={{ my: 2 }} />
 
             <Box display="flex" flexDirection="column">
+              <FormGroup>
               <FormLabel sx={{ mb: 1 }}>Imágenes</FormLabel>
-              <Button
-                color="secondary"
-                fullWidth
-                startIcon={<UploadOutlined />}
-                sx={{ mb: 3, color: "white", backgroundColor: "#4caf50" }}
-                // onClick={() => fileInputRef.current?.click()}
-              >
-                Cargar imagen
-              </Button>
-
               <input
                 // ref={fileInputRef}
                 type="file"
                 multiple
                 accept="image/png, image/gif, image/jpeg"
-                // style={{ display: "none" }}
+                style={ {marginBottom: "20px"}
+                  // { display: "none" }
+                }
+               
                 onChange={(e)=> selectFile(e)}
               />
-               {file && (
-          <>
-            <p>Selected file: {file.name}</p>
-            <button
+              
+              {file && 
+              <Button
+                color="secondary"
+                fullWidth
+                startIcon={<UploadOutlined />}
+                sx={{ mb: 3, color: "white", backgroundColor: "#4caf50" }}
               onClick={uploadFile}
-              className=" bg-purple-500 text-white p-2 rounded-sm shadow-md hover:bg-purple-700 transition-all"
-            >
-              Upload a File!
-            </button>
-          </>
-        )}
-        {uploadingStatus && <p>{uploadingStatus}</p>}
-        {uploadedFile && <img src={uploadedFile} />}
+              >
+                Cargar imagen
+              </Button>
+              }
+              </FormGroup>
+        {/* {uploadingStatus && <p>{uploadingStatus}</p>}
+        {uploadedFile && <img src={uploadedFile} />} */}
 
               <Chip
                 label="Es necesario al menos 1 imagen"
