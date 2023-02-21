@@ -16,7 +16,10 @@ interface Props {
   product: IProductSchema;
 }
 
+
 export const ProductCard: FC<Props> = ({ product }) => {
+
+  const imageURL = `https://ik.imagekit.io/e2ouoknyw/product/${product._id}`
   return (
     <Grid
       item
@@ -32,7 +35,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
           <CardMedia
             component="img"
             height="200"
-            image={product.images[0]}
+            image={imageURL}
             alt={product.title}
           />
           <CardContent>

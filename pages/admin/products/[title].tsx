@@ -64,13 +64,47 @@ interface Props {
   product: IProductSchema;
 }
 
+
+
 const ProductAdminPage: FC<Props> = ({ product }) => {
   const [isSaving, setIsSaving] = useState(false);
-
+  const [file, setFile] = useState<any>();
+  const [uploadingStatus, setUploadingStatus] = useState<any>();
+  const [uploadedFile, setUploadedFile] = useState<any>();
+  
+  const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
+  
   const router = useRouter();
   console.log(router.asPath);
 
   // const fileInputRef = useRef<HTMLInputElement>(null);
+  const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e?.target.files){ return };
+    setFile(e.target.files[0]);
+  };
+
+  const uploadFile = async () => {
+    setUploadingStatus("Uploading the file to AWS S3");
+    const imageName = "product/" + product._id;
+
+    let { data } = await axios.post("/api/s3/uploadFile", {
+      name: imageName,
+      type: file.type,
+    });
+
+    console.log(data);
+
+    const url = data.url;
+    let { data: newData } = await axios.put(url, file, {
+      headers: {
+        "Content-type": file.type,
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
+
+    setUploadedFile(BUCKET_URL + imageName);
+    setFile(null);
+  };
 
   const {
     register,
@@ -253,14 +287,27 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 Cargar imagen
               </Button>
 
-              {/* <input
-                ref={fileInputRef}
+              <input
+                // ref={fileInputRef}
                 type="file"
                 multiple
                 accept="image/png, image/gif, image/jpeg"
-                style={{ display: "none" }}
-                onChange={onFilesSelected}
-              /> */}
+                // style={{ display: "none" }}
+                onChange={(e)=> selectFile(e)}
+              />
+               {file && (
+          <>
+            <p>Selected file: {file.name}</p>
+            <button
+              onClick={uploadFile}
+              className=" bg-purple-500 text-white p-2 rounded-sm shadow-md hover:bg-purple-700 transition-all"
+            >
+              Upload a File!
+            </button>
+          </>
+        )}
+        {uploadingStatus && <p>{uploadingStatus}</p>}
+        {uploadedFile && <img src={uploadedFile} />}
 
               <Chip
                 label="Es necesario al menos 1 imagen"
@@ -329,3 +376,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 };
 
 export default ProductAdminPage;
+// function setUploadingStatus(arg0: string) {
+//   throw new Error("Function not implemented.");
+// }
+
