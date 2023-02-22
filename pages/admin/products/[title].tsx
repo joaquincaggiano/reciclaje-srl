@@ -84,8 +84,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   };
 
   const uploadFile = async () => {
-    setUploadingStatus("Uploading the file to AWS S3");
-    const imageName = "product/" + product._id;
+    // setUploadingStatus("Uploading the file to AWS S3");
+    const imageName = "product/" + product._id + "/" + Date.now();
 
     let { data } = await axios.post("/api/s3/uploadFile", {
       name: imageName,
