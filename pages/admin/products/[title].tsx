@@ -64,23 +64,29 @@ interface Props {
   product: IProductSchema;
 }
 
-
-
 const ProductAdminPage: FC<Props> = ({ product }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [file, setFile] = useState<any>();
   const [uploadingStatus, setUploadingStatus] = useState<any>();
   const [uploadedFile, setUploadedFile] = useState<any>();
-  
-  const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
-  
-  const router = useRouter();
-  console.log(router.asPath);
 
-  // const fileInputRef = useRef<HTMLInputElement>(null);
+  // console.log("FILE", file);
+
+  const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
+
+  const router = useRouter();
+  // console.log(router.asPath);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e?.target.files){ return };
+    if (!e?.target.files) {
+      return;
+    }
     setFile(e.target.files[0]);
+    setValue("images", [...getValues("images"), e.target.files[0].name], {
+      shouldValidate: true,
+    });
   };
 
   const uploadFile = async () => {
@@ -113,6 +119,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     getValues,
     setValue,
   } = useForm<FormData>({ defaultValues: product });
+
+  console.log("GET VALUES", getValues("images"))
 
   const onChangeColor = (color: string) => {
     const currentColors = getValues("colors");
@@ -150,13 +158,13 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   //   }
   // };
 
-  // const onDeleteImage = (image: string) => {
-  //   setValue(
-  //     "images",
-  //     getValues("images").filter((img) => img !== image),
-  //     { shouldValidate: true }
-  //   );
-  // };
+  const onDeleteImage = (image: string) => {
+    setValue(
+      "images",
+      getValues("images").filter((img) => img !== image),
+      { shouldValidate: true }
+    );
+  };
 
   const onSubmit = async (form: FormData) => {
     if (form.images.length < 1) return;
@@ -277,45 +285,47 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
             <Box display="flex" flexDirection="column">
               <FormGroup>
-              <FormLabel sx={{ mb: 1 }}>Imágenes</FormLabel>
-              <input
-                // ref={fileInputRef}
-                type="file"
-                multiple
-                accept="image/png, image/gif, image/jpeg"
-                style={ {marginBottom: "20px"}
-                  // { display: "none" }
-                }
-               
-                onChange={(e)=> selectFile(e)}
-              />
-              
-              {file && 
-              <Button
-                color="secondary"
-                fullWidth
-                startIcon={<UploadOutlined />}
-                sx={{ mb: 3, color: "white", backgroundColor: "#4caf50" }}
-              onClick={uploadFile}
-              >
-                Cargar imagen
-              </Button>
-              }
-              </FormGroup>
-        {/* {uploadingStatus && <p>{uploadingStatus}</p>}
-        {uploadedFile && <img src={uploadedFile} />} */}
+                <FormLabel sx={{ mb: 1 }}>Imágenes</FormLabel>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  name="images"
+                  multiple
+                  accept="image/png, image/gif, image/jpeg"
+                  style={{ display: "none" }}
+                  onChange={(e) => selectFile(e)}
+                />
 
-              <Chip
-                label="Es necesario al menos 1 imagen"
-                color="error"
-                variant="outlined"
-                sx={{
-                  display: getValues("images").length < 1 ? "flex" : "none",
-                }}
-              />
+                <Button
+                  color="secondary"
+                  fullWidth
+                  startIcon={<UploadOutlined />}
+                  sx={{ mb: 3, color: "white", backgroundColor: "#4caf50" }}
+                  // onClick={uploadFile}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  Cargar imagen
+                </Button>
+              </FormGroup>
+              {uploadingStatus && <p>{uploadingStatus}</p>}
+              {uploadedFile && <img src={uploadedFile} />}
+
+              {!file && (
+                <Chip
+                  label="Es necesario al menos 1 imagen"
+                  color="error"
+                  variant="outlined"
+                  sx={{
+                    display: getValues("images").length < 1 ? "flex" : "none",
+                  }}
+                />
+              )}
+
+              
+
 
               <Grid container spacing={2}>
-                {product.images.map((img) => (
+                {getValues("images").map((img) => (
                   <Grid item xs={4} sm={3} key={img}>
                     <Card>
                       <CardMedia
@@ -325,7 +335,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                         alt={img}
                       />
                       <CardActions>
-                        <Button fullWidth color="error">
+                        <Button
+                          fullWidth
+                          color="error" /*onClick={onDeleteImage(uploadedFile)}*/
+                        >
                           Borrar
                         </Button>
                       </CardActions>
@@ -349,7 +362,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (title === "new") {
     const tempProduct = JSON.parse(JSON.stringify(new Product()));
     delete tempProduct._id;
-    tempProduct.images = ["img1.jpg"];
+    // tempProduct.images = ["img1.jpg"];
     product = tempProduct;
   } else {
     product = await dbProducts.getProductByTitle(title.toString());
@@ -375,4 +388,3 @@ export default ProductAdminPage;
 // function setUploadingStatus(arg0: string) {
 //   throw new Error("Function not implemented.");
 // }
-

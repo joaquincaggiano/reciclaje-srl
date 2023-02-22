@@ -15,6 +15,8 @@ export default function handler(
       return getProducts(req, res);
     case "PUT":
       return updateProduct(req, res);
+    case "POST":
+      return createProduct(req, res);
 
     default:
       return res.status(400).json({ message: "Bad Request" });
@@ -63,6 +65,42 @@ const updateProduct = async (
     await db.disconnect();
 
     return res.status(200).json(productToUpdate);
+  } catch (error) {
+    console.log(error);
+    await db.disconnect();
+    return res.status(400).json({ message: "Revisar la consola del servidor" });
+  }
+};
+
+const createProduct = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) => {
+  const { images = [] } = req.body as IProductSchema;
+
+  if (images.length < 1) {
+    return res
+      .status(400)
+      .json({ message: "Es necesario al menos una imágenes" });
+  }
+
+  try {
+    await db.connect();
+    const productInDB = await Product.findOne({ title: req.body.title });
+
+    if (productInDB) {
+      await db.disconnect();
+      return res
+        .status(400)
+        .json({ message: "Ya existe un producto con ese nombre" });
+    }
+
+    const product = new Product(req.body);
+    await product.save();
+
+    await db.disconnect();
+
+    return res.status(201).json(product);
   } catch (error) {
     console.log(error);
     await db.disconnect();
