@@ -54,6 +54,7 @@ const validColors = [
 
 interface FormData {
   _id?: string;
+  internalID: string;
   title: string;
   images: string[];
   colors: string[];
@@ -67,10 +68,8 @@ interface Props {
 const ProductAdminPage: FC<Props> = ({ product }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [file, setFile] = useState<any>();
-  const [uploadingStatus, setUploadingStatus] = useState<any>();
-  const [uploadedFile, setUploadedFile] = useState<any>();
-
-  // console.log("FILE", file);
+  const [imagePreview, setImagePreview] = useState<any>();
+  const [imageName, setImageName] = useState<any>();
 
   const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
@@ -79,37 +78,25 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e?.target.files) {
-      return;
-    }
-    setFile(e.target.files[0]);
-    setValue("images", [...getValues("images"), e.target.files[0].name], {
-      shouldValidate: true,
-    });
-  };
+  console.log("imagename", imageName);
 
   const uploadFile = async () => {
-    // setUploadingStatus("Uploading the file to AWS S3");
-    const imageName = "product/" + product._id + "/" + Date.now();
-
-    let { data } = await axios.post("/api/s3/uploadFile", {
-      name: imageName,
-      type: file.type,
-    });
-
-    console.log(data);
-
-    const url = data.url;
-    let { data: newData } = await axios.put(url, file, {
-      headers: {
-        "Content-type": file.type,
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
-
-    setUploadedFile(BUCKET_URL + imageName);
-    setFile(null);
+          let { data } = await axios.post("/api/s3/uploadFile", {
+            name: imageName,
+            type: file.type,
+          });
+          
+              console.log(data);
+          
+              const url = data.url;
+              let { data: newData } = await axios.put(url, file, {
+                headers: {
+                  "Content-type": file.type,
+                  "Access-Control-Allow-Origin": "*",
+                },
+              });
+        
+              setFile(null);
   };
 
   const {
@@ -120,7 +107,22 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue,
   } = useForm<FormData>({ defaultValues: product });
 
-  console.log("GET VALUES", getValues("images"))
+  console.log("GET VALUES title", getValues("title"))
+
+  const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e?.target.files) {
+      return;
+    }
+    //ACA ESTA EL ERROR! el imagename no llega a cargarse a tiempo y en mongo sale como undefined pero cuando se hace el upload al s3 va sin problema
+    setImageName(`product/${getValues("title")}/${Date.now()}`)
+    setFile(e.target.files[0])
+    setImagePreview(URL.createObjectURL(e.target.files[0]))
+    console.log("IMAGE NAME", imageName)
+    setValue("images",  [BUCKET_URL + imageName], {
+      shouldValidate: true,
+    });
+    console.log("getvalueimage", getValues("images"))
+  };
 
   const onChangeColor = (color: string) => {
     const currentColors = getValues("colors");
@@ -158,26 +160,26 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   //   }
   // };
 
-  const onDeleteImage = (image: string) => {
-    setValue(
-      "images",
-      getValues("images").filter((img) => img !== image),
-      { shouldValidate: true }
-    );
-  };
+  // const onDeleteImage = (image: string) => {
+  //   setValue(
+  //     "images",
+  //     getValues("images").filter((img) => img !== image),
+  //     { shouldValidate: true }
+  //   );
+  // };
 
   const onSubmit = async (form: FormData) => {
+    console.log("EL FoRM", form)
     if (form.images.length < 1) return;
-
     setIsSaving(true);
-
     try {
-      const { data } = await axios({
-        url: "/api/admin/products",
-        method: form._id ? "PUT" : "POST",
-        data: form,
-      });
-
+        const { data } = await axios({
+          url: "/api/admin/products",
+          method: form._id ? "PUT" : "POST",
+          data: form,
+        });
+        uploadFile()
+      alert("Success!");
       if (!form._id) {
         router.replace(`/admin/products/${form.title}`);
       } else {
@@ -240,6 +242,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               })}
               error={!!errors.title}
               helperText={errors.title?.message}
+              onChange={(e)=>
+                setValue("title", e.target.value, { shouldValidate: true })}
             />
 
             <Divider sx={{ my: 1 }} />
@@ -307,10 +311,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   Cargar imagen
                 </Button>
               </FormGroup>
-              {uploadingStatus && <p>{uploadingStatus}</p>}
-              {uploadedFile && <img src={uploadedFile} />}
+              {/* {uploadingStatus && <p>{uploadingStatus}</p>} */}
+              {/* {uploadedFile && <img src={uploadedFile} />} */}
 
-              {!file && (
+              {!imagePreview && (
                 <Chip
                   label="Es necesario al menos 1 imagen"
                   color="error"
@@ -320,32 +324,34 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   }}
                 />
               )}
-
-              
-
-
+              {imagePreview && (
               <Grid container spacing={2}>
-                {getValues("images").map((img) => (
-                  <Grid item xs={4} sm={3} key={img}>
+                {/* {getValues("images").map((img) => ( */}
+                  <Grid item xs={4} sm={3} 
+                  // key={img}
+                  >
                     <Card>
                       <CardMedia
                         component="img"
                         className="fadeIn"
-                        image={img}
-                        alt={img}
+                        image={imagePreview}
+                        alt={imagePreview}
                       />
+                        
                       <CardActions>
                         <Button
                           fullWidth
                           color="error" /*onClick={onDeleteImage(uploadedFile)}*/
+                          onClick= {()=>setFile(null)}
                         >
                           Borrar
                         </Button>
                       </CardActions>
                     </Card>
                   </Grid>
-                ))}
               </Grid>
+              )}
+                {/* ))} */}
             </Box>
           </Grid>
         </Grid>
