@@ -18,8 +18,15 @@ interface Props {
 
 
 export const ProductCard: FC<Props> = ({ product }) => {
+  // const imageUrl = product.images.map(url => {
+  //   const url1 = url?.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com", "https://ik.imagekit.io/e2ouoknyw")
+  //   return url1
+  // })
+  // console.log("Image url", imageUrl)
+  // console.log("products image", product.images[0]?.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com", "https://ik.imagekit.io/e2ouoknyw"))
+  // const url1 = product.images[0]?.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com", "https://ik.imagekit.io/e2ouoknyw")
 
-  const imageURL = `https://ik.imagekit.io/e2ouoknyw/product/${product._id}`
+  // const imageURL = `https://ik.imagekit.io/e2ouoknyw/product/${product._id}`
   return (
     <Grid
       item
@@ -35,7 +42,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
           <CardMedia
             component="img"
             height="200"
-            image={imageURL}
+            image={product.images[0]}
             alt={product.title}
           />
           <CardContent>

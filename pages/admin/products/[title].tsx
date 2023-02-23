@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useRef, useState } from "react";
+import { ChangeEvent, ChangeEventHandler, useEffect, FC, useRef, useState } from "react";
 import { GetServerSideProps } from "next";
 
 import { useRouter } from "next/router";
@@ -54,7 +54,6 @@ const validColors = [
 
 interface FormData {
   _id?: string;
-  internalID: string;
   title: string;
   images: string[];
   colors: string[];
@@ -107,17 +106,33 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue,
   } = useForm<FormData>({ defaultValues: product });
 
+  useEffect(() => {
+    if(getValues("title") !== undefined) {
+      const productName = getValues("title").replace(" ", "-").toLowerCase()
+      setImageName(`product/${productName}/${Date.now()}`)
+    }
+    // if (getValues("images").length != 0){
+    //   setImagePreview(getValues("images")[0])
+    // }
+  }, [])
+  
+
   console.log("GET VALUES title", getValues("title"))
+
+
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
+   setValue("title", e.target.value, 
+   { shouldValidate: true })
+   const productName = e.target.value.replace(" ", "-").toLowerCase()
+   setImageName(`product/${productName}/${Date.now()}`)
+  }
 
   const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e?.target.files) {
       return;
     }
-    //ACA ESTA EL ERROR! el imagename no llega a cargarse a tiempo y en mongo sale como undefined pero cuando se hace el upload al s3 va sin problema
-    setImageName(`product/${getValues("title")}/${Date.now()}`)
     setFile(e.target.files[0])
     setImagePreview(URL.createObjectURL(e.target.files[0]))
-    console.log("IMAGE NAME", imageName)
     setValue("images",  [BUCKET_URL + imageName], {
       shouldValidate: true,
     });
@@ -138,36 +153,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue("colors", [...currentColors, color], { shouldValidate: true });
   };
 
-  // const onFilesSelected = async (e: ChangeEvent<HTMLInputElement>) => {
-  //   if (!e.target.files || e.target.files.length === 0) {
-  //     return;
-  //   }
-
-  //   try {
-  //     for (const file of e.target.files) {
-  //       const formData = new FormData();
-  //       formData.append("file", file);
-  //       const { data } = await axios.post<{ message: string }>(
-  //         "/api/admin/upload",
-  //         formData
-  //       );
-  //       setValue("images", [...getValues("images"), data.message], {
-  //         shouldValidate: true,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // const onDeleteImage = (image: string) => {
-  //   setValue(
-  //     "images",
-  //     getValues("images").filter((img) => img !== image),
-  //     { shouldValidate: true }
-  //   );
-  // };
-
   const onSubmit = async (form: FormData) => {
     console.log("EL FoRM", form)
     if (form.images.length < 1) return;
@@ -179,7 +164,9 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           data: form,
         });
         uploadFile()
+
       alert("Success!");
+      router.replace('/admin/products')
       if (!form._id) {
         router.replace(`/admin/products/${form.title}`);
       } else {
@@ -242,8 +229,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               })}
               error={!!errors.title}
               helperText={errors.title?.message}
-              onChange={(e)=>
-                setValue("title", e.target.value, { shouldValidate: true })}
+              onChange={(e)=>handleTitleChange(e)}
             />
 
             <Divider sx={{ my: 1 }} />
@@ -311,10 +297,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   Cargar imagen
                 </Button>
               </FormGroup>
-              {/* {uploadingStatus && <p>{uploadingStatus}</p>} */}
-              {/* {uploadedFile && <img src={uploadedFile} />} */}
 
-              {!imagePreview && (
+              {!imagePreview || getValues("images").length === 0 && (
                 <Chip
                   label="Es necesario al menos 1 imagen"
                   color="error"
@@ -324,7 +308,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   }}
                 />
               )}
-              {imagePreview && (
+              {imagePreview || getValues("images").length !== 0 && (
               <Grid container spacing={2}>
                 {/* {getValues("images").map((img) => ( */}
                   <Grid item xs={4} sm={3} 
@@ -334,7 +318,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                       <CardMedia
                         component="img"
                         className="fadeIn"
-                        image={imagePreview}
+                        image={imagePreview || getValues("images")[0]}
                         alt={imagePreview}
                       />
                         
@@ -391,6 +375,3 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 };
 
 export default ProductAdminPage;
-// function setUploadingStatus(arg0: string) {
-//   throw new Error("Function not implemented.");
-// }
