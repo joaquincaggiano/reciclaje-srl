@@ -122,6 +122,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue("colors", [...currentColors, color], { shouldValidate: true });
   };
 
+  const onDeleteImage = (image: string) => {
+    setValue("images", getValues("images").filter((img) => img !== image), { shouldValidate: true });
+  };
+
   const uploadFile = async () => {
     let { data } = await axios.post("/api/s3/uploadFile", {
       name: imageName,
