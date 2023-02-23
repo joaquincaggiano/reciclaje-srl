@@ -1,4 +1,4 @@
-import { ChangeEvent, ChangeEventHandler, useEffect, FC, useRef, useState } from "react";
+import { ChangeEvent, useEffect, FC, useRef, useState } from "react";
 import { GetServerSideProps } from "next";
 
 import { useRouter } from "next/router";
@@ -65,38 +65,19 @@ interface Props {
 }
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
+  const router = useRouter();
+
   const [isSaving, setIsSaving] = useState(false);
   const [file, setFile] = useState<any>();
-  const [imagePreview, setImagePreview] = useState<any>();
-  const [imageName, setImageName] = useState<any>();
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const [imageName, setImageName] = useState<string>("");
 
-  const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
-
-  const router = useRouter();
-  // console.log(router.asPath);
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  console.log("imagename", imageName);
-
-  const uploadFile = async () => {
-          let { data } = await axios.post("/api/s3/uploadFile", {
-            name: imageName,
-            type: file.type,
-          });
-          
-              console.log(data);
-          
-              const url = data.url;
-              let { data: newData } = await axios.put(url, file, {
-                headers: {
-                  "Content-type": file.type,
-                  "Access-Control-Allow-Origin": "*",
-                },
-              });
-        
-              setFile(null);
-  };
+  useEffect(() => {
+    if(getValues("title") !== undefined) {
+      const productName = getValues("title").replace(" ", "-").toLowerCase()
+      setImageName(`product/${productName}/${Date.now()}`)
+    }
+  }, [])
 
   const {
     register,
@@ -105,27 +86,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     getValues,
     setValue,
   } = useForm<FormData>({ defaultValues: product });
-
-  useEffect(() => {
-    if(getValues("title") !== undefined) {
-      const productName = getValues("title").replace(" ", "-").toLowerCase()
-      setImageName(`product/${productName}/${Date.now()}`)
-    }
-    // if (getValues("images").length != 0){
-    //   setImagePreview(getValues("images")[0])
-    // }
-  }, [])
   
-
-  console.log("GET VALUES title", getValues("title"))
-
-
-  const handleTitleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
-   setValue("title", e.target.value, 
-   { shouldValidate: true })
-   const productName = e.target.value.replace(" ", "-").toLowerCase()
-   setImageName(`product/${productName}/${Date.now()}`)
-  }
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
   const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e?.target.files) {
@@ -136,10 +100,16 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue("images",  [BUCKET_URL + imageName], {
       shouldValidate: true,
     });
-    console.log("getvalueimage", getValues("images"))
   };
 
-  const onChangeColor = (color: string) => {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
+    setValue("title", e.target.value, 
+    { shouldValidate: true })
+    const productName = e.target.value.replace(" ", "-").toLowerCase()
+    setImageName(`product/${productName}/${Date.now()}`)
+   };
+
+   const onChangeColor = (color: string) => {
     const currentColors = getValues("colors");
 
     if (currentColors.includes(color)) {
@@ -149,12 +119,28 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         { shouldValidate: true }
       );
     }
-
     setValue("colors", [...currentColors, color], { shouldValidate: true });
   };
 
+  const uploadFile = async () => {
+    let { data } = await axios.post("/api/s3/uploadFile", {
+      name: imageName,
+      type: file.type,
+    });
+   
+        console.log(data);
+    
+        const url = data.url;
+        let { data: newData } = await axios.put(url, file, {
+          headers: {
+            "Content-type": file.type,
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+        setFile(null);
+};
+
   const onSubmit = async (form: FormData) => {
-    console.log("EL FoRM", form)
     if (form.images.length < 1) return;
     setIsSaving(true);
     try {
@@ -164,8 +150,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           data: form,
         });
         uploadFile()
-
-      alert("Success!");
       router.replace('/admin/products')
       if (!form._id) {
         router.replace(`/admin/products/${form.title}`);
