@@ -97,7 +97,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     }
     setFile(e.target.files[0]);
     setImagePreview(URL.createObjectURL(e.target.files[0]));
-    setValue("images", [BUCKET_URL + imageName], {
+    setValue("images", [...getValues("images"), BUCKET_URL + imageName], {
       shouldValidate: true,
     });
   };
@@ -131,8 +131,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     );
     setFile(null);
   };
-
-  console.log("getValuesImage", getValues("images"))
 
   const uploadFile = async () => {
     let { data } = await axios.post("/api/s3/uploadFile", {
