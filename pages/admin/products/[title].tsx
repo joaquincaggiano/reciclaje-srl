@@ -325,6 +325,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                                 fullWidth
                                 color="error"
                                 onClick={() => onDeleteImage(img)}
+                                sx={{'&:hover': {backgroundColor: "#d32f2f", color: "#ffff"}}}
                                 // onClick={() => setFile(null)}
                               >
                                 Borrar
