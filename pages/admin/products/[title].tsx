@@ -74,7 +74,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   useEffect(() => {
     if(getValues("title") !== undefined) {
-      const productName = getValues("title").replace(" ", "-").toLowerCase()
+      const productName = getValues("title").replaceAll(" ", "-").toLowerCase()
       setImageName(`product/${productName}/${Date.now()}`)
     }
   }, [])
@@ -105,7 +105,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
     setValue("title", e.target.value, 
     { shouldValidate: true })
-    const productName = e.target.value.replace(" ", "-").toLowerCase()
+    const productName = e.target.value.replaceAll(" ", "-").toLowerCase()
     setImageName(`product/${productName}/${Date.now()}`)
    };
 
