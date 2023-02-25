@@ -70,13 +70,14 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const [isSaving, setIsSaving] = useState(false);
   // const [file, setFile] = useState<File | null>();
   const [file, setFile] = useState<any>();
-  const [imagePreview, setImagePreview] = useState<string>("");
+  const [imagePreview, setImagePreview] = useState<string[]>([""]);
   const [imageName, setImageName] = useState<string>("");
 
   useEffect(() => {
     if (getValues("title") !== undefined) {
       const productName = getValues("title").replaceAll(" ", "-").toLowerCase();
       setImageName(`product/${productName}/${Date.now()}`);
+      setImagePreview([...getValues("images")])
     }
   }, []);
 
@@ -100,15 +101,21 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
     // toFix: Si subis dos imagenes a la vez se suben con el mismo path
     try {
+      let arrayDeFiles = []
       for (let i = 0; i < e.target.files.length; i++) {
         // let fileIteration = e.target.files.item(i)
-        // console.log(fileIteration)
-        setFile(e.target.files[i]);
-        setImagePreview(URL.createObjectURL(e.target.files[i]));
-        setValue("images", [...getValues("images"), BUCKET_URL + imageName], {
-          shouldValidate: true,
-        });
+        console.log("ONE FILE",e.target.files[i])
+        arrayDeFiles.push(e.target.files[i])
+        // setImagePreview(URL.createObjectURL(e.target.files[i]));
+        setFile(arrayDeFiles);
       }
+
+      const urls = arrayDeFiles.map(oneFile => {
+        return URL.createObjectURL(oneFile)
+      })
+      console.log("URLS", urls)
+      setImagePreview([...imagePreview, ...urls])
+
     } catch (error) {
       console.log(error)
     }
@@ -119,7 +126,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     // });
   };
 
-  console.log("FILE", file)
+  // console.log("FILE", file)
   console.log("getValues", getValues("images"))
   console.log("imagepreview", imagePreview)
 
@@ -145,6 +152,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   };
 
   const onDeleteImage = (image: string) => {
+    setImagePreview(imagePreview.filter((img) => img !== image))
     setValue(
       "images",
       getValues("images").filter((img) => img !== image),
@@ -172,8 +180,12 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   };
 
   const onSubmit = async (form: FormData) => {
+    
     if (form.images.length < 1) return;
     setIsSaving(true);
+    setValue("images", [...getValues("images"), BUCKET_URL + imageName], {
+      shouldValidate: true,
+    });
     try {
       const { data } = await axios({
         url: "/api/admin/products",
@@ -314,8 +326,9 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 </Button>
               </FormGroup>
 
-              {/*!imagePreview ||*/
-                (getValues("images").length === 0 && (
+              {
+              // !imagePreview ||
+                imagePreview.length === 0 && (
                   <Chip
                     label="Es necesario al menos 1 imagen"
                     color="error"
@@ -324,13 +337,13 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                       display: getValues("images").length < 1 ? "flex" : "none",
                     }}
                   />
-                ))}
+                )}
 
               {/*imagePreview ||*/
-                (getValues("images").length !== 0 && (
+                (imagePreview.length !== 0 && (
                   <Grid container spacing={2}>
-                    {getValues("images").map((img, i) => {
-                      console.log("IMG", img)
+                    {imagePreview.map((img, i) => {
+                      // console.log("IMG", img)
                       return (
                         <Grid item xs={4} sm={3} key={i}>
                           <Card>
