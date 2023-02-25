@@ -1,5 +1,6 @@
 // import { NextApiRequest, NextApiResponse } from "next";
 // import S3 from "aws-sdk/clients/s3";
+import Credentials from 'next-auth/providers/credentials';
 
 // const s3 = new S3({
 //   region: "sa-east-1",
@@ -43,35 +44,61 @@
 
 
 
-// // Import required AWS SDK clients and commands for Node.js.
-// import { PutObjectCommand } from 'aws-sdk/clients/s3';
-// import { s3Client } from "./libs/s3Client.js"; // Helper function that creates an Amazon S3 service client module.
-// import path from "path";
-// import fs from "fs";
 
-// const file = "OBJECT_PATH_AND_NAME"; // Path to and name of object. For example '../myFiles/index.js'.
-// const fileStream = fs.createReadStream(file);
+import { NextApiRequest, NextApiResponse } from 'next'
+import { createPresignedPost } from '@aws-sdk/s3-presigned-post'
+import { S3Client } from '@aws-sdk/client-s3'
+// import S3 from "aws-sdk/clients/s3";
 
-// // Set the parameters
-// export const uploadParams = {
-//   Bucket: "BUCKET_NAME",
-//   // Add the required 'Key' parameter using the 'path' module.
-//   Key: path.basename(file),
-//   // Add the required 'Body' parameter
-//   Body: fileStream,
-// };
+const s3 = new S3Client({
+    region: "sa-east-1",
+    credentials: {
+      accessKeyId: process.env.ACCESS_KEY || "",
+      secretAccessKey: process.env.SECRET_KEY || "",
+    },
+    // signatureVersion: "v4",
+  });
 
+const uploadHandler = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+): Promise<void> => {
+  const {
+    // query: { file, fileType, fileId, fileTitle },
+    method,
+  } = req
 
-// // Upload file to specified bucket.
-// export const run = async () => {
-//   try {
-//     const data = await s3Client.send(new PutObjectCommand(uploadParams));
-//     console.log("Success", data);
-//     return data; // For unit tests.
-//   } catch (err) {
-//     console.log("Error", err);
-//   }
-// };
-// run();
+  let { name, type } = req.body;
 
+  switch (method) {
+    case 'POST':
+      try {
+        const post = await createPresignedPost(s3, {
+          Bucket: process.env.S3_BUCKET_NAME || "",
+          // Key: must match POST url for file upload
+          Key: `${name}-${type}`,
+          Fields: {
+            ContentType: type as string,
+          },
+          Expires: 600, // seconds
+          Conditions: [
+            { bucket: process.env.S3_BUCKET_NAME || "" },
+            ['starts-with', '$ContentType', 'image/'],
+          ],
+        })
+
+        res.status(200).json(post)
+      } catch (error: any) {
+        console.error('🚀 ~ file: index.ts ~ line 45 ~ error', error)
+        // throw error for errorWrapper to handle?
+        // send to some error logging service?
+        res.json(error)
+        // throw error
+      }
+    default:
+      res.status(405).end(`Method ${method} Not Allowed`)
+  }
+}
+
+export default uploadHandler
 
