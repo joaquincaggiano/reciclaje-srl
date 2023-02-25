@@ -68,6 +68,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const router = useRouter();
 
   const [isSaving, setIsSaving] = useState(false);
+  // const [file, setFile] = useState<File | null>();
   const [file, setFile] = useState<any>();
   const [imagePreview, setImagePreview] = useState<string>("");
   const [imageName, setImageName] = useState<string>("");
@@ -92,15 +93,35 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
   const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
+    // console.log("E TARGET FILES", e.target.files)
     if (!e?.target.files) {
       return;
     }
-    setFile(e.target.files[0]);
-    setImagePreview(URL.createObjectURL(e.target.files[0]));
-    setValue("images", [...getValues("images"), BUCKET_URL + imageName], {
-      shouldValidate: true,
-    });
+
+    // toFix: Si subis dos imagenes a la vez se suben con el mismo path
+    try {
+      for (let i = 0; i < e.target.files.length; i++) {
+        // let fileIteration = e.target.files.item(i)
+        // console.log(fileIteration)
+        setFile(e.target.files[i]);
+        setImagePreview(URL.createObjectURL(e.target.files[i]));
+        setValue("images", [...getValues("images"), BUCKET_URL + imageName], {
+          shouldValidate: true,${file.name}/
+        });
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    // setFile(e.target.files[0]);
+    // setImagePreview(URL.createObjectURL(e.target.files[0]));
+    // setValue("images", [...getValues("images"), BUCKET_URL + imageName], {
+    //   shouldValidate: true,
+    // });
   };
+
+  console.log("FILE", file)
+  console.log("getValues", getValues("images"))
+  console.log("imagepreview", imagePreview)
 
   const handleTitleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -277,7 +298,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   multiple
                   accept="image/png, image/gif, image/jpeg"
                   style={{ display: "none" }}
-                  onChange={(e) => selectFile(e)}
+                  // onChange={(e) => selectFile(e)}
+                  onChange={selectFile}
                 />
 
                 <Button
@@ -307,15 +329,16 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               {/*imagePreview ||*/
                 (getValues("images").length !== 0 && (
                   <Grid container spacing={2}>
-                    {getValues("images").map((img) => {
+                    {getValues("images").map((img, i) => {
+                      console.log("IMG", img)
                       return (
-                        <Grid item xs={4} sm={3} key={img}>
+                        <Grid item xs={4} sm={3} key={i}>
                           <Card>
                             <CardMedia
                               component="img"
                               className="fadeIn"
-                              image={imagePreview || getValues("images")[0]}
-                              alt={imagePreview}
+                              image={img}
+                              alt={img}
                             />
 
                             <CardActions>
@@ -324,7 +347,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                                 color="error"
                                 onClick={() => onDeleteImage(img)}
                                 sx={{'&:hover': {backgroundColor: "#d32f2f", color: "#ffff"}}}
-                                // onClick={() => setFile(null)}
                               >
                                 Borrar
                               </Button>
