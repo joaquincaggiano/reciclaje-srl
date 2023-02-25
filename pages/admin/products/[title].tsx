@@ -106,7 +106,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         setFile(e.target.files[i]);
         setImagePreview(URL.createObjectURL(e.target.files[i]));
         setValue("images", [...getValues("images"), BUCKET_URL + imageName], {
-          shouldValidate: true,${file.name}/
+          shouldValidate: true,
         });
       }
     } catch (error) {

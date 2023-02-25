@@ -46,7 +46,7 @@ const Products = () => {
 
   const rows = data!.map((product) => {
     const colores = product.colors.join(", ");
-    console.log('prod img', product.images )
+    // console.log('prod img', product.images )
     return {
       id: product._id,
       title: product.title,
