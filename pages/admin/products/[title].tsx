@@ -126,9 +126,9 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     // });
   };
 
-  // console.log("FILE", file)
-  console.log("getValues", getValues("images"))
-  console.log("imagepreview", imagePreview)
+  console.log("FILE", file)
+  // console.log("getValues", getValues("images"))
+  // console.log("imagepreview", imagePreview)
 
   const handleTitleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -162,17 +162,23 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   };
 
   const uploadFile = async () => {
+    // File ahora es un array
+    const oneFile = file.map((fil:File) => {
+      return fil;
+    })
+
     let { data } = await axios.post("/api/s3/uploadFile", {
       name: imageName,
-      type: file.type,
+      // type: file.type,
+      type: oneFile.type,
     });
 
     console.log(data);
 
     const url = data.url;
-    let { data: newData } = await axios.put(url, file, {
+    let { data: newData } = await axios.put(url, oneFile, /*file,*/ {
       headers: {
-        "Content-type": file.type,
+        "Content-type": oneFile.type,
         "Access-Control-Allow-Origin": "*",
       },
     });
