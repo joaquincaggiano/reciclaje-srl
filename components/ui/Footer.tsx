@@ -15,6 +15,8 @@ import {
   LocalPhoneOutlined,
 } from "@mui/icons-material";
 
+import { Subscribe } from "../mailchimp";
+
 export const Footer = () => {
 
 
@@ -49,7 +51,8 @@ export const Footer = () => {
           justifyContent="space-evenly"
           alignItems="center"
         >
-          <TextField
+          <Subscribe />
+          {/* <TextField
             sx={{ backgroundColor: "white", width: "60%", borderRadius: "8px" }}
             type="email"
             label="Correo"
@@ -61,7 +64,7 @@ export const Footer = () => {
             color="secondary"
           >
             Suscribirse
-          </Button>
+          </Button> */}
         </Grid>
 
         <Grid
