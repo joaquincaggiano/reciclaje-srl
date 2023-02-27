@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from 'react';
 import { Box, Button, Chip, Modal, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { validations } from "@/utils";
 import { CancelOutlined } from "@mui/icons-material";
+import { UiContext } from '@/context';
 
 type FormData = {
   email: string;
@@ -23,7 +24,9 @@ const style = {
 };
 
 export const ModalSubscribe = () => {
-  const [open, setOpen] = useState<boolean>(true);
+  const {isModalOpen, toggleModalOpen} = useContext(UiContext)
+
+  // const [open, setOpen] = useState<boolean>(true);
   const [email, setEmail] = useState<string>("");
   const [state, setState] = useState<string>("idle");
   const [message, setMessage] = useState<string>("");
@@ -34,7 +37,7 @@ export const ModalSubscribe = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const handleClose = () => setOpen(false);
+  // const handleClose = () => setOpen(false);
 
   const onSubscribe = async () => {
     setState("Loading");
@@ -56,7 +59,7 @@ export const ModalSubscribe = () => {
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={isModalOpen} onClose={toggleModalOpen}>
       <form onSubmit={handleSubmit(onSubscribe)} noValidate>
         <Box sx={style}>
           <CancelOutlined
@@ -67,7 +70,7 @@ export const ModalSubscribe = () => {
               fontSize: "25px",
               "&:hover": { color: "#d32f2f" },
             }}
-            onClick={handleClose}
+            onClick={toggleModalOpen}
           />
 
           <Typography variant="h4" component="h2">

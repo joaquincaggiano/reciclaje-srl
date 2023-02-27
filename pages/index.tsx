@@ -1,19 +1,28 @@
+import { useEffect, useContext } from 'react';
+import { UiContext } from "@/context";
 import { NextPage } from "next";
-import { useEffect } from "react";
+
+import { useServices } from "@/hooks/useServices";
+
 import { MainLayout } from "../components/layouts";
 import { CardServicesHome } from "@/components/services";
+import { ModalSubscribe } from "@/components/mailchimp";
 
 import { Carrousel, FullScreenLoading } from "@/components/ui";
 import { Typography, Divider, Grid } from "@mui/material";
 import { content } from "@/utils";
 
-import { useServices } from "@/hooks/useServices";
-import { ModalSubscribe } from "@/components/mailchimp";
 
 const HomePage: NextPage = () => {
   const { services, isLoading } = useServices("/services");
+  const {toggleModalOpen} = useContext(UiContext)
 
-  useEffect(() => {});
+  useEffect(() => {
+    setTimeout(() => {
+      toggleModalOpen()
+    }, 2000)
+  }, []);
+
   return (
     <MainLayout title={content.home.title} metaHeader={content.home.metaHeader}>
       <ModalSubscribe />
