@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Chip, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { validations } from "@/utils";
@@ -10,7 +10,8 @@ type FormData = {
 
 export const Subscribe = () => {
   const [email, setEmail] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [state, setState] = useState<string>("idle");
+  const [message, setMessage] = useState<string>("");
 
   const {
     register,
@@ -19,54 +20,118 @@ export const Subscribe = () => {
   } = useForm<FormData>();
 
   const onSubscribe = async () => {
-    setIsLoading(true);
+    setState("Loading");
 
     try {
       const response = await axios.post("/api/subscribe", { email });
       console.log(response);
-      setIsLoading(true);
+      setState("Success");
       setEmail("");
+      setMessage("Fabuloso, has sido suscripto!");
+      setTimeout(() => {setState("idle")}, 2000)
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
+      setState("Error");
+      setMessage("Algo salío mal");
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubscribe)} noValidate>
       <Box>
-        <Typography variant="h4">Subscribirse a las Novedades</Typography>
-        <Typography variant="body1">
+        <Typography variant="h4" sx={{ textAlign: "center" }}>
+          Subscribirse a las Novedades
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          sx={{ textAlign: "center", fontSize: "20px" }}
+        >
           Notificate sobre todas nuestras novedades de negocios
         </Typography>
 
-        <TextField
-          type="email"
-          label="Correo"
-          variant="filled"
-          fullWidth
-          {...register("email", {
-            required: "Este campo es requerido",
-            validate: validations.isEmail,
-          })}
-          error={!!errors.email} //el !! hace que sea un valor booleano
-          helperText={errors.email?.message}
-        />
-
-        <Button
-          disabled={isLoading === true}
-          type="submit"
-          color="secondary"
-          className="circular-btn"
-          size="large"
-          fullWidth
+        <Box
+          display="flex"
+          justifyContent="space-evenly"
+          alignItems="center"
+          flexWrap="wrap"
           sx={{
-            border: "1px solid #4caf50",
-            "&:hover": { backgroundColor: "#4caf50", color: "white" },
+            flexDirection: { xs: "column" },
+            width: "90%",
+            margin: "auto",
           }}
         >
-          Suscribirse
-        </Button>
+          <Box
+            display="flex"
+            justifyContent="space-evenly"
+            alignItems="center"
+            sx={{ flexDirection: { xs: "column", sm: "row" } }}
+          >
+            <TextField
+              type="email"
+              label="Correo"
+              variant="filled"
+              sx={{
+                backgroundColor: "white",
+                borderRadius: "8px",
+                my: { xs: 2 },
+                mr: { sm: 2 },
+              }}
+              fullWidth
+              {...register("email", {
+                required: "Este campo es requerido",
+                validate: validations.isEmail,
+              })}
+              error={!!errors.email} //el !! hace que sea un valor booleano
+              helperText={errors.email?.message}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <Button
+              disabled={state === "Loading"}
+              type="submit"
+              color="secondary"
+              className="circular-btn"
+              size="large"
+              fullWidth
+              sx={{
+                backgroundColor: "#4caf50",
+                color: "white",
+                height: "55px",
+                border: "1px solid white",
+                width: { xs: "100%", sm: "60%" },
+                "&:hover": { backgroundColor: "white", color: "#4caf50" },
+              }}
+            >
+              Suscribirse
+            </Button>
+          </Box>
+
+          {state === "Error" && (
+            <Chip
+              label={message}
+              color="error"
+              variant="outlined"
+              sx={{
+                backgroundColor: "#ffff",
+                width: "80%",
+                mt: 1,
+                border: "2px solid",
+              }}
+            />
+          )}
+          {state === "Success" && (
+            <Chip
+              label={message}
+              color="secondary"
+              variant="outlined"
+              sx={{
+                backgroundColor: "#ffff",
+                width: "80%",
+                mb: 1,
+              }}
+            />
+          )}
+        </Box>
       </Box>
     </form>
   );

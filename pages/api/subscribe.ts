@@ -6,11 +6,26 @@ type Data = {
   message: string;
 };
 
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) {
+  switch (req.method) {
+    case "POST":
+      return onSubscribeUser(req, res);
 
-export default async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+    default:
+      res.status(400).json({ message: "Bad Request" });
+  }
+}
+
+const onSubscribeUser = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) => {
   const { email } = req.body;
 
-  if (!email || !email.length || !validations.isEmail(email)) {
+  if (!email || !email.length /*|| !validations.isEmail(email)*/) {
     return res.status(400).json({ message: "Email is required" });
   }
 
