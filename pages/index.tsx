@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { MainLayout } from "../components/layouts";
 import { CardServicesHome } from "@/components/services";
 
-import { Carrousel } from "@/components/ui";
+import { Carrousel, FullScreenLoading } from "@/components/ui";
 import { Typography, Divider, Grid } from "@mui/material";
 import { content } from "@/utils";
 
@@ -48,22 +48,26 @@ const HomePage: NextPage = () => {
         {content.services.title}
       </Typography>
 
-      <Grid
-        container
-        spacing={4}
-        sx={{ flexDirection: { xs: "column", sm: "row" }, flexWrap: "wrap" }}
-      >
-        {services.map((svc, i) => {
-          return (
-            <CardServicesHome
-              title={svc.title}
-              description={svc.description}
-              image={svc.images[0]}
-              key={i}
-            />
-          );
-        })}
-      </Grid>
+      {isLoading ? (
+        <FullScreenLoading />
+      ) : (
+        <Grid
+          container
+          spacing={4}
+          sx={{ flexDirection: { xs: "column", sm: "row" }, flexWrap: "wrap" }}
+        >
+          {services.map((svc, i) => {
+            return (
+              <CardServicesHome
+                title={svc.title}
+                description={svc.description}
+                image={svc.images[0]}
+                key={i}
+              />
+            );
+          })}
+        </Grid>
+      )}
 
       <Divider sx={{ mt: 5 }} />
 
