@@ -4,10 +4,11 @@ import { MainLayout } from "../components/layouts";
 import { CardServicesHome } from "@/components/services";
 
 import { Carrousel } from "@/components/ui";
-import { Typography, Divider, Box, Grid } from "@mui/material";
+import { Typography, Divider, Grid } from "@mui/material";
 import { content } from "@/utils";
 
 import { useServices } from "@/hooks/useServices";
+import { ModalSubscribe } from "@/components/mailchimp";
 
 const HomePage: NextPage = () => {
   const { services, isLoading } = useServices("/services");
@@ -15,6 +16,8 @@ const HomePage: NextPage = () => {
   useEffect(() => {});
   return (
     <MainLayout title={content.home.title} metaHeader={content.home.metaHeader}>
+      <ModalSubscribe />
+
       <Typography
         variant="h1"
         component="h1"
