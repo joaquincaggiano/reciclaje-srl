@@ -1,10 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
-import { validations } from "@/utils";
+import { db } from "@/database";
+import { Subscribe } from "@/models";
+// import { validations } from "@/utils";
 
-type Data = {
-  message: string;
-};
+interface ISubscribe {
+  email: string;
+}
+type Data = { message: string } | ISubscribe | { message: string } & {user: ISubscribe};
 
 export default async function handler(
   req: NextApiRequest,
@@ -23,7 +26,7 @@ const onSubscribeUser = async (
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) => {
-  const { email } = req.body;
+  const { email } = req.body as ISubscribe;
 
   if (!email || !email.length /*|| !validations.isEmail(email)*/) {
     return res.status(400).json({ message: "Email is required" });
@@ -48,15 +51,35 @@ const onSubscribeUser = async (
   };
 
   try {
+    
     const response = await axios.post(url, data, options);
+    
     if (response.status >= 400) {
       return res.status(400).json({
         message: `There was an error subscribing to the newsletter. Shoot me an email at joaquincaggiano@gmail and I'll add you to the list.`,
       });
     }
-    return res.status(201).json({ message: "success" });
+
+    await db.connect();
+    const userSubscribeInDB = await Subscribe.findOne({ email: email });
+
+    if (userSubscribeInDB) {
+      await db.disconnect();
+      return res
+        .status(400)
+        .json({ message: "Ya existe un usuario suscripto con ese nombre" });
+    }
+
+    const userToSubscribe = new Subscribe(req.body);
+    await userToSubscribe.save();
+
+    await db.disconnect();
+
+    return res.status(201).json({user: userToSubscribe, message: "success"});
   } catch (error) {
+    await db.disconnect();
     console.log(error);
+    return res.status(400).json({ message: "Revisar la consola del servidor" });
     // return res.status(500).json({ message: error.message });
   }
 };
