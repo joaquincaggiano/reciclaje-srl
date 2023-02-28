@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { db } from "@/database";
-import { Product, Service, Blog } from "@/models";
+import { Product, Service, Blog, Subscribe } from "@/models";
 
 type Data = {
   numbersOfProducts: number;
   numbersOfServices: number;
   numbersOfBlogs: number;
-  // numbersOfUsers: number;
+  numbersOfSubscribes: number;
 };
 
 export default async function handler(
@@ -15,12 +15,12 @@ export default async function handler(
 ) {
   await db.connect();
 
-  const [numbersOfProducts, numbersOfServices, numbersOfBlogs] =
-    await Promise.all([Product.count(), Service.count(), Blog.count()]);
+  const [numbersOfProducts, numbersOfServices, numbersOfBlogs, numbersOfSubscribes] =
+    await Promise.all([Product.count(), Service.count(), Blog.count(), Subscribe.count()]);
 
   await db.disconnect();
 
   res
     .status(200)
-    .json({ numbersOfProducts, numbersOfServices, numbersOfBlogs });
+    .json({ numbersOfProducts, numbersOfServices, numbersOfBlogs, numbersOfSubscribes });
 }
