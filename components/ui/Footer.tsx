@@ -10,6 +10,7 @@ import {
 import { EmailOutlined, LocalPhoneOutlined } from "@mui/icons-material";
 
 import { Subscribe } from "../mailchimp";
+import { content } from "@/utils";
 
 export const Footer = () => {
   return (
@@ -66,7 +67,7 @@ export const Footer = () => {
               variant="button"
               sx={{ fontSize: "20px", color: "white" }}
             >
-              341-1234567
+              {content.contact.datosContacto.whatsapp}
             </Typography>
           </Box>
           <Box display="flex" justifyContent="center" alignItems="center">
