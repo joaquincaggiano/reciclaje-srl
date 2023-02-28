@@ -1,5 +1,3 @@
-import { useEffect, useContext } from 'react';
-import { UiContext } from "@/context";
 import { NextPage } from "next";
 
 import { useServices } from "@/hooks/useServices";
@@ -12,16 +10,8 @@ import { Carrousel, FullScreenLoading } from "@/components/ui";
 import { Typography, Divider, Grid } from "@mui/material";
 import { content } from "@/utils";
 
-
 const HomePage: NextPage = () => {
   const { services, isLoading } = useServices("/services");
-  const {toggleModalOpen} = useContext(UiContext)
-
-  useEffect(() => {
-    setTimeout(() => {
-      toggleModalOpen()
-    }, 2000)
-  }, []);
 
   return (
     <MainLayout title={content.home.title} metaHeader={content.home.metaHeader}>
