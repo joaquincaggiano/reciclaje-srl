@@ -7,8 +7,8 @@ type Data =
   | {
       message: string;
     }
-  | ISubscribe
-  | ISubscribe[];
+  | ISubscribe[]
+  | ISubscribe;
 
 export default function handler(
   req: NextApiRequest,
@@ -17,19 +17,17 @@ export default function handler(
   switch (req.method) {
     case "GET":
       return getSubscribes(req, res);
-
     default:
       return res.status(400).json({ message: "Bad Request" });
   }
 }
 
-const getSubscribes = async (
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) => {
+const getSubscribes = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   await db.connect();
-  const subscribes = await Subscribe.find().sort("asc").lean();
+  const subscribes = await Subscribe.find()
+    .select("email -_id")
+    .lean();
   await db.disconnect();
 
-  res.status(200).json(subscribes);
+  return res.status(200).json(subscribes);
 };

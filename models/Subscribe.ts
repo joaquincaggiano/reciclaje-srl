@@ -1,8 +1,5 @@
 import mongoose, { Schema, model, Model } from 'mongoose';
-
-interface ISubscribe {
-    email: string
-}
+import { ISubscribe } from '@/interfaces';
 
 const subscribeSchema = new Schema({
     email   : { type: String, required: true, unique: true },

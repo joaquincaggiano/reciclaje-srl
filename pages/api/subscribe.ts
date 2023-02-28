@@ -2,11 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 import { db } from "@/database";
 import { Subscribe } from "@/models";
+import { ISubscribe } from "@/interfaces";
 // import { validations } from "@/utils";
 
-interface ISubscribe {
-  email: string;
-}
 type Data = { message: string } | ISubscribe | { message: string } & {user: ISubscribe};
 
 export default async function handler(
