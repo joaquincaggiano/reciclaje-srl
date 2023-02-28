@@ -10,6 +10,7 @@ import { ModalSubscribe } from "../mailchimp";
 
 import { IconButton, Link, Tooltip } from "@mui/material";
 import { UnsubscribeOutlined } from "@mui/icons-material";
+import { content } from "@/utils";
 
 interface Props {
   title: string;
@@ -78,12 +79,12 @@ export const MainLayout: FC<Props> = ({
         <IconButton
           sx={{
             position: "fixed",
-            top: { xs: "65%" },
+            top: { xs: "65%", xl: "63%" },
             left: { xs: "75%", sm: "87%", md: "90%", lg: "92.2%", xl: "95%" },
           }}
         >
           <NextLink
-            href="https://wa.me/+5493416957516"
+            href={`https://wa.me/${content.contact.datosContacto.whatsapp}`}
             passHref
             legacyBehavior
             replace={true}
