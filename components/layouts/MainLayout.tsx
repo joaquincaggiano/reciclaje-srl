@@ -60,7 +60,7 @@ export const MainLayout: FC<Props> = ({
             sx={{
               border: "1px solid #4caf50",
               position: "fixed",
-              top: "80%",
+              top: "73%",
               left: { xs: "77%", sm: "88%", md: "91%", lg: "93%", xl: "95.4%" },
               "&:hover": { backgroundColor: "#4caf50" },
             }}
@@ -78,7 +78,7 @@ export const MainLayout: FC<Props> = ({
         <IconButton
           sx={{
             position: "fixed",
-            top: { xs: "72%", xl: "70%" },
+            top: { xs: "65%" },
             left: { xs: "75%", sm: "87%", md: "90%", lg: "92.2%", xl: "95%" },
           }}
         >
