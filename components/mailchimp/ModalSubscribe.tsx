@@ -55,6 +55,9 @@ export const ModalSubscribe = () => {
       console.log(error);
       setState("Error");
       setMessage("Algo salío mal");
+      setTimeout(() => {
+        setState("idle");
+      }, 2000);
     }
   };
 

@@ -42,7 +42,30 @@ import Credentials from 'next-auth/providers/credentials';
 // };
 
 
+/********FUNCION EN EL TSX*******/
+  // const uploadFile = async () => {
+  //   // File ahora es un array
+  //   const oneFile = file.map((fil:File) => {
+  //     return fil;
+  //   })
 
+  //   let { data } = await axios.post("/api/s3/uploadFile", {
+  //     name: imageName,
+  //     // type: file.type,
+  //     type: oneFile.type,
+  //   });
+
+  //   console.log(data);
+
+  //   const url = data.url;
+  //   let { data: newData } = await axios.put(url, oneFile, /*file,*/ {
+  //     headers: {
+  //       "Content-type": oneFile.type,
+  //       "Access-Control-Allow-Origin": "*",
+  //     },
+  //   });
+  //   setFile(null);
+  // };
 
 
 import { NextApiRequest, NextApiResponse } from 'next'

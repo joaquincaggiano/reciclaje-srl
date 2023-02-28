@@ -10,6 +10,8 @@ import { dbProducts } from "@/database";
 
 import { useForm } from "react-hook-form";
 
+import { useS3Upload } from "next-s3-upload";
+
 import axios from "axios";
 
 import {
@@ -37,6 +39,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+
 import { Product } from "@/models";
 
 const validCategories = ["Polietileno", "Molienda"];
@@ -66,17 +69,27 @@ interface Props {
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
   const router = useRouter();
+  const { uploadToS3 } = useS3Upload();
 
   const [isSaving, setIsSaving] = useState(false);
-  // const [file, setFile] = useState<File | null>();
   const [file, setFile] = useState<any>();
   const [imagePreview, setImagePreview] = useState<string[]>([""]);
-  const [imageName, setImageName] = useState<string>("");
+  //hacer un state para path y uno que sea un array de filenames
+  //todo: a cada filename una propiedad unica aparte del datenow
+  //mapear los filenames para pasar a la api de upload routes
+  const [imagePath, setImagePath] = useState<string>("")
+  const [imageFilename, setImageFilename] = useState<string[]>([""]);
+  // const [urls, setUrls] = useState<string[]>([]);
 
+  
   useEffect(() => {
     if (getValues("title") !== undefined) {
       const productName = getValues("title").replaceAll(" ", "-").toLowerCase();
-      setImageName(`product/${productName}/${Date.now()}`);
+      setImagePath(`product/${productName}`);
+      // [...getValues("images")].map((imageName, i) => {
+      //    return setImageFilename(current => [...current, `${Date.now()}-${i}`]);
+      // })
+      // console.log("image filename", imageFilename)
       setImagePreview([...getValues("images")])
     }
   }, []);
@@ -93,29 +106,47 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
-  const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
-    // console.log("E TARGET FILES", e.target.files)
+  const selectFile = async(e: ChangeEvent<HTMLInputElement>) => {
     if (!e?.target.files) {
       return;
     }
-
-    // toFix: Si subis dos imagenes a la vez se suben con el mismo path
+    
     try {
       let arrayDeFiles = []
+
       for (let i = 0; i < e.target.files.length; i++) {
-        // let fileIteration = e.target.files.item(i)
-        console.log("ONE FILE",e.target.files[i])
         arrayDeFiles.push(e.target.files[i])
-        // setImagePreview(URL.createObjectURL(e.target.files[i]));
         setFile(arrayDeFiles);
       }
 
       const urls = arrayDeFiles.map(oneFile => {
         return URL.createObjectURL(oneFile)
       })
-      console.log("URLS", urls)
-      setImagePreview([...imagePreview, ...urls])
 
+      setImagePreview(current => [...current, ...urls])
+
+      console.log("ARRAY DE FILE", arrayDeFiles)
+
+      // for (let i = 0; i < arrayDeFiles.length; i++) {
+
+      //   if (imageFilename.length === 0) {
+      //     setImageFilename([`${Date.now()}-${i}`])
+      //   } else {
+      //     setImageFilename([...imageFilename, `${Date.now()}-${i}`])
+      //   }
+        
+      // }
+
+      arrayDeFiles.map((imageName, i)=>{
+       return setImageFilename([...imageFilename, `${imageName.name}-${i}`])
+      })
+      
+      console.log("FILENAME", imageFilename)
+
+      const data = await axios.post("/api/uploadsRoutes", {
+        path: imagePath, 
+        filename: imageFilename})
+      console.log("DATA DEL UPLOAD",data);
     } catch (error) {
       console.log(error)
     }
@@ -126,7 +157,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     // });
   };
 
-  console.log("FILE", file)
+  console.log("FILENAME", imageFilename)
+  // console.log("FILE", file)
+  // console.log("imageFilename", imageFilename)
+  // console.log("imagePath", imagePath)
   // console.log("getValues", getValues("images"))
   // console.log("imagepreview", imagePreview)
 
@@ -135,7 +169,9 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   ) => {
     setValue("title", e.target.value, { shouldValidate: true });
     const productName = e.target.value.replaceAll(" ", "-").toLowerCase();
-    setImageName(`product/${productName}/${Date.now()}`);
+  //   setImageName({
+  //     path: `product/${productName}`,
+  //     filename: `${Date.now()}`});
   };
 
   const onChangeColor = (color: string) => {
@@ -160,36 +196,11 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     );
     setFile(null);
   };
-
-  const uploadFile = async () => {
-    // File ahora es un array
-    const oneFile = file.map((fil:File) => {
-      return fil;
-    })
-
-    let { data } = await axios.post("/api/s3/uploadFile", {
-      name: imageName,
-      // type: file.type,
-      type: oneFile.type,
-    });
-
-    console.log(data);
-
-    const url = data.url;
-    let { data: newData } = await axios.put(url, oneFile, /*file,*/ {
-      headers: {
-        "Content-type": oneFile.type,
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
-    setFile(null);
-  };
-
+  
   const onSubmit = async (form: FormData) => {
-    
     if (form.images.length < 1) return;
     setIsSaving(true);
-    setValue("images", [...getValues("images"), BUCKET_URL + imageName], {
+    setValue("images", [...getValues("images"), BUCKET_URL + imageFilename], {
       shouldValidate: true,
     });
     try {
@@ -198,7 +209,14 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         method: form._id ? "PUT" : "POST",
         data: form,
       });
-      uploadFile();
+      // uploadFile();
+      for (let index = 0; index < file.length; index++) {
+        const filesToUpload = file[index];
+        const { url } = await uploadToS3(filesToUpload);
+  
+        // setUrls(current => [...current, url]);
+      }
+
       router.replace("/admin/products");
       if (!form._id) {
         router.replace(`/admin/products/${form.title}`);
@@ -220,21 +238,12 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           : "Editar producto"
       }
     >
-      {router.asPath === "/admin/products/new" ? (
-        <Box display="flex" justifyContent="flex-start" alignItems="center">
+         <Box display="flex" justifyContent="flex-start" alignItems="center">
           <Typography variant="h1" sx={{ mr: 1 }}>
-            Crear Producto
+          {router.asPath === "/admin/products/new" ? ( "Crear Producto") : ("Editar Producto")}
           </Typography>
           <BorderColorOutlined />
         </Box>
-      ) : (
-        <Box display="flex" justifyContent="flex-start" alignItems="center">
-          <Typography variant="h1" sx={{ mr: 1 }}>
-            Editar Producto
-          </Typography>
-          <BorderColorOutlined />
-        </Box>
-      )}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" justifyContent="end" sx={{ mb: 1 }}>
           <Button
@@ -313,10 +322,9 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   ref={fileInputRef}
                   type="file"
                   name="images"
-                  multiple
+                  multiple={true}
                   accept="image/png, image/gif, image/jpeg"
                   style={{ display: "none" }}
-                  // onChange={(e) => selectFile(e)}
                   onChange={selectFile}
                 />
 
@@ -332,9 +340,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 </Button>
               </FormGroup>
 
-              {
-              // !imagePreview ||
-                imagePreview.length === 0 && (
+              { imagePreview.length === 0 ? (
                   <Chip
                     label="Es necesario al menos 1 imagen"
                     color="error"
@@ -343,13 +349,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                       display: getValues("images").length < 1 ? "flex" : "none",
                     }}
                   />
-                )}
-
-              {/*imagePreview ||*/
-                (imagePreview.length !== 0 && (
-                  <Grid container spacing={2}>
+                ):( <Grid container spacing={2}>
                     {imagePreview.map((img, i) => {
-                      // console.log("IMG", img)
                       return (
                         <Grid item xs={4} sm={3} key={i}>
                           <Card>
@@ -375,7 +376,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                       );
                     })}
                   </Grid>
-                ))}
+                )}
             </Box>
           </Grid>
         </Grid>
