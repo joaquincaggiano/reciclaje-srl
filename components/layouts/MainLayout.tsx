@@ -1,11 +1,15 @@
 import { FC, ReactNode } from "react";
 import { useContext } from "react";
-import Head from "next/head";
-import { Navbar, SideMenu, Footer } from "../ui";
-import { IconButton, Tooltip } from "@mui/material";
-import { UnsubscribeOutlined } from "@mui/icons-material";
 import { UiContext } from "@/context";
+
+import Head from "next/head";
+import NextLink from "next/link";
+
+import { Navbar, SideMenu, Footer } from "../ui";
 import { ModalSubscribe } from "../mailchimp";
+
+import { IconButton, Link, Tooltip } from "@mui/material";
+import { UnsubscribeOutlined } from "@mui/icons-material";
 
 interface Props {
   title: string;
@@ -21,7 +25,6 @@ export const MainLayout: FC<Props> = ({
   imageFullUrl,
 }) => {
   const { toggleModalOpen } = useContext(UiContext);
-  
 
   return (
     <>
@@ -52,26 +55,44 @@ export const MainLayout: FC<Props> = ({
       >
         <ModalSubscribe />
         {children}
-        <Tooltip title="Suscríbete">
+        <Tooltip title="Suscríbete" onClick={toggleModalOpen}>
           <IconButton
             sx={{
               border: "1px solid #4caf50",
               position: "fixed",
               top: "80%",
-              left: { xs: "85%", sm: "90%", md: "93%", lg: "95%" },
+              left: { xs: "77%", sm: "88%", md: "91%", lg: "93%", xl: "95.4%" },
               "&:hover": { backgroundColor: "#4caf50" },
             }}
           >
             <UnsubscribeOutlined
-              onClick={toggleModalOpen}
               sx={{
-                fontSize: "30px",
+                fontSize: "50px",
                 color: "#4caf50",
                 "&:hover": { color: "#ffff" },
               }}
             />
           </IconButton>
         </Tooltip>
+
+        <IconButton
+          sx={{
+            position: "fixed",
+            top: { xs: "72%", xl: "70%" },
+            left: { xs: "75%", sm: "87%", md: "90%", lg: "92.2%", xl: "95%" },
+          }}
+        >
+          <NextLink
+            href="https://wa.me/+5493416957516"
+            passHref
+            legacyBehavior
+            replace={true}
+          >
+            <Link>
+              <img src="/whatsapp.png" style={{ width: "65px" }} />
+            </Link>
+          </NextLink>
+        </IconButton>
       </main>
 
       <Footer />
