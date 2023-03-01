@@ -144,15 +144,18 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       console.log("FILENAME", imageFilename);
 
       const bodyData = new FormData();
-      bodyData.append("path", imagePath)
-      imageFilename.forEach((oneFilename) => {
-        bodyData.append('filename', oneFilename);
+      bodyData.append("path", imagePath);
+      imageFilename.map(async(oneFilename) => {
+        return await bodyData.append("filename", oneFilename);
       });
 
-      const data = await axios.post("/api/uploadsRoutes", bodyData/*{
+      const data = await axios.post(
+        "/api/uploadsRoutes",
+        bodyData /*{
         path: imagePath,
-        filename: bodyData,
-      }*/);
+        filename: imageFilename,
+      }*/
+      );
       console.log("DATA DEL UPLOAD", data);
     } catch (error) {
       console.log(error);

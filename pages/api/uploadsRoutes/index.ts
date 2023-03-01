@@ -23,24 +23,21 @@ export default function handler(
 }
 
 const postPath = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-//   const {path, filename} = req.body as IImageData;
+// SIENTO QUE EL PROBLEMA ES LA ASINCRONIA
 
-  console.log(req.body)
 
-  return res.status(200).json({message: "ok"})
 
-//   let url: string[];
-//   const { path, filename } = req.body as IImageData;
+//   let url: string[] = [];
+//   const { path = "", filename = [] } = req.body as IImageData;
 
-// //   if (filename.length === 0) {
-// //     res.status(400).json({ message: "File not found" });
-// //   }
+//   if (!filename.length) {
+//     res.status(400).json({ message: "File not found" });
+//   }
 
-// //   console.log(filename, path);
-// //   console.log("REQ BODY", req.body);
-// const files = await filename.map((eachFile: string) => {
+//   //   console.log(filename, path);
+//   //   console.log("REQ BODY", req.body);
+//   filename.map((eachFile: string) => {
 //     return url.push(`/${path}/${eachFile}`);
 //   });
-//   console.log("FILES API", files)
-//   return res.status(200).json({message: "ok"});
+//   return res.status(200).json(url);
 };
