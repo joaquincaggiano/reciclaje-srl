@@ -77,11 +77,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   //hacer un state para path y uno que sea un array de filenames
   //todo: a cada filename una propiedad unica aparte del datenow
   //mapear los filenames para pasar a la api de upload routes
-  const [imagePath, setImagePath] = useState<string>("")
-  const [imageFilename, setImageFilename] = useState<string[]>([""]);
+  const [imagePath, setImagePath] = useState<string>("");
+  const [imageFilename, setImageFilename] = useState<string[]>([]);
   // const [urls, setUrls] = useState<string[]>([]);
 
-  
   useEffect(() => {
     if (getValues("title") !== undefined) {
       const productName = getValues("title").replaceAll(" ", "-").toLowerCase();
@@ -90,7 +89,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       //    return setImageFilename(current => [...current, `${Date.now()}-${i}`]);
       // })
       // console.log("image filename", imageFilename)
-      setImagePreview([...getValues("images")])
+      setImagePreview([...getValues("images")]);
     }
   }, []);
 
@@ -106,26 +105,24 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
-  const selectFile = async(e: ChangeEvent<HTMLInputElement>) => {
+  const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e?.target.files) {
       return;
     }
-    
+
     try {
-      let arrayDeFiles = []
+      let arrayDeFiles = [];
 
       for (let i = 0; i < e.target.files.length; i++) {
-        arrayDeFiles.push(e.target.files[i])
+        arrayDeFiles.push(e.target.files[i]);
         setFile(arrayDeFiles);
       }
 
-      const urls = arrayDeFiles.map(oneFile => {
-        return URL.createObjectURL(oneFile)
-      })
+      const urls = arrayDeFiles.map((oneFile) => {
+        return URL.createObjectURL(oneFile);
+      });
 
-      setImagePreview(current => [...current, ...urls])
-
-      console.log("ARRAY DE FILE", arrayDeFiles)
+      setImagePreview((current) => [...current, ...urls]);
 
       // for (let i = 0; i < arrayDeFiles.length; i++) {
 
@@ -134,21 +131,31 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       //   } else {
       //     setImageFilename([...imageFilename, `${Date.now()}-${i}`])
       //   }
-        
+
       // }
 
-      arrayDeFiles.map((imageName, i)=>{
-       return setImageFilename([...imageFilename, `${imageName.name}-${i}`])
-      })
-      
-      console.log("FILENAME", imageFilename)
+      arrayDeFiles.map((imageName, i) => {
+        return setImageFilename((current) => [
+          ...current,
+          `${imageName.name.replaceAll(".", "-")}-${i}`,
+        ]);
+      });
 
-      const data = await axios.post("/api/uploadsRoutes", {
-        path: imagePath, 
-        filename: imageFilename})
-      console.log("DATA DEL UPLOAD",data);
+      console.log("FILENAME", imageFilename);
+
+      const bodyData = new FormData();
+      bodyData.append("path", imagePath)
+      imageFilename.forEach((oneFilename) => {
+        bodyData.append('filename', oneFilename);
+      });
+
+      const data = await axios.post("/api/uploadsRoutes", bodyData/*{
+        path: imagePath,
+        filename: bodyData,
+      }*/);
+      console.log("DATA DEL UPLOAD", data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
     // setFile(e.target.files[0]);
     // setImagePreview(URL.createObjectURL(e.target.files[0]));
@@ -157,10 +164,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     // });
   };
 
-  console.log("FILENAME", imageFilename)
+  console.log("FILENAME", imageFilename);
   // console.log("FILE", file)
   // console.log("imageFilename", imageFilename)
-  // console.log("imagePath", imagePath)
+  console.log("imagePath", imagePath);
   // console.log("getValues", getValues("images"))
   // console.log("imagepreview", imagePreview)
 
@@ -169,9 +176,11 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   ) => {
     setValue("title", e.target.value, { shouldValidate: true });
     const productName = e.target.value.replaceAll(" ", "-").toLowerCase();
-  //   setImageName({
-  //     path: `product/${productName}`,
-  //     filename: `${Date.now()}`});
+    setImagePath(`product/${productName}`);
+
+    //   setImageName({
+    //     path: `product/${productName}`,
+    //     filename: `${Date.now()}`});
   };
 
   const onChangeColor = (color: string) => {
@@ -188,7 +197,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   };
 
   const onDeleteImage = (image: string) => {
-    setImagePreview(imagePreview.filter((img) => img !== image))
+    setImagePreview(imagePreview.filter((img) => img !== image));
     setValue(
       "images",
       getValues("images").filter((img) => img !== image),
@@ -196,7 +205,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     );
     setFile(null);
   };
-  
+
   const onSubmit = async (form: FormData) => {
     if (form.images.length < 1) return;
     setIsSaving(true);
@@ -213,7 +222,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       for (let index = 0; index < file.length; index++) {
         const filesToUpload = file[index];
         const { url } = await uploadToS3(filesToUpload);
-  
+
         // setUrls(current => [...current, url]);
       }
 
@@ -238,12 +247,14 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           : "Editar producto"
       }
     >
-         <Box display="flex" justifyContent="flex-start" alignItems="center">
-          <Typography variant="h1" sx={{ mr: 1 }}>
-          {router.asPath === "/admin/products/new" ? ( "Crear Producto") : ("Editar Producto")}
-          </Typography>
-          <BorderColorOutlined />
-        </Box>
+      <Box display="flex" justifyContent="flex-start" alignItems="center">
+        <Typography variant="h1" sx={{ mr: 1 }}>
+          {router.asPath === "/admin/products/new"
+            ? "Crear Producto"
+            : "Editar Producto"}
+        </Typography>
+        <BorderColorOutlined />
+      </Box>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" justifyContent="end" sx={{ mb: 1 }}>
           <Button
@@ -340,43 +351,49 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 </Button>
               </FormGroup>
 
-              { imagePreview.length === 0 ? (
-                  <Chip
-                    label="Es necesario al menos 1 imagen"
-                    color="error"
-                    variant="outlined"
-                    sx={{
-                      display: getValues("images").length < 1 ? "flex" : "none",
-                    }}
-                  />
-                ):( <Grid container spacing={2}>
-                    {imagePreview.map((img, i) => {
-                      return (
-                        <Grid item xs={4} sm={3} key={i}>
-                          <Card>
-                            <CardMedia
-                              component="img"
-                              className="fadeIn"
-                              image={img}
-                              alt={img}
-                            />
+              {imagePreview.length === 0 ? (
+                <Chip
+                  label="Es necesario al menos 1 imagen"
+                  color="error"
+                  variant="outlined"
+                  sx={{
+                    display: getValues("images").length < 1 ? "flex" : "none",
+                  }}
+                />
+              ) : (
+                <Grid container spacing={2}>
+                  {imagePreview.map((img, i) => {
+                    return (
+                      <Grid item xs={4} sm={3} key={i}>
+                        <Card>
+                          <CardMedia
+                            component="img"
+                            className="fadeIn"
+                            image={img}
+                            alt={img}
+                          />
 
-                            <CardActions>
-                              <Button
-                                fullWidth
-                                color="error"
-                                onClick={() => onDeleteImage(img)}
-                                sx={{'&:hover': {backgroundColor: "#d32f2f", color: "#ffff"}}}
-                              >
-                                Borrar
-                              </Button>
-                            </CardActions>
-                          </Card>
-                        </Grid>
-                      );
-                    })}
-                  </Grid>
-                )}
+                          <CardActions>
+                            <Button
+                              fullWidth
+                              color="error"
+                              onClick={() => onDeleteImage(img)}
+                              sx={{
+                                "&:hover": {
+                                  backgroundColor: "#d32f2f",
+                                  color: "#ffff",
+                                },
+                              }}
+                            >
+                              Borrar
+                            </Button>
+                          </CardActions>
+                        </Card>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              )}
             </Box>
           </Grid>
         </Grid>
