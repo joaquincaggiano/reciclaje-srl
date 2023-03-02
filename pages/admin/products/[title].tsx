@@ -153,11 +153,11 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       //   bodyData.append(`filename${i}`, imageFilename[i])
       // }
       
-      bodyData.set(`filename1`, imageFilename[1])
+      // bodyData.set(`filename1`, imageFilename[1])
 
-      // await imageFilename.map((oneFilename, i) => {
-      //   return ;
-      // });
+      arrayDeFiles.map((oneFilename, i) => {
+        return bodyData.append(`filename${i}`,  `${oneFilename.name.replaceAll(".", "-")}-${i}`);
+      });
 
       
       // setTimeout(() => {
