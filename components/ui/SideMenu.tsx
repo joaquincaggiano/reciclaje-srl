@@ -63,7 +63,6 @@ export const SideMenu = () => {
               <Divider />
             </>
           )}
-
           <ListItem
             button
             sx={{ display: { xs: "flex", md: "none" } }}
@@ -156,7 +155,6 @@ export const SideMenu = () => {
                 </ListItemIcon>
                 <ListItemText primary={"Blog"} />
               </ListItem>
-
               <Divider />
 
               <ListItem button onClick={logOutUser}>

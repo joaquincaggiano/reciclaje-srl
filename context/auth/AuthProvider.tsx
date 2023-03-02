@@ -1,6 +1,7 @@
 import { FC, useReducer, useEffect, PropsWithChildren } from "react";
 import { useSession, signOut } from "next-auth/react";
 
+
 import Cookies from "js-cookie";
 import axios from "axios";
 
@@ -21,6 +22,7 @@ const AUTH_INITIAL_STATE: AuthState = {
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
 
+
   // Session
   const {data, status} = useSession();
 
@@ -29,6 +31,7 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       dispatch({type: "[Auth] - Login", payload: data?.user as IUser})
     }
   }, [status, data])
+
   
   const loginUser = async(email: string, password: string): Promise<boolean> => {
     try {
@@ -46,7 +49,9 @@ export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const logOut = () => {
+
     signOut();
+
   }
 
   return (
