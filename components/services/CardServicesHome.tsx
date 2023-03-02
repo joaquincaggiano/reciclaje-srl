@@ -16,7 +16,7 @@ interface Props {
   image: string;
 }
 
-export const CardServices: FC<Props> = ({ title, description, image }) => {
+export const CardServicesHome: FC<Props> = ({ title, description, image }) => {
   return (
     <Grid
       item

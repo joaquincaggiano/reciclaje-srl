@@ -6,7 +6,7 @@ export const content: Content = {
     metaHeader: "Contáctate con nosotros",
     imageFullUrl: "",
     datosContacto: {
-      whatsapp: "341-1234567",
+      whatsapp: "+5493416957516",
       email: "alguien@gmail.com",
     },
   },

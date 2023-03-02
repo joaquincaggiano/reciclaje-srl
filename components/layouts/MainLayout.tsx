@@ -1,12 +1,22 @@
 import { FC, ReactNode } from "react";
+import { useContext } from "react";
+import { UiContext } from "@/context";
+
 import Head from "next/head";
+import NextLink from "next/link";
+
 import { Navbar, SideMenu, Footer } from "../ui";
+import { ModalSubscribe } from "../mailchimp";
+
+import { IconButton, Link, Tooltip } from "@mui/material";
+import { UnsubscribeOutlined } from "@mui/icons-material";
+import { content } from "@/utils";
 
 interface Props {
   title: string;
   metaHeader: string;
   imageFullUrl?: string;
-  children: ReactNode
+  children: ReactNode;
 }
 
 export const MainLayout: FC<Props> = ({
@@ -15,6 +25,8 @@ export const MainLayout: FC<Props> = ({
   metaHeader,
   imageFullUrl,
 }) => {
+  const { toggleModalOpen } = useContext(UiContext);
+
   return (
     <>
       <Head>
@@ -39,10 +51,49 @@ export const MainLayout: FC<Props> = ({
           margin: "80px auto",
           maxWidth: "1440px",
           padding: "0px 30px",
-          minHeight: "65vh"
+          minHeight: "65vh",
         }}
       >
+        <ModalSubscribe />
         {children}
+        <Tooltip title="Suscríbete" onClick={toggleModalOpen}>
+          <IconButton
+            sx={{
+              border: "1px solid #4caf50",
+              position: "fixed",
+              top: "73%",
+              left: { xs: "77%", sm: "88%", md: "91%", lg: "93%", xl: "95.4%" },
+              "&:hover": { backgroundColor: "#4caf50" },
+            }}
+          >
+            <UnsubscribeOutlined
+              sx={{
+                fontSize: "50px",
+                color: "#4caf50",
+                "&:hover": { color: "#ffff" },
+              }}
+            />
+          </IconButton>
+        </Tooltip>
+
+        <IconButton
+          sx={{
+            position: "fixed",
+            top: { xs: "65%", xl: "63%" },
+            left: { xs: "75%", sm: "87%", md: "90%", lg: "92.2%", xl: "95%" },
+          }}
+        >
+          <NextLink
+            href={`https://wa.me/${content.contact.datosContacto.whatsapp}`}
+            passHref
+            legacyBehavior
+            replace={true}
+          >
+            <Link>
+              <img src="/whatsapp.png" style={{ width: "65px" }} />
+            </Link>
+          </NextLink>
+        </IconButton>
       </main>
 
       <Footer />

@@ -2,20 +2,17 @@ import NextLink from "next/link";
 import {
   Box,
   IconButton,
-  // Link,
-  Button,
   Grid,
-  TextField,
   Typography,
+  CardMedia,
+  Link,
 } from "@mui/material";
-import {
-  EmailOutlined,
-  LocalPhoneOutlined,
-} from "@mui/icons-material";
+import { EmailOutlined, LocalPhoneOutlined } from "@mui/icons-material";
+
+import { Subscribe } from "../mailchimp";
+import { content } from "@/utils";
 
 export const Footer = () => {
-
-
   return (
     <footer style={{ backgroundColor: "#4caf50", minHeight: "150px" }}>
       <Grid
@@ -29,12 +26,16 @@ export const Footer = () => {
         }}
       >
         <Grid item>
-          <IconButton>
-            <NextLink href="/" passHref legacyBehavior>
-              {/* <HomeOutlined sx={{ fontSize: 100 }} /> */}
-              <Typography sx={{ fontSize: 70 }}>LOGO</Typography>
-            </NextLink>
-          </IconButton>
+          <NextLink href="/" passHref legacyBehavior>
+            <Link>
+              <CardMedia
+                component="img"
+                height="200"
+                image="/todo-rec-logo-2.png"
+                alt="Logo Todo-Rec"
+              />
+            </Link>
+          </NextLink>
         </Grid>
 
         <Grid
@@ -43,30 +44,22 @@ export const Footer = () => {
           justifyContent="space-evenly"
           alignItems="center"
         >
-          <TextField
-            sx={{ backgroundColor: "white", width: "60%", borderRadius: "8px" }}
-            color="info"
-            type="email"
-            label="Correo"
-            variant="filled"
-          />
-          <Button
-            sx={{ backgroundColor: "white", height: "55px", '&:hover': {backgroundColor: "#4caf50",
-            color: "white"} }}
-            color="secondary"
+          <Subscribe />
+        </Grid>
+
+        <Grid
+          item
+          display="flex"
+          justifyContent="space-evenly"
+          alignItems="center"
+          sx={{ flexDirection: { xs: "column", sm: "row" } }}
+        >
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ mr: 3 }}
           >
-            Suscribirse
-          </Button>
-        </Grid>
-
-        <Grid
-          item
-          display="flex"
-          justifyContent="space-evenly"
-          alignItems="center"
-          sx={{flexDirection: {xs: "column", sm: "row"}}}
-        >
-          <Box display="flex" justifyContent="center" alignItems="center" sx={{mr: 3}}>
             <IconButton>
               <LocalPhoneOutlined color="info" />
             </IconButton>
@@ -74,7 +67,7 @@ export const Footer = () => {
               variant="button"
               sx={{ fontSize: "20px", color: "white" }}
             >
-              341-1234567
+              {content.contact.datosContacto.whatsapp}
             </Typography>
           </Box>
           <Box display="flex" justifyContent="center" alignItems="center">

@@ -24,7 +24,7 @@ export default function handler(
 const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   await db.connect();
   const products = await Product.find()
-    .select("title images colors -_id")
+    .select("title images colors _id")
     .lean();
   await db.disconnect();
 

@@ -54,7 +54,7 @@ export const initialData: SeedData = {
     {
       title: "Molienda Alto Impacto",
       images: [
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+        "https://ik.imagekit.io/e2ouoknyw/product/prueba-21/1677170739391",
       ],
       colors: ["Blanco", "Gris"],
       category: "Molienda",
@@ -62,7 +62,7 @@ export const initialData: SeedData = {
     {
       title: "Molienda ABS",
       images: [
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+        "https://ik.imagekit.io/e2ouoknyw/product/prueba-21/1677170739391",
       ],
       colors: ["Blanco", "Gris", "Negro"],
       category: "Molienda",
@@ -70,7 +70,7 @@ export const initialData: SeedData = {
     {
       title: "Molienda Polipropileno",
       images: [
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+        "https://ik.imagekit.io/e2ouoknyw/product/prueba-21/1677170739391",
       ],
       colors: ["Negro", "Gris", "Transparente"],
       category: "Molienda",
@@ -78,7 +78,7 @@ export const initialData: SeedData = {
     {
       title: "Polietileno de roto moldeo",
       images: [
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+        "https://ik.imagekit.io/e2ouoknyw/product/prueba-21/1677170739391",
       ],
       colors: ["Blanco", "Amarillo", "Verde", "Azul", "Rojo", "Negro"],
       category: "Polietileno",
@@ -86,7 +86,7 @@ export const initialData: SeedData = {
     {
       title: "Polietileno estrudado de baja intensidad",
       images: [
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+        "https://ik.imagekit.io/e2ouoknyw/product/prueba-21/1677170739391",
       ],
       colors: ["Caramelo", "Negro"],
       category: "Polietileno",
@@ -94,7 +94,7 @@ export const initialData: SeedData = {
     {
       title: "Polietileno estrudado de alta intensidad",
       images: [
-        "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
+        "https://ik.imagekit.io/e2ouoknyw/product/prueba-21/1677170739391",
       ],
       colors: ["Caramelo", "Negro"],
       category: "Polietileno",

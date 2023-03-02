@@ -1,19 +1,22 @@
 import { NextPage } from "next";
-import { useEffect } from "react";
-import { MainLayout } from "../components/layouts";
-import { CardServices } from "@/components/services";
 
-import { Carrousel } from "@/components/ui";
-import { Typography, Divider, Box, Grid } from "@mui/material";
+import { useServices } from "@/hooks/useServices";
+
+import { MainLayout } from "../components/layouts";
+import { CardServicesHome } from "@/components/services";
+import { ModalSubscribe } from "@/components/mailchimp";
+
+import { Carrousel, FullScreenLoading } from "@/components/ui";
+import { Typography, Divider, Grid } from "@mui/material";
 import { content } from "@/utils";
 
-// database sin conexion a mongo
-import { seedDatabase } from "@/database";
-
 const HomePage: NextPage = () => {
-  useEffect(() => {});
+  const { services, isLoading } = useServices("/services");
+
   return (
     <MainLayout title={content.home.title} metaHeader={content.home.metaHeader}>
+      <ModalSubscribe />
+
       <Typography
         variant="h1"
         component="h1"
@@ -44,22 +47,27 @@ const HomePage: NextPage = () => {
         {content.services.title}
       </Typography>
 
-      <Grid
-        container
-        spacing={4}
-        sx={{ flexDirection: { xs: "column", sm: "row" }, flexWrap: "wrap" }}
-      >
-        {seedDatabase.initialData.services.map((svc, i) => {
-          return (
-            <CardServices
-              title={svc.title}
-              description={svc.description}
-              image={svc.images[0]}
-              key={i}
-            />
-          );
-        })}
-      </Grid>
+      {isLoading ? (
+        <FullScreenLoading />
+      ) : (
+        <Grid
+          container
+          spacing={4}
+          sx={{ flexDirection: { xs: "column", sm: "row" }, flexWrap: "wrap" }}
+        >
+          {services.map((svc, i) => {
+            return (
+              <CardServicesHome
+                title={svc.title}
+                description={svc.description}
+                image={svc.images[0]}
+                key={i}
+              />
+            );
+          })}
+        </Grid>
+      )}
+
 
       <Divider sx={{ mt: 5 }} />
 
