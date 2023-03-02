@@ -10,8 +10,6 @@ import { dbProducts } from "@/database";
 
 import { useForm } from "react-hook-form";
 
-import { useS3Upload } from "next-s3-upload";
-
 import axios from "axios";
 
 import {
@@ -39,7 +37,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-
 import { Product } from "@/models";
 
 const validCategories = ["Polietileno", "Molienda"];
@@ -69,29 +66,18 @@ interface Props {
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
   const router = useRouter();
-  const { uploadToS3 } = useS3Upload();
 
   const [isSaving, setIsSaving] = useState(false);
   const [file, setFile] = useState<any>();
-  const [imagePreview, setImagePreview] = useState<string[]>([""]);
-  //hacer un state para path y uno que sea un array de filenames
-  //todo: a cada filename una propiedad unica aparte del datenow
-  //mapear los filenames para pasar a la api de upload routes
-  const [imagePath, setImagePath] = useState<string>("");
-  const [imageFilename, setImageFilename] = useState<string[]>([]);
-  // const [urls, setUrls] = useState<string[]>([]);
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const [imageName, setImageName] = useState<string>("");
 
   useEffect(() => {
-    if (getValues("title") !== undefined) {
-      const productName = getValues("title").replaceAll(" ", "-").toLowerCase();
-      setImagePath(`product/${productName}`);
-      // [...getValues("images")].map((imageName, i) => {
-      //    return setImageFilename(current => [...current, `${Date.now()}-${i}`]);
-      // })
-      // console.log("image filename", imageFilename)
-      setImagePreview([...getValues("images")]);
+    if(getValues("title") !== undefined) {
+      const productName = getValues("title").replace(" ", "-").toLowerCase()
+      setImageName(`product/${productName}/${Date.now()}`)
     }
-  }, []);
+  }, [])
 
   const {
     register,
@@ -100,98 +86,30 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     getValues,
     setValue,
   } = useForm<FormData>({ defaultValues: product });
-
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
-
+  
   const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
-  const axiosCall = async function(param: Object){
-    await axios.post(
-      "/api/uploadsRoutes",
-      param);
-
-  } 
-
-  const imagePreviewHandler = (images: File[])=>{
-    const urls = images.map((oneFile) => {
-      return URL.createObjectURL(oneFile);
-    });
-    setImagePreview((current) => [...current, ...urls]);
-  }
-
-  const filenameHandler = async (filesArray: File[])=>{
-    filesArray.map((imageName: File, i: number) => {
-      return setImageFilename((current) => [
-        ...current,
-        `${imageName.name.replaceAll(".", "-")}-${i}`,
-      ]);
-    });  
-  }
-
-
-
-  const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
+  const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e?.target.files) {
       return;
     }
-    try {
-      let arrayDeFiles = [];
-      for (let i = 0; i < e.target.files.length; i++) {
-        arrayDeFiles.push(e.target.files[i]);
-        setFile(arrayDeFiles);
-      }
-      console.log("array de files", arrayDeFiles)
-      await imagePreviewHandler(arrayDeFiles)
-     
-      await filenameHandler(arrayDeFiles)
-
-      const bodyData = new FormData();
-
-      bodyData.append("path", imagePath);
-
-      // for (let i = 0; i < imageFilename.length; i++) {
-      //   bodyData.append(`filename${i}`, imageFilename[i])
-      // }
-      
-      // bodyData.set(`filename1`, imageFilename[1])
-
-      arrayDeFiles.map((oneFilename, i) => {
-        return bodyData.append(`filename${i}`,  `${oneFilename.name.replaceAll(".", "-")}-${i}`);
-      });
-
-      
-      // setTimeout(() => {
-        await axiosCall(bodyData)
-        console.log("BODY DATA filename", bodyData.get("filename1"))
-        console.log("BODY DATA path", bodyData.get("path"))
-      // }, 4000)
-      
-      // await axiosCall(bodyData)
-    } catch (error) {
-      console.log(error);
-    }
+    setFile(e.target.files[0])
+    setImagePreview(URL.createObjectURL(e.target.files[0]))
+    setValue("images",  [BUCKET_URL + imageName], {
+      shouldValidate: true,
+    });
   };
 
-  // console.log("FILENAME", imageFilename);
-  // console.log("FILE", file)
-  // console.log("imageFilename", imageFilename)
-  // console.log("imagePath", imagePath);
-  // console.log("getValues", getValues("images"))
-  // console.log("imagepreview", imagePreview)
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
+    setValue("title", e.target.value, 
+    { shouldValidate: true })
+    const productName = e.target.value.replace(" ", "-").toLowerCase()
+    setImageName(`product/${productName}/${Date.now()}`)
+   };
 
-  const handleTitleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setValue("title", e.target.value, { shouldValidate: true });
-    const productName = e.target.value.replaceAll(" ", "-").toLowerCase();
-    setImagePath(`product/${productName}`);
-
-    //   setImageName({
-    //     path: `product/${productName}`,
-    //     filename: `${Date.now()}`});
-  };
-
-  const onChangeColor = (color: string) => {
+   const onChangeColor = (color: string) => {
     const currentColors = getValues("colors");
 
     if (currentColors.includes(color)) {
@@ -205,36 +123,38 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   };
 
   const onDeleteImage = (image: string) => {
-    setImagePreview(imagePreview.filter((img) => img !== image));
-    setValue(
-      "images",
-      getValues("images").filter((img) => img !== image),
-      { shouldValidate: true }
-    );
-    setFile(null);
+    setValue("images", getValues("images").filter((img) => img !== image), { shouldValidate: true });
   };
+
+  const uploadFile = async () => {
+    let { data } = await axios.post("/api/s3/uploadFile", {
+      name: imageName,
+      type: file.type,
+    });
+   
+        console.log(data);
+    
+        const url = data.url;
+        let { data: newData } = await axios.put(url, file, {
+          headers: {
+            "Content-type": file.type,
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
+        setFile(null);
+};
 
   const onSubmit = async (form: FormData) => {
     if (form.images.length < 1) return;
     setIsSaving(true);
-    setValue("images", [...getValues("images"), BUCKET_URL + imageFilename], {
-      shouldValidate: true,
-    });
     try {
-      const { data } = await axios({
-        url: "/api/admin/products",
-        method: form._id ? "PUT" : "POST",
-        data: form,
-      });
-      // uploadFile();
-      for (let index = 0; index < file.length; index++) {
-        const filesToUpload = file[index];
-        const { url } = await uploadToS3(filesToUpload);
-
-        // setUrls(current => [...current, url]);
-      }
-
-      router.replace("/admin/products");
+        const { data } = await axios({
+          url: "/api/admin/products",
+          method: form._id ? "PUT" : "POST",
+          data: form,
+        });
+        uploadFile()
+      router.replace('/admin/products')
       if (!form._id) {
         router.replace(`/admin/products/${form.title}`);
       } else {
@@ -255,14 +175,21 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           : "Editar producto"
       }
     >
-      <Box display="flex" justifyContent="flex-start" alignItems="center">
-        <Typography variant="h1" sx={{ mr: 1 }}>
-          {router.asPath === "/admin/products/new"
-            ? "Crear Producto"
-            : "Editar Producto"}
-        </Typography>
-        <BorderColorOutlined />
-      </Box>
+      {router.asPath === "/admin/products/new" ? (
+        <Box display="flex" justifyContent="flex-start" alignItems="center">
+          <Typography variant="h1" sx={{ mr: 1 }}>
+            Crear Producto
+          </Typography>
+          <BorderColorOutlined />
+        </Box>
+      ) : (
+        <Box display="flex" justifyContent="flex-start" alignItems="center">
+          <Typography variant="h1" sx={{ mr: 1 }}>
+            Editar Producto
+          </Typography>
+          <BorderColorOutlined />
+        </Box>
+      )}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" justifyContent="end" sx={{ mb: 1 }}>
           <Button
@@ -290,7 +217,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               })}
               error={!!errors.title}
               helperText={errors.title?.message}
-              onChange={(e) => handleTitleChange(e)}
+              onChange={(e)=>handleTitleChange(e)}
             />
 
             <Divider sx={{ my: 1 }} />
@@ -330,8 +257,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             </FormGroup>
           </Grid>
 
-          {/* Imagenes */}
-          <Grid item xs={12} sm={6}>
+             {/* Imagenes */}
+             <Grid item xs={12} sm={6}>
             <Divider sx={{ my: 2 }} />
 
             <Box display="flex" flexDirection="column">
@@ -341,10 +268,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   ref={fileInputRef}
                   type="file"
                   name="images"
-                  multiple={true}
+                  multiple={false}
                   accept="image/png, image/gif, image/jpeg"
                   style={{ display: "none" }}
-                  onChange={selectFile}
+                  onChange={(e) => selectFile(e)}
                 />
 
                 <Button
@@ -359,49 +286,48 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 </Button>
               </FormGroup>
 
-              {imagePreview.length === 0 ? (
-                <Chip
-                  label="Es necesario al menos 1 imagen"
-                  color="error"
-                  variant="outlined"
-                  sx={{
-                    display: getValues("images").length < 1 ? "flex" : "none",
-                  }}
-                />
-              ) : (
-                <Grid container spacing={2}>
-                  {imagePreview.map((img, i) => {
-                    return (
-                      <Grid item xs={4} sm={3} key={i}>
-                        <Card>
-                          <CardMedia
-                            component="img"
-                            className="fadeIn"
-                            image={img}
-                            alt={img}
-                          />
+              {/*!imagePreview ||*/
+                (getValues("images").length === 0 && (
+                  <Chip
+                    label="Es necesario al menos 1 imagen"
+                    color="error"
+                    variant="outlined"
+                    sx={{
+                      display: getValues("images").length < 1 ? "flex" : "none",
+                    }}
+                  />
+                ))}
 
-                          <CardActions>
-                            <Button
-                              fullWidth
-                              color="error"
-                              onClick={() => onDeleteImage(img)}
-                              sx={{
-                                "&:hover": {
-                                  backgroundColor: "#d32f2f",
-                                  color: "#ffff",
-                                },
-                              }}
-                            >
-                              Borrar
-                            </Button>
-                          </CardActions>
-                        </Card>
-                      </Grid>
-                    );
-                  })}
-                </Grid>
-              )}
+              {/*imagePreview ||*/
+                (getValues("images").length !== 0 && (
+                  <Grid container spacing={2}>
+                    {getValues("images").map((img) => {
+                      return (
+                        <Grid item xs={4} sm={3} key={img}>
+                          <Card>
+                            <CardMedia
+                              component="img"
+                              className="fadeIn"
+                              image={imagePreview || getValues("images")[0]}
+                              alt={imagePreview}
+                            />
+
+                            <CardActions>
+                              <Button
+                                fullWidth
+                                color="error"
+                                onClick={() => onDeleteImage(img)}
+                                // onClick={() => setFile(null)}
+                              >
+                                Borrar
+                              </Button>
+                            </CardActions>
+                          </Card>
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                ))}
             </Box>
           </Grid>
         </Grid>
