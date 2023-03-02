@@ -24,6 +24,10 @@ export default function handler(
 
 const postPath = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 // SIENTO QUE EL PROBLEMA ES LA ASINCRONIA
+const data = await req.body
+
+console.log(data);
+return res.status(200).json({message: req.body});
 
 
 

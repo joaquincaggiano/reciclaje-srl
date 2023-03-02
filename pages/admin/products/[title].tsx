@@ -105,72 +105,77 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
+  const axiosCall = async function(param: Object){
+    await axios.post(
+      "/api/uploadsRoutes",
+      param);
+
+  } 
+
+  const imagePreviewHandler = (images: File[])=>{
+    const urls = images.map((oneFile) => {
+      return URL.createObjectURL(oneFile);
+    });
+    setImagePreview((current) => [...current, ...urls]);
+  }
+
+  const filenameHandler = async (filesArray: File[])=>{
+    filesArray.map((imageName: File, i: number) => {
+      return setImageFilename((current) => [
+        ...current,
+        `${imageName.name.replaceAll(".", "-")}-${i}`,
+      ]);
+    });  
+  }
+
+
+
   const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e?.target.files) {
       return;
     }
-
     try {
       let arrayDeFiles = [];
-
       for (let i = 0; i < e.target.files.length; i++) {
         arrayDeFiles.push(e.target.files[i]);
         setFile(arrayDeFiles);
       }
-
-      const urls = arrayDeFiles.map((oneFile) => {
-        return URL.createObjectURL(oneFile);
-      });
-
-      setImagePreview((current) => [...current, ...urls]);
-
-      // for (let i = 0; i < arrayDeFiles.length; i++) {
-
-      //   if (imageFilename.length === 0) {
-      //     setImageFilename([`${Date.now()}-${i}`])
-      //   } else {
-      //     setImageFilename([...imageFilename, `${Date.now()}-${i}`])
-      //   }
-
-      // }
-
-      arrayDeFiles.map((imageName, i) => {
-        return setImageFilename((current) => [
-          ...current,
-          `${imageName.name.replaceAll(".", "-")}-${i}`,
-        ]);
-      });
-
-      console.log("FILENAME", imageFilename);
+      console.log("array de files", arrayDeFiles)
+      await imagePreviewHandler(arrayDeFiles)
+     
+      await filenameHandler(arrayDeFiles)
 
       const bodyData = new FormData();
-      bodyData.append("path", imagePath);
-      imageFilename.map(async(oneFilename) => {
-        return await bodyData.append("filename", oneFilename);
-      });
 
-      const data = await axios.post(
-        "/api/uploadsRoutes",
-        bodyData /*{
-        path: imagePath,
-        filename: imageFilename,
-      }*/
-      );
-      console.log("DATA DEL UPLOAD", data);
+      bodyData.append("path", imagePath);
+
+      // for (let i = 0; i < imageFilename.length; i++) {
+      //   bodyData.append(`filename${i}`, imageFilename[i])
+      // }
+      
+      bodyData.set(`filename1`, imageFilename[1])
+
+      // await imageFilename.map((oneFilename, i) => {
+      //   return ;
+      // });
+
+      
+      // setTimeout(() => {
+        await axiosCall(bodyData)
+        console.log("BODY DATA filename", bodyData.get("filename1"))
+        console.log("BODY DATA path", bodyData.get("path"))
+      // }, 4000)
+      
+      // await axiosCall(bodyData)
     } catch (error) {
       console.log(error);
     }
-    // setFile(e.target.files[0]);
-    // setImagePreview(URL.createObjectURL(e.target.files[0]));
-    // setValue("images", [...getValues("images"), BUCKET_URL + imageName], {
-    //   shouldValidate: true,
-    // });
   };
 
-  console.log("FILENAME", imageFilename);
+  // console.log("FILENAME", imageFilename);
   // console.log("FILE", file)
   // console.log("imageFilename", imageFilename)
-  console.log("imagePath", imagePath);
+  // console.log("imagePath", imagePath);
   // console.log("getValues", getValues("images"))
   // console.log("imagepreview", imagePreview)
 
