@@ -11,7 +11,7 @@ import { dbProducts } from "@/database";
 import { useForm } from "react-hook-form";
 
 import axios from "axios";
-
+//UNINSTALL DEPENDENCIES
 import {
   BorderColorOutlined,
   SaveOutlined,
