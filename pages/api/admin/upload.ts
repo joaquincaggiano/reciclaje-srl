@@ -1,54 +1,41 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
-import fs from "fs";
 
-type Data = {
-  message: string;
+type NextApiRequestWithFormData = NextApiRequest & {
+  formData?: formidable.Fields;
+  files?: formidable.Files;
 };
 
 export const config = {
   api: {
-    bodyParser: false, //es para que next no parsee el body y lo deje como viene
+    bodyParser: false,
   },
 };
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
+export default async function handler(
+  req: NextApiRequestWithFormData,
+  res: NextApiResponse
 ) {
   switch (req.method) {
     case "POST":
-      return uploadFile(req, res);
+      return getImages(req, res);
 
     default:
-      return res.status(400).json({ message: "Bad request" });
+      break;
   }
 }
 
-const saveFile = async (file: formidable.File) => {
-  const data = fs.readFileSync(file.filepath);
-  fs.writeFileSync(`./public/${file.originalFilename}`, data);
-  fs.unlinkSync(file.filepath); //elimina
-  return;
-};
+const getImages = (req: NextApiRequestWithFormData, res: NextApiResponse) => {
+  const form = new formidable.IncomingForm();
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Error al procesar los archivos subidos' });
+      return;
+    }
 
-const parseFiles = async (req: NextApiRequest) => {
-  return new Promise((resolve, reject) => {
-    const form = new formidable.IncomingForm();
-    form.parse(req, async (err, fields, files) => {
-      if (err) {
-        return reject(err);
-      }
+    // Procesar los archivos aquí...
 
-      await saveFile(files.file as formidable.File);
-      resolve(true);
-    });
+    res.status(200).json({ message: 'Archivos subidos correctamente', files: files });
   });
 };
-
-const uploadFile = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  await parseFiles(req);
-
-  return res.status(200).json({ message: "Imagen subida" });
-};
-

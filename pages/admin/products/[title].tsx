@@ -73,11 +73,11 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const [imageName, setImageName] = useState<string>("");
 
   useEffect(() => {
-    if(getValues("title") !== undefined) {
-      const productName = getValues("title").replace(" ", "-").toLowerCase()
-      setImageName(`product/${productName}/${Date.now()}`)
+    if (getValues("title") !== undefined) {
+      const productName = getValues("title").replace(" ", "-").toLowerCase();
+      setImageName(`product/${productName}/${Date.now()}`);
     }
-  }, [])
+  }, []);
 
   const {
     register,
@@ -86,30 +86,61 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     getValues,
     setValue,
   } = useForm<FormData>({ defaultValues: product });
-  
+
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
-  const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e?.target.files) {
+  // const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
+  //   if (!e?.target.files) {
+  //     return;
+  //   }
+  //   setFile(e.target.files[0])
+  //   setImagePreview(URL.createObjectURL(e.target.files[0]))
+  //   setValue("images",  [BUCKET_URL + imageName], {
+  //     shouldValidate: true,
+  //   });
+  // };
+
+  const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      console.error("No se han seleccionado archivos");
       return;
     }
-    setFile(e.target.files[0])
-    setImagePreview(URL.createObjectURL(e.target.files[0]))
-    setValue("images",  [BUCKET_URL + imageName], {
-      shouldValidate: true,
-    });
+
+    try {
+      const formData = new FormData();
+      for (let i = 0; i < e.target.files.length; i++) {
+        formData.append("images", e.target.files[i]);
+        const response = await axios.post("/api/admin/upload", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+  
+        if (response) {
+          console.log("Imágenes cargadas exitosamente", response);
+        } else {
+          console.error("Error al cargar las imágenes");
+        }
+      }
+      
+      // for (let [key, value] of formData.entries()) {
+      //   console.log(key, value);
+      // }
+
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleTitleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
-    setValue("title", e.target.value, 
-    { shouldValidate: true })
-    const productName = e.target.value.replace(" ", "-").toLowerCase()
-    setImageName(`product/${productName}/${Date.now()}`)
-   };
+  const handleTitleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setValue("title", e.target.value, { shouldValidate: true });
+    const productName = e.target.value.replace(" ", "-").toLowerCase();
+    setImageName(`product/${productName}/${Date.now()}`);
+  };
 
-   const onChangeColor = (color: string) => {
+  const onChangeColor = (color: string) => {
     const currentColors = getValues("colors");
 
     if (currentColors.includes(color)) {
@@ -123,7 +154,11 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   };
 
   const onDeleteImage = (image: string) => {
-    setValue("images", getValues("images").filter((img) => img !== image), { shouldValidate: true });
+    setValue(
+      "images",
+      getValues("images").filter((img) => img !== image),
+      { shouldValidate: true }
+    );
   };
 
   const uploadFile = async () => {
@@ -131,30 +166,30 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       name: imageName,
       type: file.type,
     });
-   
-        console.log(data);
-    
-        const url = data.url;
-        let { data: newData } = await axios.put(url, file, {
-          headers: {
-            "Content-type": file.type,
-            "Access-Control-Allow-Origin": "*",
-          },
-        });
-        setFile(null);
-};
+
+    console.log(data);
+
+    const url = data.url;
+    let { data: newData } = await axios.put(url, file, {
+      headers: {
+        "Content-type": file.type,
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
+    setFile(null);
+  };
 
   const onSubmit = async (form: FormData) => {
     if (form.images.length < 1) return;
     setIsSaving(true);
     try {
-        const { data } = await axios({
-          url: "/api/admin/products",
-          method: form._id ? "PUT" : "POST",
-          data: form,
-        });
-        uploadFile()
-      router.replace('/admin/products')
+      const { data } = await axios({
+        url: "/api/admin/products",
+        method: form._id ? "PUT" : "POST",
+        data: form,
+      });
+      uploadFile();
+      router.replace("/admin/products");
       if (!form._id) {
         router.replace(`/admin/products/${form.title}`);
       } else {
@@ -217,7 +252,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               })}
               error={!!errors.title}
               helperText={errors.title?.message}
-              onChange={(e)=>handleTitleChange(e)}
+              onChange={(e) => handleTitleChange(e)}
             />
 
             <Divider sx={{ my: 1 }} />
@@ -257,8 +292,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             </FormGroup>
           </Grid>
 
-             {/* Imagenes */}
-             <Grid item xs={12} sm={6}>
+          {/* Imagenes */}
+          <Grid item xs={12} sm={6}>
             <Divider sx={{ my: 2 }} />
 
             <Box display="flex" flexDirection="column">
@@ -267,8 +302,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  name="images"
-                  multiple={false}
+                  // name="images"
+                  multiple
                   accept="image/png, image/gif, image/jpeg"
                   style={{ display: "none" }}
                   onChange={(e) => selectFile(e)}
@@ -286,8 +321,9 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 </Button>
               </FormGroup>
 
-              {/*!imagePreview ||*/
-                (getValues("images").length === 0 && (
+              {
+                /*!imagePreview ||*/
+                getValues("images").length === 0 && (
                   <Chip
                     label="Es necesario al menos 1 imagen"
                     color="error"
@@ -296,10 +332,12 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                       display: getValues("images").length < 1 ? "flex" : "none",
                     }}
                   />
-                ))}
+                )
+              }
 
-              {/*imagePreview ||*/
-                (getValues("images").length !== 0 && (
+              {
+                /*imagePreview ||*/
+                getValues("images").length !== 0 && (
                   <Grid container spacing={2}>
                     {getValues("images").map((img) => {
                       return (
@@ -327,7 +365,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                       );
                     })}
                   </Grid>
-                ))}
+                )
+              }
             </Box>
           </Grid>
         </Grid>
