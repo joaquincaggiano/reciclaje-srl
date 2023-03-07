@@ -14,13 +14,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    let { name, type } = req.body;
+    let { data, name } = req.body;
+    
 
     const fileParams = {
       Bucket: process.env.BUCKET_NAME,
       Key: name,
+      Body: data,
       Expires: 60,
-      ContentType: type,
+      ContentType: data.type,
     };
 
     const url = await s3.getSignedUrlPromise("putObject", fileParams);

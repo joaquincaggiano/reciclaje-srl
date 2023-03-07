@@ -38,6 +38,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Product } from "@/models";
+import { run } from "node:test";
 
 const validCategories = ["Polietileno", "Molienda"];
 const validColors = [
@@ -69,13 +70,14 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const [isSaving, setIsSaving] = useState(false);
   const [file, setFile] = useState<any>();
-  const [imagePreview, setImagePreview] = useState<string>("");
-  const [imageName, setImageName] = useState<string>("");
+    const [imagePreview, setImagePreview] = useState<string[]>([]);
+  // const [imageName, setImageName] = useState<string>("");
 
   useEffect(() => {
     if (getValues("title") !== undefined) {
       const productName = getValues("title").replace(" ", "-").toLowerCase();
-      setImageName(`product/${productName}/${Date.now()}`);
+      // setImageName(`product/${productName}/${Date.now()}`);
+      setImagePreview([...getValues('images')])
     }
   }, []);
 
@@ -91,41 +93,37 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
-  // const selectFile = (e: ChangeEvent<HTMLInputElement>) => {
-  //   if (!e?.target.files) {
-  //     return;
-  //   }
-  //   setFile(e.target.files[0])
-  //   setImagePreview(URL.createObjectURL(e.target.files[0]))
-  //   setValue("images",  [BUCKET_URL + imageName], {
-  //     shouldValidate: true,
-  //   });
-  // };
-
   const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
       console.error("No se han seleccionado archivos");
       return;
     }
-
+    
     try {
       const formData = new FormData();
+      const urls:string[] = []
+      formData.append("productName", getValues("title").replaceAll(" ", "-").toLowerCase())
       for (let i = 0; i < e.target.files.length; i++) {
-        formData.append("images", e.target.files[i]);
+        formData.append(`images${i}`, e.target.files[i]);
+         urls.push(URL.createObjectURL(e.target.files[i]))
+          }
+          setImagePreview(current => [...current, ...urls])
         const response = await axios.post("/api/admin/upload", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-  
-        if (response) {
-          console.log("Imágenes cargadas exitosamente", response);
-        } else {
-          console.error("Error al cargar las imágenes");
-        }
-      }
-      
-      // for (let [key, value] of formData.entries()) {
-      //   console.log(key, value);
-      // }
+             headers: { "Content-Type": "multipart/form-data" },
+            });
+            
+            if (response) {
+              setFile(response)
+              const currentImages = getValues("images")
+              const imagesPaths = response.data.imagesPath.map((path: string) => BUCKET_URL + path)
+              
+              setValue("images", [...currentImages, ...imagesPaths], { shouldValidate: true })
+             
+              console.log("Imágenes cargadas exitosamente", response);
+              
+            } else {
+              console.error("Error al cargar las imágenes");
+            }
 
     } catch (error) {
       console.error(error);
@@ -136,8 +134,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setValue("title", e.target.value, { shouldValidate: true });
-    const productName = e.target.value.replace(" ", "-").toLowerCase();
-    setImageName(`product/${productName}/${Date.now()}`);
   };
 
   const onChangeColor = (color: string) => {
@@ -162,21 +158,24 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   };
 
   const uploadFile = async () => {
-    let { data } = await axios.post("/api/s3/uploadFile", {
-      name: imageName,
-      type: file.type,
-    });
+    //EL RESPONSE DE SELECTFILES ESTA AHORA EN FILES - loop para un llamado por cada imagen
+    const eachFile = file.data.files(async (oneFile: File, i: number) => {
+      let { data } = await axios.post("/api/s3/uploadFile", {
+        data: oneFile,
+        name: file.data.imagesPath[i]
+      });
+      console.log(data)
+    })
+eachFile()
 
-    console.log(data);
-
-    const url = data.url;
-    let { data: newData } = await axios.put(url, file, {
-      headers: {
-        "Content-type": file.type,
-        "Access-Control-Allow-Origin": "*",
-      },
-    });
-    setFile(null);
+    // const url = data.url;
+    // let { data: newData } = await axios.put(url, file, {
+    //   headers: {
+    //     "Content-type": file?.type,
+    //     "Access-Control-Allow-Origin": "*",
+    //   },
+    // });
+    // setFile(null);
   };
 
   const onSubmit = async (form: FormData) => {
@@ -339,15 +338,15 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 /*imagePreview ||*/
                 getValues("images").length !== 0 && (
                   <Grid container spacing={2}>
-                    {getValues("images").map((img) => {
+                    {imagePreview.map((img) => {
                       return (
                         <Grid item xs={4} sm={3} key={img}>
                           <Card>
                             <CardMedia
                               component="img"
                               className="fadeIn"
-                              image={imagePreview || getValues("images")[0]}
-                              alt={imagePreview}
+                              image={img}
+                              alt={"sds"}
                             />
 
                             <CardActions>
