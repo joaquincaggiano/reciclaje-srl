@@ -15,7 +15,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     let { data, name } = req.body;
-    
 
     const fileParams = {
       Bucket: process.env.BUCKET_NAME,

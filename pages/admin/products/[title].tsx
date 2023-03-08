@@ -70,14 +70,14 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const [isSaving, setIsSaving] = useState(false);
   const [file, setFile] = useState<any>();
-    const [imagePreview, setImagePreview] = useState<string[]>([]);
+  const [imagePreview, setImagePreview] = useState<string[]>([]);
   // const [imageName, setImageName] = useState<string>("");
 
   useEffect(() => {
     if (getValues("title") !== undefined) {
       const productName = getValues("title").replace(" ", "-").toLowerCase();
       // setImageName(`product/${productName}/${Date.now()}`);
-      setImagePreview([...getValues('images')])
+      setImagePreview([...getValues("images")]);
     }
   }, []);
 
@@ -98,33 +98,37 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       console.error("No se han seleccionado archivos");
       return;
     }
-    
+
     try {
       const formData = new FormData();
-      const urls:string[] = []
-      formData.append("productName", getValues("title").replaceAll(" ", "-").toLowerCase())
+      const urls: string[] = [];
+      formData.append(
+        "productName",
+        getValues("title").replaceAll(" ", "-").toLowerCase()
+      );
       for (let i = 0; i < e.target.files.length; i++) {
         formData.append(`images${i}`, e.target.files[i]);
-         urls.push(URL.createObjectURL(e.target.files[i]))
-          }
-          setImagePreview(current => [...current, ...urls])
-        const response = await axios.post("/api/admin/upload", formData, {
-             headers: { "Content-Type": "multipart/form-data" },
-            });
-            
-            if (response) {
-              setFile(response)
-              const currentImages = getValues("images")
-              const imagesPaths = response.data.imagesPath.map((path: string) => BUCKET_URL + path)
-              
-              setValue("images", [...currentImages, ...imagesPaths], { shouldValidate: true })
-             
-              console.log("Imágenes cargadas exitosamente", response);
-              
-            } else {
-              console.error("Error al cargar las imágenes");
-            }
+        urls.push(URL.createObjectURL(e.target.files[i]));
+      }
+      setImagePreview((current) => [...current, ...urls]);
+      const response = await axios.post("/api/admin/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
+      if (response) {
+        setFile(response);
+        // const currentImages = getValues("images");
+        //  //no existe response.data.imagesPath
+        // const imagesPaths = response.data.imagesPath.map((path: string) => BUCKET_URL + path);
+
+        // setValue("images", [...currentImages, ...imagesPaths], {
+        //   shouldValidate: true,
+        // });
+
+        console.log("Imágenes cargadas exitosamente", response);
+      } else {
+        console.error("Error al cargar las imágenes");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -155,18 +159,19 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       getValues("images").filter((img) => img !== image),
       { shouldValidate: true }
     );
+    setImagePreview(imagePreview.filter((img) => img !== image))
   };
 
   const uploadFile = async () => {
     //EL RESPONSE DE SELECTFILES ESTA AHORA EN FILES - loop para un llamado por cada imagen
-    const eachFile = file.data.files(async (oneFile: File, i: number) => {
+    const eachFile = file.data.files(async (oneFile: File, i: number) => { //aca falta un método o algo, esta raro
       let { data } = await axios.post("/api/s3/uploadFile", {
         data: oneFile,
-        name: file.data.imagesPath[i]
+        name: file.data.imagesPath[i],
       });
-      console.log(data)
-    })
-eachFile()
+      console.log(data);
+    });
+    eachFile();
 
     // const url = data.url;
     // let { data: newData } = await axios.put(url, file, {
@@ -321,8 +326,8 @@ eachFile()
               </FormGroup>
 
               {
-                /*!imagePreview ||*/
-                getValues("images").length === 0 && (
+                imagePreview.length === 0 && (
+                // getValues("images").length === 0 && (
                   <Chip
                     label="Es necesario al menos 1 imagen"
                     color="error"
@@ -335,8 +340,8 @@ eachFile()
               }
 
               {
-                /*imagePreview ||*/
-                getValues("images").length !== 0 && (
+                imagePreview && (
+                // getValues("images").length !== 0 && (
                   <Grid container spacing={2}>
                     {imagePreview.map((img) => {
                       return (
