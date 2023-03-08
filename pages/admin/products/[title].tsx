@@ -118,7 +118,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       if (response) {
         setFile(response);
         // const currentImages = getValues("images");
-        //  //no existe response.data.imagesPath
         // const imagesPaths = response.data.imagesPath.map((path: string) => BUCKET_URL + path);
 
         // setValue("images", [...currentImages, ...imagesPaths], {
