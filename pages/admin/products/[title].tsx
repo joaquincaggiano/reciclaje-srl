@@ -94,6 +94,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
   const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
+    // para tener en cuenta: capaz hay que borrar la imagen que se suba al formdata si apretamos en el boton de borrar de la imagen
+
     if (!e.target.files || e.target.files.length === 0) {
       console.error("No se han seleccionado archivos");
       return;
@@ -123,8 +125,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         // setValue("images", [...currentImages, ...imagesPaths], {
         //   shouldValidate: true,
         // });
-
-        console.log("Imágenes cargadas exitosamente", response);
+        // console.log("IMAGES", getValues("images"))
+        // console.log("Imágenes cargadas exitosamente", response);
       } else {
         console.error("Error al cargar las imágenes");
       }
@@ -158,19 +160,40 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       getValues("images").filter((img) => img !== image),
       { shouldValidate: true }
     );
-    setImagePreview(imagePreview.filter((img) => img !== image))
+    setImagePreview(imagePreview.filter((img) => img !== image));
+    // console.log("QUE ES IMAGE", image)
+    console.log("IMAGES delete getvalue", getValues("images"));
+    console.log("IMAGES preview delete", imagePreview);
   };
+
+  // console.log("que hay en el file", file);
 
   const uploadFile = async () => {
     //EL RESPONSE DE SELECTFILES ESTA AHORA EN FILES - loop para un llamado por cada imagen
-    const eachFile = file.data.files(async (oneFile: File, i: number) => { //aca falta un método o algo, esta raro
+    for (let i = 0; i < file.data.files.length; i++) {
+      const element = file.data.files[i];
+      console.log("element",element)
+    }
+
+    for (const key in file.data.files) {
       let { data } = await axios.post("/api/s3/uploadFile", {
-        data: oneFile,
-        name: file.data.imagesPath[i],
-      });
-      console.log(data);
-    });
-    eachFile();
+            data: file.data.files[key],
+            name: file.data.imagesPath,
+          });
+          console.log(data);
+        };
+      // imagesPath.push(`product/${productName}/${files[key].newFilename}`);
+    }
+
+    // const eachFile = file.data.files.map(async (oneFile: File, i: number) => {
+    //   //aca falta un método o algo, esta raro
+    //   let { data } = await axios.post("/api/s3/uploadFile", {
+    //     data: oneFile,
+    //     name: file.data.imagesPath[i],
+    //   });
+    //   console.log(data);
+    // });
+    // eachFile();
 
     // const url = data.url;
     // let { data: newData } = await axios.put(url, file, {
@@ -180,9 +203,18 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     //   },
     // });
     // setFile(null);
-  };
+  // };
 
   const onSubmit = async (form: FormData) => {
+    const currentImages = getValues("images");
+    const imagesPaths = file.data.imagesPath.map(
+      (path: string) => BUCKET_URL + path
+    );
+
+    setValue("images", [...currentImages, ...imagesPaths], {
+      shouldValidate: true,
+    });
+
     if (form.images.length < 1) return;
     setIsSaving(true);
     try {
@@ -324,52 +356,46 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 </Button>
               </FormGroup>
 
-              {
-                imagePreview.length === 0 && (
-                // getValues("images").length === 0 && (
-                  <Chip
-                    label="Es necesario al menos 1 imagen"
-                    color="error"
-                    variant="outlined"
-                    sx={{
-                      display: getValues("images").length < 1 ? "flex" : "none",
-                    }}
-                  />
-                )
-              }
+              {imagePreview.length === 0 && (
+                <Chip
+                  label="Es necesario al menos 1 imagen"
+                  color="error"
+                  variant="outlined"
+                  sx={{
+                    display: imagePreview.length < 1 ? "flex" : "none",
+                  }}
+                />
+              )}
 
-              {
-                imagePreview && (
-                // getValues("images").length !== 0 && (
-                  <Grid container spacing={2}>
-                    {imagePreview.map((img) => {
-                      return (
-                        <Grid item xs={4} sm={3} key={img}>
-                          <Card>
-                            <CardMedia
-                              component="img"
-                              className="fadeIn"
-                              image={img}
-                              alt={"sds"}
-                            />
+              {imagePreview && (
+                <Grid container spacing={2}>
+                  {imagePreview.map((img) => {
+                    return (
+                      <Grid item xs={4} sm={3} key={img}>
+                        <Card>
+                          <CardMedia
+                            component="img"
+                            className="fadeIn"
+                            image={img}
+                            alt={"sds"}
+                          />
 
-                            <CardActions>
-                              <Button
-                                fullWidth
-                                color="error"
-                                onClick={() => onDeleteImage(img)}
-                                // onClick={() => setFile(null)}
-                              >
-                                Borrar
-                              </Button>
-                            </CardActions>
-                          </Card>
-                        </Grid>
-                      );
-                    })}
-                  </Grid>
-                )
-              }
+                          <CardActions>
+                            <Button
+                              fullWidth
+                              color="error"
+                              onClick={() => onDeleteImage(img)}
+                              // onClick={() => setFile(null)}
+                            >
+                              Borrar
+                            </Button>
+                          </CardActions>
+                        </Card>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              )}
             </Box>
           </Grid>
         </Grid>

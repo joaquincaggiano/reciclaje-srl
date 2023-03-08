@@ -6,9 +6,9 @@ type NextApiRequestWithFormData = NextApiRequest & {
   files?: formidable.Files;
 };
 
-interface MyFile extends formidable.File {
-  newFilename: string;
-}
+// interface MyFile extends formidable.Files {
+//   newFilename: string;
+// }
 
 export const config = {
   api: {
@@ -28,12 +28,11 @@ export default async function handler(
       break;
   }
 }
-const paths = (files: MyFile[], fields: formidable.Fields) => {
+const paths = (files: formidable.Files, fields: formidable.Fields) => {
   // console.log(files)
   const imagesPath: string[] = [];
   const productName = fields.productName;
   for (const key in files) {
-    
     imagesPath.push(`product/${productName}/${files[key].newFilename}`);
   }
   console.log("imagesPath", imagesPath)
