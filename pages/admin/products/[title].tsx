@@ -69,13 +69,14 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const [isSaving, setIsSaving] = useState(false);
   const [file, setFile] = useState<any>();
-  const [imagePreview, setImagePreview] = useState<string>("");
+  const [imagePreview, setImagePreview] = useState<string[]>([]);
   const [imageName, setImageName] = useState<string>("");
 
   useEffect(() => {
     if (getValues("title") !== undefined) {
       const productName = getValues("title").replaceAll(" ", "-").toLowerCase();
       setImageName(`product/${productName}/${Date.now()}`);
+      setImagePreview([getValues("images")[0]])
     }
   }, []);
 
@@ -95,11 +96,14 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     if (!e?.target.files) {
       return;
     }
-    setFile(e.target.files[0]);
-    setImagePreview(URL.createObjectURL(e.target.files[0]));
-    setValue("images", [BUCKET_URL + imageName], {
-      shouldValidate: true,
-    });
+    for (let i = 0; i < e.target.files.length; i++) {
+      setFile((current: any)=>[current, e.target.files[i]]);
+      setImagePreview((current)=>[...current, URL.createObjectURL(e.target.files[i])]);
+      setValue("images", [BUCKET_URL + `product/${getValues("title")}/${Date.now()}`], {
+        shouldValidate: true,
+      });
+
+    }
   };
 
   const handleTitleChange = (
@@ -124,6 +128,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   };
 
   const onDeleteImage = (image: string) => {
+    setImagePreview(imagePreview.filter((img) => img !== image))
     setValue(
       "images",
       getValues("images").filter((img) => img !== image),
@@ -309,15 +314,15 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               {/*imagePreview ||*/
                 (getValues("images").length !== 0 && (
                   <Grid container spacing={2}>
-                    {getValues("images").map((img) => {
+                    {imagePreview.map((img) => {
                       return (
                         <Grid item xs={4} sm={3} key={img}>
                           <Card>
                             <CardMedia
                               component="img"
                               className="fadeIn"
-                              image={imagePreview || getValues("images")[0]}
-                              alt={imagePreview}
+                              image={img || getValues("images")[0]}
+                              alt={"ajsgda"}
                             />
 
                             <CardActions>
