@@ -38,7 +38,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Product } from "@/models";
-import { run } from "node:test";
 
 const validCategories = ["Polietileno", "Molienda"];
 const validColors = [
@@ -65,6 +64,12 @@ interface Props {
   product: IProductSchema;
 }
 
+// interface MyFileResponse {
+//   fields: string;
+//   files: File[];
+//   imagesPath: string[]
+// }
+
 const ProductAdminPage: FC<Props> = ({ product }) => {
   const router = useRouter();
 
@@ -75,7 +80,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   useEffect(() => {
     if (getValues("title") !== undefined) {
-      const productName = getValues("title").replace(" ", "-").toLowerCase();
+      // const productName = getValues("title").replace(" ", "-").toLowerCase();
       // setImageName(`product/${productName}/${Date.now()}`);
       setImagePreview([...getValues("images")]);
     }
@@ -93,47 +98,77 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
-  const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
-    // para tener en cuenta: capaz hay que borrar la imagen que se suba al formdata si apretamos en el boton de borrar de la imagen
+  //////////////////////PRUEBA DE SUBIR ARCHIVOS MULTIPLES//////////////////
 
+  const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
       console.error("No se han seleccionado archivos");
       return;
     }
 
     try {
-      const formData = new FormData();
       const urls: string[] = [];
+      const formData = new FormData();
+
       formData.append(
         "productName",
-        getValues("title").replaceAll(" ", "-").toLowerCase()
+        `product/${getValues("title")
+          .replaceAll(" ", "-")
+          .toLowerCase()}/${Date.now()}`
       );
+
       for (let i = 0; i < e.target.files.length; i++) {
-        formData.append(`images${i}`, e.target.files[i]);
+        formData.append(`images`, e.target.files[i]);
         urls.push(URL.createObjectURL(e.target.files[i]));
+        const response = await axios.post("/api/admin/uploadPrueba", formData);
+        console.log("response", response);
       }
       setImagePreview((current) => [...current, ...urls]);
-      const response = await axios.post("/api/admin/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      if (response) {
-        setFile(response);
-        // const currentImages = getValues("images");
-        // const imagesPaths = response.data.imagesPath.map((path: string) => BUCKET_URL + path);
-
-        // setValue("images", [...currentImages, ...imagesPaths], {
-        //   shouldValidate: true,
-        // });
-        // console.log("IMAGES", getValues("images"))
-        // console.log("Imágenes cargadas exitosamente", response);
-      } else {
-        console.error("Error al cargar las imágenes");
-      }
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
+
+  ////////////////////////////////////////////////////////////////////////////////////////
+
+  // const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
+  //   // para tener en cuenta: capaz hay que borrar la imagen que se suba al formdata si apretamos en el boton de borrar de la imagen
+
+  //   if (!e.target.files || e.target.files.length === 0) {
+  //     // todo: make a new throw error
+  //     console.error("No se han seleccionado archivos");
+  //     return;
+  //   }
+
+  //   try {
+  //     const formData = new FormData();
+  //     const urls: string[] = [];
+  //     formData.append(
+  //       "productName",
+  //       getValues("title").replaceAll(" ", "-").toLowerCase()
+  //     );
+
+  //     for (let i = 0; i < e.target.files.length; i++) {
+  //       formData.append(`images${i}`, e.target.files[i]);
+  //       urls.push(URL.createObjectURL(e.target.files[i]));
+  //     }
+
+  //     setImagePreview((current) => [...current, ...urls]);
+
+  //     const response = await axios.post("/api/admin/upload", formData, {
+  //       headers: { "Content-Type": "multipart/form-data" },
+  //     });
+
+  //     if (response) {
+  //       setFile(response);
+  //       console.log("Imágenes cargadas exitosamente", response);
+  //     } else {
+  //       console.error("Error al cargar las imágenes");
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const handleTitleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -161,59 +196,52 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       { shouldValidate: true }
     );
     setImagePreview(imagePreview.filter((img) => img !== image));
-    // console.log("QUE ES IMAGE", image)
-    console.log("IMAGES delete getvalue", getValues("images"));
-    console.log("IMAGES preview delete", imagePreview);
   };
 
-  // console.log("que hay en el file", file);
+  // const uploadFile = async () => {
+  //   try {
+  //     for (const key in file.data.files) {
+  //       // console.log("Un File en Upload", file?.data.files[key])
+  //       let { data } = await axios.post("/api/s3/uploadFile", {
+  //         data: file?.data.files[key],
+  //         name: `product/${file?.data.fields.productName}/${file?.data.files[key].newFilename}`,
+  //       });
+  //       console.log("DATA DEL UPLOADFILE FUNCTION", data);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const uploadFile = async () => {
-    //EL RESPONSE DE SELECTFILES ESTA AHORA EN FILES - loop para un llamado por cada imagen
-    for (let i = 0; i < file.data.files.length; i++) {
-      const element = file.data.files[i];
-      console.log("element",element)
-    }
+  // const eachFile = file.data.files.map(async (oneFile: File, i: number) => {
+  //   //aca falta un método o algo, esta raro
+  //   let { data } = await axios.post("/api/s3/uploadFile", {
+  //     data: oneFile,
+  //     name: file.data.imagesPath[i],
+  //   });
+  //   console.log(data);
+  // });
+  // eachFile();
 
-    for (const key in file.data.files) {
-      let { data } = await axios.post("/api/s3/uploadFile", {
-            data: file.data.files[key],
-            name: file.data.imagesPath,
-          });
-          console.log(data);
-        };
-      // imagesPath.push(`product/${productName}/${files[key].newFilename}`);
-    }
-
-    // const eachFile = file.data.files.map(async (oneFile: File, i: number) => {
-    //   //aca falta un método o algo, esta raro
-    //   let { data } = await axios.post("/api/s3/uploadFile", {
-    //     data: oneFile,
-    //     name: file.data.imagesPath[i],
-    //   });
-    //   console.log(data);
-    // });
-    // eachFile();
-
-    // const url = data.url;
-    // let { data: newData } = await axios.put(url, file, {
-    //   headers: {
-    //     "Content-type": file?.type,
-    //     "Access-Control-Allow-Origin": "*",
-    //   },
-    // });
-    // setFile(null);
+  // const url = data.url;
+  // let { data: newData } = await axios.put(url, file, {
+  //   headers: {
+  //     "Content-type": file?.type,
+  //     "Access-Control-Allow-Origin": "*",
+  //   },
+  // });
+  // setFile(null);
   // };
 
   const onSubmit = async (form: FormData) => {
-    const currentImages = getValues("images");
-    const imagesPaths = file.data.imagesPath.map(
-      (path: string) => BUCKET_URL + path
-    );
+    // const currentImages = getValues("images");
+    // const imagesPaths = file.data.imagesPath.map(
+    //   (path: string) => BUCKET_URL + path
+    // );
 
-    setValue("images", [...currentImages, ...imagesPaths], {
-      shouldValidate: true,
-    });
+    // setValue("images", [...currentImages, ...imagesPaths], {
+    //   shouldValidate: true,
+    // });
 
     if (form.images.length < 1) return;
     setIsSaving(true);
@@ -223,7 +251,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         method: form._id ? "PUT" : "POST",
         data: form,
       });
-      uploadFile();
+      // uploadFile();
       router.replace("/admin/products");
       if (!form._id) {
         router.replace(`/admin/products/${form.title}`);
