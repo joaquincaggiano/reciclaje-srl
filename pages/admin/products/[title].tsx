@@ -64,27 +64,10 @@ interface Props {
   product: IProductSchema;
 }
 
-// interface MyFileResponse {
-//   fields: string;
-//   files: File[];
-//   imagesPath: string[]
-// }
-
 const ProductAdminPage: FC<Props> = ({ product }) => {
   const router = useRouter();
 
   const [isSaving, setIsSaving] = useState(false);
-  const [file, setFile] = useState<any>();
-  const [imagePreview, setImagePreview] = useState<string[]>([]);
-  // const [imageName, setImageName] = useState<string>("");
-
-  useEffect(() => {
-    if (getValues("title") !== undefined) {
-      // const productName = getValues("title").replace(" ", "-").toLowerCase();
-      // setImageName(`product/${productName}/${Date.now()}`);
-      setImagePreview([...getValues("images")]);
-    }
-  }, []);
 
   const {
     register,
@@ -95,8 +78,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   } = useForm<FormData>({ defaultValues: product });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
   //////////////////////PRUEBA DE SUBIR ARCHIVOS MULTIPLES//////////////////
   //SELECT FILE sube las imagenes a s3 directamente. TODO: quitar el imagePreview y que se cargue directo de la url generada con el upload
@@ -125,8 +106,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           shouldValidate: true,
         });
       }
-
-      setImagePreview((current) => [...current, ...urls]);
     } catch (error) {
       console.log(error);
     }
@@ -159,23 +138,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       getValues("images").filter((img) => img !== image),
       { shouldValidate: true }
     );
-    setImagePreview(imagePreview.filter((img) => img !== image));
   };
-
-  // const uploadFile = async () => {
-  //   try {
-  //     for (const key in file.data.files) {
-  //       // console.log("Un File en Upload", file?.data.files[key])
-  //       let { data } = await axios.post("/api/s3/uploadFile", {
-  //         data: file?.data.files[key],
-  //         name: `product/${file?.data.fields.productName}/${file?.data.files[key].newFilename}`,
-  //       });
-  //       console.log("DATA DEL UPLOADFILE FUNCTION", data);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const onSubmit = async (form: FormData) => {
     if (form.images.length < 1) return;
@@ -300,7 +263,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  // name="images"
                   multiple
                   accept="image/png, image/gif, image/jpeg"
                   style={{ display: "none" }}
@@ -319,20 +281,17 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 </Button>
               </FormGroup>
 
-              {imagePreview.length === 0 && (
                 <Chip
                   label="Es necesario al menos 1 imagen"
                   color="error"
                   variant="outlined"
                   sx={{
-                    display: imagePreview.length < 1 ? "flex" : "none",
+                    display: getValues("images").length < 1 ? "flex" : "none",
                   }}
                 />
-              )}
 
-              {imagePreview && (
                 <Grid container spacing={2}>
-                  {imagePreview.map((img) => {
+                  {getValues("images").map((img) => {
                     return (
                       <Grid item xs={4} sm={3} key={img}>
                         <Card>
@@ -340,7 +299,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                             component="img"
                             className="fadeIn"
                             image={img}
-                            alt={"sds"}
+                            alt={"Product Image"}
                           />
 
                           <CardActions>
@@ -348,7 +307,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                               fullWidth
                               color="error"
                               onClick={() => onDeleteImage(img)}
-                              // onClick={() => setFile(null)}
                             >
                               Borrar
                             </Button>
@@ -358,7 +316,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                     );
                   })}
                 </Grid>
-              )}
             </Box>
           </Grid>
         </Grid>
@@ -375,7 +332,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (title === "new") {
     const tempProduct = JSON.parse(JSON.stringify(new Product()));
     delete tempProduct._id;
-    // tempProduct.images = ["img1.jpg"];
     product = tempProduct;
   } else {
     product = await dbProducts.getProductByTitle(title.toString());
