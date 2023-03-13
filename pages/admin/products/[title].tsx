@@ -114,14 +114,15 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         "productName",
         `product/${getValues("title")
           .replaceAll(" ", "-")
-          .toLowerCase()}/${Date.now()}`
+          .toLowerCase()}`
       );
 
       for (let i = 0; i < e.target.files.length; i++) {
         formData.append(`images`, e.target.files[i]);
         urls.push(URL.createObjectURL(e.target.files[i]));
-        const response = await axios.post("/api/admin/uploadPrueba", formData);
-        console.log("response", response);
+        const {data} = await axios.post("/api/admin/uploadPrueba", formData);
+        console.log("response", data);
+        
       }
       setImagePreview((current) => [...current, ...urls]);
     } catch (error) {
@@ -130,45 +131,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   };
 
   ////////////////////////////////////////////////////////////////////////////////////////
-
-  // const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
-  //   // para tener en cuenta: capaz hay que borrar la imagen que se suba al formdata si apretamos en el boton de borrar de la imagen
-
-  //   if (!e.target.files || e.target.files.length === 0) {
-  //     // todo: make a new throw error
-  //     console.error("No se han seleccionado archivos");
-  //     return;
-  //   }
-
-  //   try {
-  //     const formData = new FormData();
-  //     const urls: string[] = [];
-  //     formData.append(
-  //       "productName",
-  //       getValues("title").replaceAll(" ", "-").toLowerCase()
-  //     );
-
-  //     for (let i = 0; i < e.target.files.length; i++) {
-  //       formData.append(`images${i}`, e.target.files[i]);
-  //       urls.push(URL.createObjectURL(e.target.files[i]));
-  //     }
-
-  //     setImagePreview((current) => [...current, ...urls]);
-
-  //     const response = await axios.post("/api/admin/upload", formData, {
-  //       headers: { "Content-Type": "multipart/form-data" },
-  //     });
-
-  //     if (response) {
-  //       setFile(response);
-  //       console.log("Imágenes cargadas exitosamente", response);
-  //     } else {
-  //       console.error("Error al cargar las imágenes");
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const handleTitleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -211,26 +173,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   //   } catch (error) {
   //     console.log(error);
   //   }
-  // };
-
-  // const eachFile = file.data.files.map(async (oneFile: File, i: number) => {
-  //   //aca falta un método o algo, esta raro
-  //   let { data } = await axios.post("/api/s3/uploadFile", {
-  //     data: oneFile,
-  //     name: file.data.imagesPath[i],
-  //   });
-  //   console.log(data);
-  // });
-  // eachFile();
-
-  // const url = data.url;
-  // let { data: newData } = await axios.put(url, file, {
-  //   headers: {
-  //     "Content-type": file?.type,
-  //     "Access-Control-Allow-Origin": "*",
-  //   },
-  // });
-  // setFile(null);
   // };
 
   const onSubmit = async (form: FormData) => {

@@ -1,10 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import S3 from "aws-sdk/clients/s3";
 import formidable from "formidable";
-
-// type Data = {
-//   message: string;
-// };
+import fs from "fs"
 
 const s3 = new S3({
   region: "sa-east-1",
@@ -21,7 +18,7 @@ export const config = {
 
 export default function handler(
   req: NextApiRequest,
-  res: NextApiResponse /*<Data>*/
+  res: NextApiResponse
 ) {
   switch (req.method) {
     case "POST":
@@ -34,7 +31,7 @@ export default function handler(
 
 const postFiles = async (
   req: NextApiRequest,
-  res: NextApiResponse /*<Data>*/
+  res: NextApiResponse
 ) => {
   const form = new formidable.IncomingForm();
   form.parse(req, async (err, fields, files) => {
@@ -46,19 +43,25 @@ const postFiles = async (
       return;
     }
 
-    // aca va s3
+    const fileParams = {
+      Bucket: process.env.BUCKET_NAME,
+      //@ts-ignore
+      Key: `${fields.productName}/${files.images.newFilename}`,
+      //@ts-ignore
+      Body: fs.createReadStream(files.images.filepath),
+      Expires: 60,
+      //@ts-ignore
+      ContentType: files.images.mimetype,
+    };
     try {
-      const fileParams = {
-        Bucket: process.env.BUCKET_NAME,
-        Key: `${fields.productName}/${files.images.newFilename}`,
-        Body: files.image as formidable.File,
-        Expires: 60,
-        ContentType: files.images.mimetype,
-      };
+      //@ts-ignore
+      const result = await s3.upload(fileParams, function(err, data) {
+        console.log(err, data);
+      }).promise();
+      //@ts-ignore
+      fs.unlinkSync(files.images.filepath);
+      res.status(200).json({ key: result.Key, url: result.Location });
 
-      const url = await s3.getSignedUrlPromise("putObject", fileParams);
-
-      res.status(200).json({ url });
     } catch (error) {
       console.log(error);
       res.status(400).json({ message: "Bad request" });
