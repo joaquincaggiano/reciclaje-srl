@@ -96,10 +96,11 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
+  // const BUCKET_URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
   //////////////////////PRUEBA DE SUBIR ARCHIVOS MULTIPLES//////////////////
-
+  //SELECT FILE sube las imagenes a s3 directamente. TODO: quitar el imagePreview y que se cargue directo de la url generada con el upload
+  // delete las preview de las imagenes con s3.deleteObjects(params, function(err, data) {})  - tambien delete del setValue
   const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
       console.error("No se han seleccionado archivos");
@@ -112,18 +113,19 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
       formData.append(
         "productName",
-        `product/${getValues("title")
-          .replaceAll(" ", "-")
-          .toLowerCase()}`
+        `product/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
       );
 
       for (let i = 0; i < e.target.files.length; i++) {
         formData.append(`images`, e.target.files[i]);
         urls.push(URL.createObjectURL(e.target.files[i]));
-        const {data} = await axios.post("/api/admin/uploadPrueba", formData);
+        const { data } = await axios.post("/api/admin/uploadPrueba", formData);
         console.log("response", data);
-        
+        setValue("images", [...getValues("images"), data.url], {
+          shouldValidate: true,
+        });
       }
+
       setImagePreview((current) => [...current, ...urls]);
     } catch (error) {
       console.log(error);
@@ -176,15 +178,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   // };
 
   const onSubmit = async (form: FormData) => {
-    // const currentImages = getValues("images");
-    // const imagesPaths = file.data.imagesPath.map(
-    //   (path: string) => BUCKET_URL + path
-    // );
-
-    // setValue("images", [...currentImages, ...imagesPaths], {
-    //   shouldValidate: true,
-    // });
-
     if (form.images.length < 1) return;
     setIsSaving(true);
     try {
