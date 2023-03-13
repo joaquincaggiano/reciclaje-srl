@@ -132,7 +132,12 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue("colors", [...currentColors, color], { shouldValidate: true });
   };
 
-  const onDeleteImage = (image: string) => {
+  const onDeleteImage = async (image: string) => {
+    console.log("DELETED IMAGE", image)
+    const imageName = image.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com", "")
+    await axios.post("/api/admin/deleteImageFromS3", {
+      key: imageName
+    })
     setValue(
       "images",
       getValues("images").filter((img) => img !== image),
