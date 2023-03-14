@@ -3,6 +3,7 @@ import { UiState } from "./";
 type UiActionType =
   | { type: "[UI] - ToggleMenu" }
   | { type: "[UI] - ToggleModal" }
+  | { type: "[UI] - ToggleModalCancelChange" }
 
 export const uiReducer = (state: UiState, action: UiActionType): UiState => {
   switch (action.type) {
@@ -15,6 +16,11 @@ export const uiReducer = (state: UiState, action: UiActionType): UiState => {
       return {
         ...state,
         isModalOpen: !state.isModalOpen,
+      };
+      case "[UI] - ToggleModalCancelChange":
+      return {
+        ...state,
+        isModalCancelChange: !state.isModalCancelChange,
       };
     default:
       return state;
