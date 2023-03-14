@@ -79,7 +79,9 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-//TODO: 
+//TODO: un modal que alerte al usuario que al salir se eliminaran los cambios e imagenes no guardados. 
+// una funcion que surja del modal que elimine las imagenes que no esten guardadas en mongo
+// 
   const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
       console.error("No se han seleccionado archivos");
@@ -87,7 +89,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     }
 
     try {
-      const urls: string[] = [];
       const formData = new FormData();
 
       formData.append(
@@ -97,7 +98,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
       for (let i = 0; i < e.target.files.length; i++) {
         formData.append(`images`, e.target.files[i]);
-        urls.push(URL.createObjectURL(e.target.files[i]));
         const { data } = await axios.post("/api/admin/uploadPrueba", formData);
         console.log("response", data);
         setValue("images", [...getValues("images"), data.url], {
@@ -152,7 +152,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         method: form._id ? "PUT" : "POST",
         data: form,
       });
-      // uploadFile();
       router.replace("/admin/products");
       if (!form._id) {
         router.replace(`/admin/products/${form.title}`);
