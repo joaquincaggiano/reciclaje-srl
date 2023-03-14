@@ -10,6 +10,11 @@ import { dbProducts } from "@/database";
 
 import { useForm } from "react-hook-form";
 
+import {ModalCancelChanges} from '@/components/admin/ModalCancelChanges'
+
+import {UiContext} from '@/context/ui/UiContext'
+import { useContext } from 'react';
+
 import axios from "axios";
 
 import {
@@ -68,6 +73,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const router = useRouter();
 
   const [isSaving, setIsSaving] = useState(false);
+  const [unsavedChanges, setUnsavedChanges] = useState(false)
+  const { toggleModalCancelChange } = useContext(UiContext);
 
   const {
     register,
@@ -79,9 +86,20 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-//TODO: un modal que alerte al usuario que al salir se eliminaran los cambios e imagenes no guardados. 
-// una funcion que surja del modal que elimine las imagenes que no esten guardadas en mongo
+//TODO: un modal que alerte al usuario que al salir se eliminaran los cambios e imagenes no guardados. TENEMOS: ModalCancelChanges
+// una funcion que surja del modal que elimine las imagenes que no esten guardadas en mongo - usamos router.beforePopState
 // 
+useEffect(() => {
+  //@ts-ignore
+ router.beforePopState(()=>{
+      if (unsavedChanges){
+       return toggleModalCancelChange()
+      }
+  })
+
+}, [router])
+
+
   const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
       console.error("No se han seleccionado archivos");
@@ -103,6 +121,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         setValue("images", [...getValues("images"), data.url], {
           shouldValidate: true,
         });
+        setUnsavedChanges(true)
       }
     } catch (error) {
       console.log(error);
@@ -115,6 +134,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setValue("title", e.target.value, { shouldValidate: true });
+    setUnsavedChanges(true)
   };
 
   const onChangeColor = (color: string) => {
@@ -128,6 +148,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       );
     }
     setValue("colors", [...currentColors, color], { shouldValidate: true });
+    setUnsavedChanges(true)
   };
 
   const onDeleteImage = async (image: string) => {
@@ -152,6 +173,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         method: form._id ? "PUT" : "POST",
         data: form,
       });
+      setUnsavedChanges(false)
       router.replace("/admin/products");
       if (!form._id) {
         router.replace(`/admin/products/${form.title}`);
@@ -173,6 +195,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           : "Editar producto"
       }
     >
+      <ModalCancelChanges/>
       {router.asPath === "/admin/products/new" ? (
         <Box display="flex" justifyContent="flex-start" alignItems="center">
           <Typography variant="h1" sx={{ mr: 1 }}>
@@ -276,7 +299,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   fullWidth
                   startIcon={<UploadOutlined />}
                   sx={{ mb: 3, color: "white", backgroundColor: "#4caf50" }}
-                  // onClick={uploadFile}
                   onClick={() => fileInputRef.current?.click()}
                 >
                   Cargar imagen
