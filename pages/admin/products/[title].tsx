@@ -79,9 +79,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  //////////////////////PRUEBA DE SUBIR ARCHIVOS MULTIPLES//////////////////
-  //SELECT FILE sube las imagenes a s3 directamente. TODO: quitar el imagePreview y que se cargue directo de la url generada con el upload
-  // delete las preview de las imagenes con s3.deleteObjects(params, function(err, data) {})  - tambien delete del setValue
+//TODO: 
   const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
       console.error("No se han seleccionado archivos");
@@ -134,7 +132,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const onDeleteImage = async (image: string) => {
     console.log("DELETED IMAGE", image)
-    const imageName = image.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com", "")
+    const imageName = image.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/", "")
     await axios.post("/api/admin/deleteImageFromS3", {
       key: imageName
     })
