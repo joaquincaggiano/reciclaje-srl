@@ -28,6 +28,10 @@ export const UiProvider: FC<PropsWithChildren> = ({ children }) => {
     dispatch({ type: "[UI] - ToggleModalCancelChange" });
   };
 
+  const openModalChange = () => {
+    dispatch({ type: "[UI] - openModalChange" });
+  }
+
   return (
     <UiContext.Provider
       value={{
@@ -37,6 +41,7 @@ export const UiProvider: FC<PropsWithChildren> = ({ children }) => {
         toggleSideMenu,
         toggleModalOpen,
         toggleModalCancelChange,
+        openModalChange
       }}
     >
       {children}

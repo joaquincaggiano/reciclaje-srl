@@ -19,27 +19,27 @@ const style = {
 export const ModalCancelChanges = () => {
   const {isModalCancelChange, toggleModalCancelChange} = useContext(UiContext)
 
-  // const [open, setOpen] = useState<boolean>(true);
-  const [email, setEmail] = useState<string>("");
-  const [state, setState] = useState<string>("idle");
-  const [message, setMessage] = useState<string>("");
+  // // const [open, setOpen] = useState<boolean>(true);
+  // const [email, setEmail] = useState<string>("");
+  // const [state, setState] = useState<string>("idle");
+  // const [message, setMessage] = useState<string>("");
 
-  const onSubscribe = async () => {
-    setState("Loading");
+  // const onSubscribe = async () => {
+  //   setState("Loading");
 
-    try {
+  //   try {
 
-    } catch (error) {
-      console.log(error);
-      setState("Error");
-      setMessage("Algo salío mal");
-    }
-  };
+  //   } catch (error) {
+  //     console.log(error);
+  //     setState("Error");
+  //     setMessage("Algo salío mal");
+  //   }
+  // };
 
   return (
     <>
     <Modal open={isModalCancelChange} onClose={toggleModalCancelChange}>
- <Box sx={style}>
+      <Box sx={style}>
           <CancelOutlined
             sx={{
               position: "relative",
@@ -61,7 +61,7 @@ export const ModalCancelChanges = () => {
           <Button>
             Stay in this page
             </Button>         
-</Box>
+      </Box>
     </Modal>
     </>
   );

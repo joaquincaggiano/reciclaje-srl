@@ -1,5 +1,7 @@
-import { ChangeEvent, useEffect, FC, useRef, useState } from "react";
+import { ChangeEvent, useEffect, FC, useRef, useState, useContext } from "react";
 import { GetServerSideProps } from "next";
+
+import {UiContext} from '@/context/ui'
 
 import { useRouter } from "next/router";
 
@@ -12,8 +14,6 @@ import { useForm } from "react-hook-form";
 
 import {ModalCancelChanges} from '@/components/admin/ModalCancelChanges'
 
-import {UiContext} from '@/context/ui/UiContext'
-import { useContext } from 'react';
 
 import axios from "axios";
 
@@ -71,10 +71,10 @@ interface Props {
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
   const router = useRouter();
+  const { toggleModalCancelChange, openModalChange } = useContext(UiContext);
 
   const [isSaving, setIsSaving] = useState(false);
-  const [unsavedChanges, setUnsavedChanges] = useState(false)
-  const { toggleModalCancelChange } = useContext(UiContext);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
 
   const {
     register,
@@ -90,14 +90,20 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 // una funcion que surja del modal que elimine las imagenes que no esten guardadas en mongo - usamos router.beforePopState
 // 
 useEffect(() => {
-  //@ts-ignore
+  console.log("OPEN MODAL PLEASE!!!")
+  // toggleModalCancelChange()
+  if (unsavedChanges === true){
+    // @ts-ignore
  router.beforePopState(()=>{
-      if (unsavedChanges){
+  // if (as !== router.asPath) {
+    // console.log(router.asPath)
        return toggleModalCancelChange()
-      }
-  })
+      })
+    }
+      // }
+  // )
 
-}, [router])
+}, [unsavedChanges])
 
 
   const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -139,16 +145,15 @@ useEffect(() => {
 
   const onChangeColor = (color: string) => {
     const currentColors = getValues("colors");
-
     if (currentColors.includes(color)) {
       return setValue(
         "colors",
         currentColors.filter((c) => c !== color),
         { shouldValidate: true }
-      );
-    }
-    setValue("colors", [...currentColors, color], { shouldValidate: true });
-    setUnsavedChanges(true)
+        );
+      }
+      setValue("colors", [...currentColors, color], { shouldValidate: true });
+      setUnsavedChanges(true)
   };
 
   const onDeleteImage = async (image: string) => {
