@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, MouseEventHandler } from 'react';
 import { Box, Button, Chip, Modal, TextField, Typography } from "@mui/material";
 import { UiContext } from '@/context';
 import { CancelOutlined } from '@mui/icons-material';
@@ -16,7 +16,7 @@ const style = {
   borderRadius: "10px",
 };
 
-export const ModalCancelChanges = () => {
+export const ModalCancelChanges = (deleteUnsavedChanges: Promise<string[]>) => {
   const {isModalCancelChange, toggleModalCancelChange} = useContext(UiContext)
 
   // // const [open, setOpen] = useState<boolean>(true);
@@ -50,17 +50,57 @@ export const ModalCancelChanges = () => {
             }}
             onClick={toggleModalCancelChange}
           />
-          <Typography variant="h4" component="h2">
-            Please save changes before leaving this page! 
-            You can also discard your changes by pressing the Discard changes button
-          </Typography>
+          <Box display="flex" flexDirection="column" justifyContent="space-evenly" alignItems="center" sx={{textAlign: "center"}}>
+            <Typography variant="h4" component="h2">
+              Please save changes before leaving this page! 
+            </Typography>
 
-          <Button>
-            Discard changes
-          </Button>
-          <Button>
-            Stay in this page
-            </Button>         
+            <Typography variant="body1">
+              You can also discard your changes by pressing the Discard changes button
+            </Typography>
+          </Box>
+
+            <Box display="flex" flexDirection="column" justifyContent="space-evenly" alignItems="center"></Box>
+              <Button 
+              onClick={() => deleteUnsavedChanges}
+              color="secondary"
+                  className="circular-btn"
+                  size="large"
+                  fullWidth
+                  sx={{
+                    backgroundColor: "#4caf50",
+                    color: "white",
+                    height: "55px",
+                    border: "1px solid white",
+                    //   width: { xs: "100%", sm: "60%" },
+                    "&:hover": {
+                      backgroundColor: "white",
+                      color: "#4caf50",
+                      border: "2px solid #4caf50",
+                    },
+                  }}>
+                Discard changes
+              </Button>
+            <Button color="secondary"
+                className="circular-btn"
+                size="large"
+                fullWidth
+                sx={{
+                  backgroundColor: "#4caf50",
+                  color: "white",
+                  height: "55px",
+                  border: "1px solid white",
+                  //   width: { xs: "100%", sm: "60%" },
+                  "&:hover": {
+                    backgroundColor: "white",
+                    color: "#4caf50",
+                    border: "2px solid #4caf50",
+                  },
+                }}>
+              Stay in this page
+              </Button>         
+            </Box>
+
       </Box>
     </Modal>
     </>

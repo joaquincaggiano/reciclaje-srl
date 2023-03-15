@@ -90,18 +90,34 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 // una funcion que surja del modal que elimine las imagenes que no esten guardadas en mongo - usamos router.beforePopState
 // 
 useEffect(() => {
-  console.log("OPEN MODAL PLEASE!!!")
-  // toggleModalCancelChange()
-  if (unsavedChanges === true){
-    // @ts-ignore
- router.beforePopState(()=>{
-  // if (as !== router.asPath) {
-    // console.log(router.asPath)
-       return toggleModalCancelChange()
-      })
+  const message = "no te vayas plis"
+//@ts-ignore
+    const routeChangeStart = (url: string) => {
+      if (router.asPath !== url && unsavedChanges) {
+        // router.events.emit('routeChangeError');
+        router.replace(router, router.asPath);
+        toggleModalCancelChange()
+        throw 'Abort route change. Please ignore this error.';
+      }
+    };
+//@ts-ignore
+    const beforeunload = e => {
+      if (unsavedChanges) {
+        e.preventDefault();
+      toggleModalCancelChange()
+      e.returnValue = message;
+      return message;
+      
+      }
+    };
+
+    window.addEventListener('beforeunload', beforeunload);
+    router.events.on('routeChangeStart', routeChangeStart);
+
+    return () => {
+      window.removeEventListener('beforeunload', beforeunload);
+      router.events.off('routeChangeStart', routeChangeStart);
     }
-      // }
-  // )
 
 }, [unsavedChanges])
 
@@ -190,6 +206,9 @@ useEffect(() => {
       setIsSaving(false);
     }
   };
+  const deleteUnsavedChanges = ()=>{
+    console.log("ACA VAMOS A BORRAR DE s3 LOS FILES QUE NO ESTAN GUARDADOS EN MONGO")
+  }
 
   return (
     <MainLayout
@@ -200,7 +219,7 @@ useEffect(() => {
           : "Editar producto"
       }
     >
-      <ModalCancelChanges/>
+      <ModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges}/>
       {router.asPath === "/admin/products/new" ? (
         <Box display="flex" justifyContent="flex-start" alignItems="center">
           <Typography variant="h1" sx={{ mr: 1 }}>
