@@ -1,7 +1,7 @@
-import { useState, useContext, MouseEventHandler } from 'react';
-import { Box, Button, Chip, Modal, TextField, Typography } from "@mui/material";
-import { UiContext } from '@/context';
-import { CancelOutlined } from '@mui/icons-material';
+import { useContext, FC } from "react";
+import { Box, Button, Modal, Typography } from "@mui/material";
+import { UiContext } from "@/context";
+import { CancelOutlined } from "@mui/icons-material";
 
 const style = {
   position: "absolute" as "absolute",
@@ -16,8 +16,13 @@ const style = {
   borderRadius: "10px",
 };
 
-export const ModalCancelChanges = (deleteUnsavedChanges: Promise<string[]>) => {
-  const {isModalCancelChange, toggleModalCancelChange} = useContext(UiContext)
+interface Props {
+  deleteUnsavedChanges: () => Promise<void>;
+}
+
+export const ModalCancelChanges: FC<Props> = ({deleteUnsavedChanges}) => {
+  const { isModalCancelChange, toggleModalCancelChange } =
+    useContext(UiContext);
 
   // // const [open, setOpen] = useState<boolean>(true);
   // const [email, setEmail] = useState<string>("");
@@ -38,8 +43,8 @@ export const ModalCancelChanges = (deleteUnsavedChanges: Promise<string[]>) => {
 
   return (
     <>
-    <Modal open={isModalCancelChange} onClose={toggleModalCancelChange}>
-      <Box sx={style}>
+      <Modal open={isModalCancelChange} onClose={toggleModalCancelChange}>
+        <Box sx={style}>
           <CancelOutlined
             sx={{
               position: "relative",
@@ -50,59 +55,75 @@ export const ModalCancelChanges = (deleteUnsavedChanges: Promise<string[]>) => {
             }}
             onClick={toggleModalCancelChange}
           />
-          <Box display="flex" flexDirection="column" justifyContent="space-evenly" alignItems="center" sx={{textAlign: "center"}}>
+
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-evenly"
+            alignItems="center"
+            sx={{ textAlign: "center" }}
+          >
             <Typography variant="h4" component="h2">
-              Please save changes before leaving this page! 
+              Please save changes before leaving this page!
             </Typography>
 
             <Typography variant="body1">
-              You can also discard your changes by pressing the Discard changes button
+              You can also discard your changes by pressing the Discard changes
+              button
             </Typography>
           </Box>
 
-            <Box display="flex" flexDirection="column" justifyContent="space-evenly" alignItems="center"></Box>
-              <Button 
-              onClick={() => deleteUnsavedChanges}
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-evenly"
+            alignItems="center"
+          >
+            <Button
+              onClick={() => deleteUnsavedChanges()}
               color="secondary"
-                  className="circular-btn"
-                  size="large"
-                  fullWidth
-                  sx={{
-                    backgroundColor: "#4caf50",
-                    color: "white",
-                    height: "55px",
-                    border: "1px solid white",
-                    //   width: { xs: "100%", sm: "60%" },
-                    "&:hover": {
-                      backgroundColor: "white",
-                      color: "#4caf50",
-                      border: "2px solid #4caf50",
-                    },
-                  }}>
-                Discard changes
-              </Button>
-            <Button color="secondary"
-                className="circular-btn"
-                size="large"
-                fullWidth
-                sx={{
-                  backgroundColor: "#4caf50",
-                  color: "white",
-                  height: "55px",
-                  border: "1px solid white",
-                  //   width: { xs: "100%", sm: "60%" },
-                  "&:hover": {
-                    backgroundColor: "white",
-                    color: "#4caf50",
-                    border: "2px solid #4caf50",
-                  },
-                }}>
-              Stay in this page
-              </Button>         
-            </Box>
+              className="circular-btn"
+              size="large"
+              fullWidth
+              sx={{
+                backgroundColor: "#4caf50",
+                color: "white",
+                height: "55px",
+                border: "1px solid white",
+                //   width: { xs: "100%", sm: "60%" },
+                "&:hover": {
+                  backgroundColor: "white",
+                  color: "#4caf50",
+                  border: "2px solid #4caf50",
+                },
+              }}
+            >
+              Descartar cambios
+            </Button>
 
-      </Box>
-    </Modal>
+            <Button
+              color="secondary"
+              className="circular-btn"
+              size="large"
+              fullWidth
+              sx={{
+                backgroundColor: "#4caf50",
+                color: "white",
+                height: "55px",
+                border: "1px solid white",
+                //   width: { xs: "100%", sm: "60%" },
+                "&:hover": {
+                  backgroundColor: "white",
+                  color: "#4caf50",
+                  border: "2px solid #4caf50",
+                },
+              }}
+            >
+              Mantenerse en la página
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </>
   );
 };
