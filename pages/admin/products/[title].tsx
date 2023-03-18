@@ -77,10 +77,11 @@ interface Props {
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
   const router = useRouter();
-  const { toggleModalCancelChange, openModalChange } = useContext(UiContext);
+  const { toggleModalCancelChange } = useContext(UiContext);
 
   const [isSaving, setIsSaving] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [stateUrl, setStateUrl] = useState<string>("");
 
   const {
     register,
@@ -92,22 +93,21 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  //TODO: un modal que alerte al usuario que al salir se eliminaran los cambios e imagenes no guardados. TENEMOS: ModalCancelChanges
-  // una funcion que surja del modal que elimine las imagenes que no esten guardadas en mongo - usamos router.beforePopState
-  //
   useEffect(() => {
     const message = "no te vayas plis";
-    //@ts-ignore
+    
     const routeChangeStart = (url: string) => {
+      setStateUrl(url)
       if (router.asPath !== url && unsavedChanges) {
-        // router.events.emit('routeChangeError');
-        router.replace(router, router.asPath);
         toggleModalCancelChange();
         throw "Abort route change. Please ignore this error.";
       }
     };
-    //@ts-ignore
-    const beforeunload = (e) => {
+
+   
+    const beforeunload = (e: BeforeUnloadEvent) => {
+      const pathToNavigate = router.asPath;
+      console.log("EL AS PATH", pathToNavigate);
       if (unsavedChanges) {
         e.preventDefault();
         toggleModalCancelChange();
@@ -189,19 +189,15 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     );
   };
 
-  // toDo: si el usuario clickea en "descartar cambios" debe ejecutarse todo el borrado de imagenes y redirigir hacia la página que desea el usuario
-
   const deleteUnsavedChanges = async () => {
     try {
       setUnsavedChanges(false);
       const productName = product.title.replaceAll(" ", "-").toLowerCase();
-      console.log("PROD NAME", productName);
+
       const { data } = await axios.post("/api/admin/getFiles", {
         productName: productName,
       });
 
-      console.log("RESPONSE DEL DELETE UNSAVED FILES", data.objects);
-      // console.log("IMAGES IN DB", product.images);
       const url = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
       const imagesInDB = product.images.map((oneImage) => {
         return oneImage.replace(url, "");
@@ -211,18 +207,15 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         (img: string) => !imagesInDB.includes(img)
       );
 
-      console.log("imagesInS3", imagesInS3);
       await imagesInS3.map((eachImage: string) => {
         axios.post("/api/admin/deleteImageFromS3", {
           key: eachImage,
         });
       });
 
-      // Prueba ir hacia otra url
-      const routeChangeStart = (url: string) => {
-        router.push(url);
-      };
-      router.events.on("routeChangeStart", routeChangeStart);
+      router.push(stateUrl);
+
+      toggleModalCancelChange();
     } catch (error) {
       console.log("ALGO SALIÓ MAL");
       throw new Error("No se pudieron borrar las imagenes");
@@ -288,14 +281,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
             disabled={isSaving}
           >
             Guardar
-          </Button>
-
-          <Button
-            color="secondary"
-            sx={{ width: "150px", color: "white", backgroundColor: "#4caf50" }}
-            onClick={() => deleteUnsavedChanges()}
-          >
-            PROBAR DELETE UNSAVED
           </Button>
         </Box>
 

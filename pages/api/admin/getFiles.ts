@@ -27,17 +27,14 @@ const getListFiles = async (
   res: NextApiResponse /*<Data>*/
 ) => {
   const { productName } = req.body;
-  console.log("productName", productName)
   const params = {
     Bucket: process.env.BUCKET_NAME as string,
     Prefix: `product/${productName}` as string,
   };
   try {
     const data = await s3.listObjectsV2(params).promise();
-    console.log("LA DATA DEL LIST", data);
     //@ts-ignore
     const objects = data.Contents.map((obj) => obj.Key);
-    console.log("OBJECT DEL LIST", objects);
     res.status(200).json({ objects });
   } catch (err) {
     console.log(err);

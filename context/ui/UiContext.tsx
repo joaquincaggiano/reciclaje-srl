@@ -9,7 +9,6 @@ interface ContextProps {
   toggleSideMenu: () => void;
   toggleModalOpen: () => void;
   toggleModalCancelChange: () => void;
-  openModalChange: () => void;
 }
 
 export const UiContext = createContext({} as ContextProps);

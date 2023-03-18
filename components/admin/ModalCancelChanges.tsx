@@ -102,6 +102,7 @@ export const ModalCancelChanges: FC<Props> = ({deleteUnsavedChanges}) => {
             </Button>
 
             <Button
+              onClick={toggleModalCancelChange}
               color="secondary"
               className="circular-btn"
               size="large"
