@@ -50,6 +50,8 @@ import {
 } from "@mui/material";
 import { Product } from "@/models";
 
+// type ValidColors = "Blanco"|"Gris"|"Negro"|"Transparente"|"Caramelo"|"Amarillo"|"Verde"|"Azul"|"Rojo";
+
 const validCategories = ["Polietileno", "Molienda"];
 const validColors = [
   "Blanco",
@@ -105,7 +107,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     };
 
     const beforeunload = (e: BeforeUnloadEvent) => {
-      console.log("EL E", e);
       if (unsavedChanges) {
         e.preventDefault();
         toggleModalCancelChange();
@@ -155,20 +156,41 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setValue("title", e.target.value, { shouldValidate: true });
-    setUnsavedChanges(true);
+
+    if (product.title === getValues("title")) {
+      setUnsavedChanges(false);
+    } else {
+      setUnsavedChanges(true);
+    }
   };
+
+  function compareArrays(arr1: string[], arr2: string[]) {
+    if (arr1.length === arr2.length) {
+      return arr1.every(function (element, index) {
+        if (element === arr2[index]) {
+          setUnsavedChanges(false);
+        } else {
+          setUnsavedChanges(true);
+        }
+      });
+    } else {
+      return setUnsavedChanges(true);
+    }
+  }
 
   const onChangeColor = (color: string) => {
     const currentColors = getValues("colors");
     if (currentColors.includes(color)) {
-      return setValue(
+      setValue(
         "colors",
         currentColors.filter((c) => c !== color),
         { shouldValidate: true }
       );
+      return compareArrays(product.colors, getValues("colors"));
     }
     setValue("colors", [...currentColors, color], { shouldValidate: true });
-    setUnsavedChanges(true);
+
+    compareArrays(product.colors, getValues("colors"));
   };
 
   const onDeleteImage = async (image: string) => {
@@ -185,10 +207,11 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       getValues("images").filter((img) => img !== image),
       { shouldValidate: true }
     );
+
+    compareArrays(product.images, getValues("images"));
+    
   };
 
-
-  // toDo: cuando producimos cambios, pero luego los revertimos, el state unsavedChanges debería volver a false
   const deleteUnsavedChanges = async () => {
     try {
       setUnsavedChanges(false);
