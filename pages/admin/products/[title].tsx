@@ -106,8 +106,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
    
     const beforeunload = (e: BeforeUnloadEvent) => {
-      const pathToNavigate = router.asPath;
-      console.log("EL AS PATH", pathToNavigate);
+      console.log("EL E", e)
       if (unsavedChanges) {
         e.preventDefault();
         toggleModalCancelChange();
@@ -213,7 +212,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         });
       });
 
-      router.push(stateUrl);
+      router.push(stateUrl || "/");
 
       toggleModalCancelChange();
     } catch (error) {
