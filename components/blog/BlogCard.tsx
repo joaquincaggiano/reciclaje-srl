@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { IBlogSchema } from "@/interfaces";
 import {
   Avatar,
+  Box,
   Card,
   CardActions,
   CardContent,
@@ -20,7 +21,7 @@ import {
 } from "@mui/icons-material";
 
 import { styled } from "@mui/material/styles";
-import { red } from "@mui/material/colors";
+import { green } from "@mui/material/colors";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -44,6 +45,15 @@ interface Props {
 export const BlogCard: FC<Props> = ({ blog }) => {
   const [expanded, setExpanded] = useState(false);
 
+  //@ts-ignore
+  const date = new Date(blog?.createdAt);
+
+  const day = date.getUTCDate().toString().padStart(2, "0");
+  const month = (date.getUTCMonth() + 1).toString().padStart(2, "0"); 
+  const year = date.getUTCFullYear().toString().slice(-2);
+
+  const actualDate = `${day}-${month}-${year}`;
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -52,12 +62,12 @@ export const BlogCard: FC<Props> = ({ blog }) => {
       <Card sx={{ maxWidth: 345 }}>
         <CardHeader
           avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              R
+            <Avatar sx={{ bgcolor: green[500] }} aria-label="recipe">
+              T
             </Avatar>
           }
           title={blog.title}
-          subheader={blog.createdAt}
+          subheader={actualDate}
         />
         <CardMedia
           component="img"

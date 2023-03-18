@@ -50,8 +50,6 @@ import {
 } from "@mui/material";
 import { Product } from "@/models";
 
-// type ValidColors = "Blanco"|"Gris"|"Negro"|"Transparente"|"Caramelo"|"Amarillo"|"Verde"|"Azul"|"Rojo";
-
 const validCategories = ["Polietileno", "Molienda"];
 const validColors = [
   "Blanco",

@@ -24,7 +24,7 @@ export default function handler(
 const getBlogs = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   await db.connect();
   const blogs = await Blog.find()
-    .select("title images description info -_id")
+    .select("title images description info createdAt -_id")
     .lean();
   await db.disconnect();
 

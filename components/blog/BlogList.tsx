@@ -6,6 +6,7 @@ import { BlogCard } from "./BlogCard";
 
 export const BlogList: FC = () => {
   const { data, error } = useSWR<IBlogSchema[]>("/api/blog");
+  console.log("data blog", data)
 
   if (!error && !data) {
     return <></>;
