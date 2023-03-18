@@ -95,18 +95,17 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   useEffect(() => {
     const message = "no te vayas plis";
-    
+
     const routeChangeStart = (url: string) => {
-      setStateUrl(url)
+      setStateUrl(url);
       if (router.asPath !== url && unsavedChanges) {
         toggleModalCancelChange();
         throw "Abort route change. Please ignore this error.";
       }
     };
 
-   
     const beforeunload = (e: BeforeUnloadEvent) => {
-      console.log("EL E", e)
+      console.log("EL E", e);
       if (unsavedChanges) {
         e.preventDefault();
         toggleModalCancelChange();
@@ -188,6 +187,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     );
   };
 
+
+  // toDo: cuando producimos cambios, pero luego los revertimos, el state unsavedChanges debería volver a false
   const deleteUnsavedChanges = async () => {
     try {
       setUnsavedChanges(false);
