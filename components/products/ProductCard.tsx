@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 
 import { ProductCarrousel } from ".";
+import classes from "../../styles/products/TypeColor.module.css"
 
 interface Props {
   product: IProductSchema;
@@ -57,7 +58,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
               alignItems="center"
             >
               {product.colors.map((color, i) => {
-                return <Typography key={i}>{color}</Typography>;
+                return <Typography className={classes.caramelo} key={i}>{color}</Typography>;
               })}
             </Box>
           </CardContent>

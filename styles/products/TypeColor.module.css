@@ -1,0 +1,64 @@
+.blanco {
+  border: 1px solid black;
+  color: black;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.gris {
+  background-color: rgb(98, 98, 98);
+  color: white;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.negro {
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.transparente {
+  border-radius: 8px;
+  padding: 5px;
+  background-color: rgba(133, 133, 133, 0.15);
+  backdrop-filter: blur(5px);
+}
+
+.amarillo {
+  border: 1px solid black;
+  background-color: yellow;
+  color: black;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+.verde {
+    border: 1px solid black;
+    background-color: #4caf50;
+    color: white;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.azul {
+    background-color: #1757ac;
+    color: white;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.azul {
+    background-color: #e30f0f;
+    color: white;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.caramelo {
+    background-color: #ba7846;
+    color: white;
+    padding: 5px;
+    border-radius: 8px;
+}
