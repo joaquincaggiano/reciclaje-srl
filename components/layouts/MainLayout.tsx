@@ -56,7 +56,7 @@ export const MainLayout: FC<Props> = ({
       >
         <ModalSubscribe />
         {children}
-        <Tooltip title="Suscríbete" onClick={toggleModalOpen}>
+        <Tooltip title="Suscríbete" onClick={toggleModalOpen} sx={{zIndex: "10000000000"}}>
           <IconButton
             sx={{
               border: "1px solid #4caf50",
