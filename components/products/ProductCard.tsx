@@ -9,18 +9,21 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  IconButton,
+  Tooltip,
   Typography,
 } from "@mui/material";
 
 import { ProductCarrousel } from ".";
-import classes from "../../styles/products/TypeColor.module.css"
+import classes from "../../styles/products/TypeColor.module.css";
+import { CircleRounded } from "@mui/icons-material";
 
 interface Props {
   product: IProductSchema;
 }
 
 export const ProductCard: FC<Props> = ({ product }) => {
-  console.log("PRODUCT IMAGES",product.images)
+  console.log("PRODUCT IMAGES", product.images);
   // const url1 = product.images[0]?.replace(
   //   "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com",
   //   "https://ik.imagekit.io/e2ouoknyw/tr:w-200,h-200"
@@ -46,8 +49,8 @@ export const ProductCard: FC<Props> = ({ product }) => {
             image={url1}
             alt={product.title}
           /> */}
-          <ProductCarrousel productImages={product.images}/>
-          <CardContent sx={{height: "140px"}}>
+          <ProductCarrousel productImages={product.images} />
+          <CardContent sx={{ height: "140px" }}>
             <Typography gutterBottom variant="h2" component="div">
               {product.title}
             </Typography>
@@ -58,7 +61,15 @@ export const ProductCard: FC<Props> = ({ product }) => {
               alignItems="center"
             >
               {product.colors.map((color, i) => {
-                return <Typography className={classes.caramelo} key={i}>{color}</Typography>;
+                console.log("color", color)
+                // const classes = 
+                return (
+                  <Tooltip className={classes[`${color.toLowerCase()}`]} key={i} title={color}>
+                    <IconButton>
+                      <CircleRounded sx={{border: "1px solid black", borderRadius: "50%"}}/>
+                    </IconButton>
+                  </Tooltip>
+                );
               })}
             </Box>
           </CardContent>

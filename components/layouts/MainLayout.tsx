@@ -56,10 +56,11 @@ export const MainLayout: FC<Props> = ({
       >
         <ModalSubscribe />
         {children}
-        <Tooltip title="Suscríbete" onClick={toggleModalOpen} sx={{zIndex: "10000000000"}}>
+        <Tooltip title="Suscríbete" onClick={toggleModalOpen}>
           <IconButton
             sx={{
               border: "1px solid #4caf50",
+              zIndex: "10000000000",
               position: "fixed",
               top: "73%",
               left: { xs: "77%", sm: "88%", md: "91%", lg: "93%", xl: "95.4%" },
@@ -81,6 +82,7 @@ export const MainLayout: FC<Props> = ({
             position: "fixed",
             top: { xs: "65%", xl: "63%" },
             left: { xs: "75%", sm: "87%", md: "90%", lg: "92.2%", xl: "95%" },
+            zIndex: "10000000000",
           }}
         >
           <NextLink
