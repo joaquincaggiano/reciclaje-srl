@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from "react";
 import { IProductSchema } from "@/interfaces";
 import {
   Box,
@@ -23,12 +23,17 @@ interface Props {
 }
 
 export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
-  
+  const [openShareOptions, setOpenShareOptions] = useState<Boolean>(false);
+
   const shareFunction = () => {
-    const awsUrl = product.images[0].replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/", "")
-    const optimizedUrl = `https://ik.imagekit.io/e2ouoknyw/${awsUrl}`
-    getImageUrl(optimizedUrl)
-  }
+    const awsUrl = product.images[0].replace(
+      "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
+      ""
+    );
+    const optimizedUrl = `https://ik.imagekit.io/e2ouoknyw/${awsUrl}`;
+    getImageUrl(optimizedUrl);
+    setOpenShareOptions(true);
+  };
 
   return (
     <Grid
@@ -55,9 +60,15 @@ export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
             >
               {product.colors.map((color, i) => {
                 return (
-                  <Tooltip className={classes[`${color.toLowerCase()}`]} key={i} title={color}>
+                  <Tooltip
+                    className={classes[`${color.toLowerCase()}`]}
+                    key={i}
+                    title={color}
+                  >
                     <IconButton>
-                      <CircleRounded sx={{border: "1px solid black", borderRadius: "50%"}}/>
+                      <CircleRounded
+                        sx={{ border: "1px solid black", borderRadius: "50%" }}
+                      />
                     </IconButton>
                   </Tooltip>
                 );
@@ -65,11 +76,46 @@ export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
             </Box>
           </CardContent>
         </CardActionArea>
-        <CardActions>
-          <Button size="small" color="primary" onClick={shareFunction}>
-            Compartir
-          </Button>
-        </CardActions>
+
+        <Box display="flex" alignItems="center">
+          <CardActions>
+            <Button size="small" color="primary" onClick={shareFunction}>
+              Compartir
+            </Button>
+          </CardActions>
+          {openShareOptions && (
+            <>
+              {/* WPP */}
+              <a
+                href={`https://api.whatsapp.com/send?text=${product.images[0]}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  style={{
+                    width: "30px",
+                    maxHeight: "30px",
+                    marginRight: "10px",
+                  }}
+                  src="/whatsapp.png"
+                  alt="logo de wpp"
+                />
+              </a>
+              {/* FACEBOOK */}
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${product.images[0]}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img
+                  style={{ width: "30px", maxHeight: "30px" }}
+                  src="/facebook.png"
+                  alt="logo de facebook"
+                />
+              </a>
+            </>
+          )}
+        </Box>
       </Card>
     </Grid>
   );
