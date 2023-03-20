@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { NextPage } from "next";
 import { MainLayout } from "@/components/layouts";
 import { content } from "@/utils";
@@ -14,11 +15,20 @@ import { ProductList } from "@/components/products";
 
 const ProductsPage: NextPage = () => {
   const { products, isLoading } = useProducts("/products");
+  const [imageUrl, setImageUrl] = useState("")
+
+  // console.log("products", products)
+
+  function getImageUrl(url: string){
+    return setImageUrl(url)
+  }
+  console.log("imageUrl",imageUrl)
 
   return (
     <MainLayout
       title={content.products.title}
       metaHeader={content.products.metaHeader}
+      imageFullUrl={imageUrl}
     >
       {isLoading ? (
         <FullScreenLoading />
@@ -39,7 +49,7 @@ const ProductsPage: NextPage = () => {
 
           <Divider sx={{ mb: 5 }} />
 
-          <ProductList products={products}/>
+          <ProductList products={products} getImageUrl={getImageUrl}/>
         </>
       )}
     </MainLayout>

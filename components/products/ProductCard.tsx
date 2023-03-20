@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC } from 'react';
 import { IProductSchema } from "@/interfaces";
 import {
   Box,
@@ -7,7 +7,6 @@ import {
   CardActionArea,
   CardActions,
   CardContent,
-  CardMedia,
   Grid,
   IconButton,
   Tooltip,
@@ -20,14 +19,16 @@ import { CircleRounded } from "@mui/icons-material";
 
 interface Props {
   product: IProductSchema;
+  getImageUrl: (url: string) => void;
 }
 
-export const ProductCard: FC<Props> = ({ product }) => {
-  console.log("PRODUCT IMAGES", product.images);
-  // const url1 = product.images[0]?.replace(
-  //   "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com",
-  //   "https://ik.imagekit.io/e2ouoknyw/tr:w-200,h-200"
-  // );
+export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
+  
+  const shareFunction = () => {
+    const awsUrl = product.images[0].replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/", "")
+    const optimizedUrl = `https://ik.imagekit.io/e2ouoknyw/${awsUrl}`
+    getImageUrl(optimizedUrl)
+  }
 
   return (
     <Grid
@@ -41,14 +42,6 @@ export const ProductCard: FC<Props> = ({ product }) => {
     >
       <Card sx={{ width: 345, minHeight: 350 }}>
         <CardActionArea>
-          {/* <CardMedia
-            component="img"
-            height="200"
-            // sx={{width: 200}}
-            // width="200"
-            image={url1}
-            alt={product.title}
-          /> */}
           <ProductCarrousel productImages={product.images} />
           <CardContent sx={{ height: "140px" }}>
             <Typography gutterBottom variant="h2" component="div">
@@ -61,8 +54,6 @@ export const ProductCard: FC<Props> = ({ product }) => {
               alignItems="center"
             >
               {product.colors.map((color, i) => {
-                console.log("color", color)
-                // const classes = 
                 return (
                   <Tooltip className={classes[`${color.toLowerCase()}`]} key={i} title={color}>
                     <IconButton>
@@ -75,7 +66,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="primary">
+          <Button size="small" color="primary" onClick={shareFunction}>
             Compartir
           </Button>
         </CardActions>
