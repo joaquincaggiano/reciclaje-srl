@@ -21,6 +21,8 @@ import { useForm } from "react-hook-form";
 
 import { ModalCancelChanges } from "@/components/admin/ModalCancelChanges";
 
+import useUnsavedChanges from "@/hooks/useUnsavedChanges";
+
 import axios from "axios";
 
 import {
@@ -80,9 +82,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const { toggleModalCancelChange } = useContext(UiContext);
 
   const [isSaving, setIsSaving] = useState(false);
-  const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [stateUrl, setStateUrl] = useState<string>("");
-
+  
   const {
     register,
     handleSubmit,
@@ -90,9 +91,11 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     getValues,
     setValue,
   } = useForm<FormData>({ defaultValues: product });
-
+  
+  //@ts-ignore
+  const [unsavedChanges, setUnsavedChanges, compareArrays] = useUnsavedChanges();
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   useEffect(() => {
     const message = "no te vayas plis";
 
@@ -162,19 +165,19 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     }
   };
 
-  function compareArrays(arr1: string[], arr2: string[]) {
-    if (arr1.length === arr2.length) {
-      return arr1.every(function (element, index) {
-        if (element === arr2[index]) {
-          setUnsavedChanges(false);
-        } else {
-          setUnsavedChanges(true);
-        }
-      });
-    } else {
-      return setUnsavedChanges(true);
-    }
-  }
+  // function compareArrays(arr1: string[], arr2: string[]) {
+  //   if (arr1.length === arr2.length) {
+  //     return arr1.every(function (element, index) {
+  //       if (element === arr2[index]) {
+  //         setUnsavedChanges(false);
+  //       } else {
+  //         setUnsavedChanges(true);
+  //       }
+  //     });
+  //   } else {
+  //     return setUnsavedChanges(true);
+  //   }
+  // }
 
   const onChangeColor = (color: string) => {
     const currentColors = getValues("colors");
@@ -189,6 +192,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     setValue("colors", [...currentColors, color], { shouldValidate: true });
 
     compareArrays(product.colors, getValues("colors"));
+    console.log("boolean", unsavedChanges)
   };
 
   const onDeleteImage = async (image: string) => {
