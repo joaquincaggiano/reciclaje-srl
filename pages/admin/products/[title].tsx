@@ -23,6 +23,12 @@ import { ModalCancelChanges } from "@/components/admin/ModalCancelChanges";
 
 import useUnsavedChanges from "@/hooks/useUnsavedChanges";
 
+import useChangeTitle from "@/hooks/useChangeTitle";
+
+import useColorChange from "@/hooks/useColorChange";
+
+import useHandleFiles from "@/hooks/useHandleFiles";
+
 import axios from "axios";
 
 import {
@@ -30,26 +36,7 @@ import {
   SaveOutlined,
   UploadOutlined,
 } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  capitalize,
-  Card,
-  CardActions,
-  CardMedia,
-  Checkbox,
-  Chip,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  Grid,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from "@mui/material";
+import {Box,	Button,	capitalize,	Card,	CardActions,	CardMedia,	Checkbox,	Chip,	Divider,	FormControl,	FormControlLabel,	FormGroup,	FormLabel,	Grid,	Radio,	RadioGroup,	TextField,	Typography} from '@mui/material';
 import { Product } from "@/models";
 
 const validCategories = ["Polietileno", "Molienda"];
@@ -82,7 +69,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const { toggleModalCancelChange } = useContext(UiContext);
 
   const [isSaving, setIsSaving] = useState(false);
-  const [stateUrl, setStateUrl] = useState<string>("");
+  // const [stateUrl, setStateUrl] = useState<string>("");
   
   const {
     register,
@@ -94,12 +81,16 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   
   //@ts-ignore
   const [unsavedChanges, setUnsavedChanges, compareArrays] = useUnsavedChanges();
+  const handleTitleChange = useChangeTitle(product);
+  const onChangeColor = useColorChange(product)
+  const [selectFile, deleteUnsavedChanges, setStateUrl, stateUrl] = useHandleFiles(product)
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     const message = "no te vayas plis";
 
     const routeChangeStart = (url: string) => {
+      //@ts-ignore
       setStateUrl(url);
       if (router.asPath !== url && unsavedChanges) {
         toggleModalCancelChange();
@@ -125,75 +116,52 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     };
   }, [unsavedChanges]);
 
-  const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) {
-      console.error("No se han seleccionado archivos");
-      return;
-    }
+  console.log("EL GET VALUE IMAGES", getValues("images"))
+  console.log("EL GET TITLE", getValues("title"))
 
-    try {
-      const formData = new FormData();
-
-      formData.append(
-        "productName",
-        `product/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
-      );
-
-      for (let i = 0; i < e.target.files.length; i++) {
-        formData.append(`images`, e.target.files[i]);
-        const { data } = await axios.post("/api/admin/upload", formData);
-        console.log("response", data);
-        setValue("images", [...getValues("images"), data.url], {
-          shouldValidate: true,
-        });
-        setUnsavedChanges(true);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleTitleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setValue("title", e.target.value, { shouldValidate: true });
-
-    if (product.title === getValues("title")) {
-      setUnsavedChanges(false);
-    } else {
-      setUnsavedChanges(true);
-    }
-  };
-
-  // function compareArrays(arr1: string[], arr2: string[]) {
-  //   if (arr1.length === arr2.length) {
-  //     return arr1.every(function (element, index) {
-  //       if (element === arr2[index]) {
-  //         setUnsavedChanges(false);
-  //       } else {
-  //         setUnsavedChanges(true);
-  //       }
-  //     });
-  //   } else {
-  //     return setUnsavedChanges(true);
+  // const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
+  //   if (!e.target.files || e.target.files.length === 0) {
+  //     console.error("No se han seleccionado archivos");
+  //     return;
   //   }
-  // }
 
-  const onChangeColor = (color: string) => {
-    const currentColors = getValues("colors");
-    if (currentColors.includes(color)) {
-      setValue(
-        "colors",
-        currentColors.filter((c) => c !== color),
-        { shouldValidate: true }
-      );
-      return compareArrays(product.colors, getValues("colors"));
-    }
-    setValue("colors", [...currentColors, color], { shouldValidate: true });
+  //   try {
+  //     const formData = new FormData();
 
-    compareArrays(product.colors, getValues("colors"));
-    console.log("boolean", unsavedChanges)
-  };
+  //     formData.append(
+  //       "productName",
+  //       `product/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
+  //     );
+
+  //     for (let i = 0; i < e.target.files.length; i++) {
+  //       formData.append(`images`, e.target.files[i]);
+  //       const { data } = await axios.post("/api/admin/upload", formData);
+  //       console.log("response", data);
+  //       setValue("images", [...getValues("images"), data.url], {
+  //         shouldValidate: true,
+  //       });
+  //       setUnsavedChanges(true);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // const onChangeColor = (color: string) => {
+  //   const currentColors = getValues("colors");
+  //   if (currentColors.includes(color)) {
+  //     setValue(
+  //       "colors",
+  //       currentColors.filter((c) => c !== color),
+  //       { shouldValidate: true }
+  //     );
+  //     return compareArrays(product.colors, getValues("colors"));
+  //   }
+  //   setValue("colors", [...currentColors, color], { shouldValidate: true });
+
+  //   compareArrays(product.colors, getValues("colors"));
+  //   console.log("boolean", unsavedChanges)
+  // };
 
   const onDeleteImage = async (image: string) => {
     console.log("DELETED IMAGE", image);
@@ -214,38 +182,38 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     
   };
 
-  const deleteUnsavedChanges = async () => {
-    try {
-      setUnsavedChanges(false);
-      const productName = product.title.replaceAll(" ", "-").toLowerCase();
+  // const deleteUnsavedChanges = async () => {
+  //   try {
+  //     setUnsavedChanges(false);
+  //     const productName = product.title.replaceAll(" ", "-").toLowerCase();
 
-      const { data } = await axios.post("/api/admin/getFiles", {
-        productName: productName,
-      });
+  //     const { data } = await axios.post("/api/admin/getFiles", {
+  //       productName: productName,
+  //     });
 
-      const url = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
-      const imagesInDB = product.images.map((oneImage) => {
-        return oneImage.replace(url, "");
-      });
+  //     const url = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
+  //     const imagesInDB = product.images.map((oneImage) => {
+  //       return oneImage.replace(url, "");
+  //     });
 
-      const imagesInS3 = data.objects.filter(
-        (img: string) => !imagesInDB.includes(img)
-      );
+  //     const imagesInS3 = data.objects.filter(
+  //       (img: string) => !imagesInDB.includes(img)
+  //     );
 
-      await imagesInS3.map((eachImage: string) => {
-        axios.post("/api/admin/deleteImageFromS3", {
-          key: eachImage,
-        });
-      });
+  //     await imagesInS3.map((eachImage: string) => {
+  //       axios.post("/api/admin/deleteImageFromS3", {
+  //         key: eachImage,
+  //       });
+  //     });
 
-      router.push(stateUrl || "/");
+  //     router.push(stateUrl || "/");
 
-      toggleModalCancelChange();
-    } catch (error) {
-      console.log("ALGO SALIÓ MAL");
-      throw new Error("No se pudieron borrar las imagenes");
-    }
-  };
+  //     toggleModalCancelChange();
+  //   } catch (error) {
+  //     console.log("ALGO SALIÓ MAL");
+  //     throw new Error("No se pudieron borrar las imagenes");
+  //   }
+  // };
 
   const onSubmit = async (form: FormData) => {
     if (form.images.length < 1) return;
@@ -376,6 +344,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   multiple
                   accept="image/png, image/gif, image/jpeg"
                   style={{ display: "none" }}
+                  //@ts-ignore
                   onChange={(e) => selectFile(e)}
                 />
 
