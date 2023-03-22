@@ -14,7 +14,7 @@ export default function useChangeTitle (props: IProductSchema | IServiceSchema |
         e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
       ) {
         setValue("title", e.target.value, { shouldValidate: true });
-        console.log("getvalues en hook", getValues("title"))
+        // console.log("getvalues en hook", getValues("title"))
         if (props.title === getValues("title")) {
                 setUnsavedChanges(false);
               } else {

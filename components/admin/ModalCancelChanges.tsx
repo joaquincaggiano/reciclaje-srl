@@ -2,6 +2,7 @@ import { useContext, FC } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { UiContext } from "@/context";
 import { CancelOutlined } from "@mui/icons-material";
+import useFormHook from "@/hooks/useFormHook";
 
 const style = {
   position: "absolute" as "absolute",
@@ -16,13 +17,14 @@ const style = {
   borderRadius: "10px",
 };
 
-interface Props {
-  deleteUnsavedChanges: () => Promise<void>;
-}
-
-export const ModalCancelChanges: FC<Props> = ({deleteUnsavedChanges}) => {
+// interface Props {
+//   deleteUnsavedChanges: () => Promise<void>;
+// }
+// @ts-ignore
+export const ModalCancelChanges = ({ props}) => {
   const { isModalCancelChange, toggleModalCancelChange } =
     useContext(UiContext);
+    const [deleteUnsavedChanges, stateUrl] = useFormHook(props)
 
   // // const [open, setOpen] = useState<boolean>(true);
   // const [email, setEmail] = useState<string>("");
@@ -80,7 +82,8 @@ export const ModalCancelChanges: FC<Props> = ({deleteUnsavedChanges}) => {
             alignItems="center"
           >
             <Button
-              onClick={() => deleteUnsavedChanges()}
+            // @ts-ignore
+              onClick={deleteUnsavedChanges(stateUrl)}
               color="secondary"
               className="circular-btn"
               size="large"

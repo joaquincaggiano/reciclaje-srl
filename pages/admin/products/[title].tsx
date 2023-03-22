@@ -1,5 +1,4 @@
 import {
-  ChangeEvent,
   useEffect,
   FC,
   useRef,
@@ -17,17 +16,9 @@ import { IProductSchema } from "../../../interfaces";
 
 import { dbProducts } from "@/database";
 
-import { useForm } from "react-hook-form";
-
 import { ModalCancelChanges } from "@/components/admin/ModalCancelChanges";
 
-import useUnsavedChanges from "@/hooks/useUnsavedChanges";
-
-import useChangeTitle from "@/hooks/useChangeTitle";
-
-import useColorChange from "@/hooks/useColorChange";
-
-import useHandleFiles from "@/hooks/useHandleFiles";
+import useFormHook from "@/hooks/useFormHook";
 
 import axios from "axios";
 
@@ -66,176 +57,57 @@ interface Props {
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
   const router = useRouter();
-  const { toggleModalCancelChange } = useContext(UiContext);
+	const { toggleModalCancelChange } =
+		useContext(UiContext);
 
-  const [isSaving, setIsSaving] = useState(false);
-  // const [stateUrl, setStateUrl] = useState<string>("");
-  
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    getValues,
-    setValue,
-  } = useForm<FormData>({ defaultValues: product });
-  
-  //@ts-ignore
-  const [unsavedChanges, setUnsavedChanges, compareArrays] = useUnsavedChanges();
-  const handleTitleChange = useChangeTitle(product);
-  const onChangeColor = useColorChange(product)
-  const [selectFile, deleteUnsavedChanges, setStateUrl, stateUrl] = useHandleFiles(product)
-  
+  const [	handleSubmit,
+		register,
+    errors,
+		setValue,
+		getValues,
+    unsavedChanges,
+    setUnsavedChanges, 
+    handleTitleChange,
+    isSaving,
+    deleteUnsavedChanges,
+    onChangeColor,
+    onDeleteImage,
+    selectFile,
+    stateUrl] = useFormHook(product)
+// const form = new FormData;
+// console.log("TYPE OF GET VALUES", getValues("colors"))
+
   const fileInputRef = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    const message = "no te vayas plis";
 
-    const routeChangeStart = (url: string) => {
-      //@ts-ignore
-      setStateUrl(url);
-      if (router.asPath !== url && unsavedChanges) {
-        toggleModalCancelChange();
-        throw "Abort route change. Please ignore this error.";
-      }
-    };
+  // useEffect(() => {
+  //   const message = "no te vayas plis";
 
-    const beforeunload = (e: BeforeUnloadEvent) => {
-      if (unsavedChanges) {
-        e.preventDefault();
-        toggleModalCancelChange();
-        e.returnValue = message;
-        return message;
-      }
-    };
-
-    window.addEventListener("beforeunload", beforeunload);
-    router.events.on("routeChangeStart", routeChangeStart);
-
-    return () => {
-      window.removeEventListener("beforeunload", beforeunload);
-      router.events.off("routeChangeStart", routeChangeStart);
-    };
-  }, [unsavedChanges]);
-
-  console.log("EL GET VALUE IMAGES", getValues("images"))
-  console.log("EL GET TITLE", getValues("title"))
-
-  // const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
-  //   if (!e.target.files || e.target.files.length === 0) {
-  //     console.error("No se han seleccionado archivos");
-  //     return;
-  //   }
-
-  //   try {
-  //     const formData = new FormData();
-
-  //     formData.append(
-  //       "productName",
-  //       `product/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
-  //     );
-
-  //     for (let i = 0; i < e.target.files.length; i++) {
-  //       formData.append(`images`, e.target.files[i]);
-  //       const { data } = await axios.post("/api/admin/upload", formData);
-  //       console.log("response", data);
-  //       setValue("images", [...getValues("images"), data.url], {
-  //         shouldValidate: true,
-  //       });
-  //       setUnsavedChanges(true);
+  //   const routeChangeStart = (url: string) => {
+  //     //@ts-ignore
+  //     setStateUrl(url);
+  //     if (router.asPath !== url && unsavedChanges) {
+  //       toggleModalCancelChange();
+  //       throw "Abort route change. Please ignore this error.";
   //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  //   };
 
-  // const onChangeColor = (color: string) => {
-  //   const currentColors = getValues("colors");
-  //   if (currentColors.includes(color)) {
-  //     setValue(
-  //       "colors",
-  //       currentColors.filter((c) => c !== color),
-  //       { shouldValidate: true }
-  //     );
-  //     return compareArrays(product.colors, getValues("colors"));
-  //   }
-  //   setValue("colors", [...currentColors, color], { shouldValidate: true });
+  //   const beforeunload = (e: BeforeUnloadEvent) => {
+  //     if (unsavedChanges) {
+  //       e.preventDefault();
+  //       toggleModalCancelChange();
+  //       e.returnValue = message;
+  //       return message;
+  //     }
+  //   };
 
-  //   compareArrays(product.colors, getValues("colors"));
-  //   console.log("boolean", unsavedChanges)
-  // };
+  //   window.addEventListener("beforeunload", beforeunload);
+  //   router.events.on("routeChangeStart", routeChangeStart);
 
-  const onDeleteImage = async (image: string) => {
-    console.log("DELETED IMAGE", image);
-    const imageName = image.replace(
-      "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
-      ""
-    );
-    await axios.post("/api/admin/deleteImageFromS3", {
-      key: imageName,
-    });
-    setValue(
-      "images",
-      getValues("images").filter((img) => img !== image),
-      { shouldValidate: true }
-    );
-
-    compareArrays(product.images, getValues("images"));
-    
-  };
-
-  // const deleteUnsavedChanges = async () => {
-  //   try {
-  //     setUnsavedChanges(false);
-  //     const productName = product.title.replaceAll(" ", "-").toLowerCase();
-
-  //     const { data } = await axios.post("/api/admin/getFiles", {
-  //       productName: productName,
-  //     });
-
-  //     const url = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
-  //     const imagesInDB = product.images.map((oneImage) => {
-  //       return oneImage.replace(url, "");
-  //     });
-
-  //     const imagesInS3 = data.objects.filter(
-  //       (img: string) => !imagesInDB.includes(img)
-  //     );
-
-  //     await imagesInS3.map((eachImage: string) => {
-  //       axios.post("/api/admin/deleteImageFromS3", {
-  //         key: eachImage,
-  //       });
-  //     });
-
-  //     router.push(stateUrl || "/");
-
-  //     toggleModalCancelChange();
-  //   } catch (error) {
-  //     console.log("ALGO SALIÓ MAL");
-  //     throw new Error("No se pudieron borrar las imagenes");
-  //   }
-  // };
-
-  const onSubmit = async (form: FormData) => {
-    if (form.images.length < 1) return;
-    setIsSaving(true);
-    try {
-      setUnsavedChanges(false);
-      const { data } = await axios({
-        url: "/api/admin/products",
-        method: form._id ? "PUT" : "POST",
-        data: form,
-      });
-      router.replace("/admin/products");
-      if (!form._id) {
-        router.replace(`/admin/products/${form.title}`);
-      } else {
-        setIsSaving(false);
-      }
-    } catch (error) {
-      console.log(error);
-      setIsSaving(false);
-    }
-  };
+  //   return () => {
+  //     window.removeEventListener("beforeunload", beforeunload);
+  //     router.events.off("routeChangeStart", routeChangeStart);
+  //   };
+  // }, [unsavedChanges]);
 
   return (
     <MainLayout
@@ -247,7 +119,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       }
     >
       {/*//@ts-ignore*/}
-      <ModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
+      <ModalCancelChanges props={product}/>
 
       {router.asPath === "/admin/products/new" ? (
         <Box display="flex" justifyContent="flex-start" alignItems="center">
@@ -264,13 +136,16 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           <BorderColorOutlined />
         </Box>
       )}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      
+      {/* @ts-ignore */}
+      <form onSubmit={handleSubmit()}>
         <Box display="flex" justifyContent="end" sx={{ mb: 1 }}>
           <Button
             color="secondary"
             startIcon={<SaveOutlined />}
             sx={{ width: "150px", color: "white", backgroundColor: "#4caf50" }}
             type="submit"
+            /* @ts-ignore */
             disabled={isSaving}
           >
             Guardar
@@ -285,12 +160,16 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               variant="filled"
               fullWidth
               sx={{ mb: 1 }}
+              /* @ts-ignore */
               {...register("title", {
                 required: "Este campo es requerido",
                 minLength: { value: 2, message: "Mínimo 2 caracteres" },
               })}
+              /* @ts-ignore */
               error={!!errors.title}
+              /* @ts-ignore */
               helperText={errors.title?.message}
+              /* @ts-ignore */
               onChange={(e) => handleTitleChange(e)}
             />
 
@@ -300,8 +179,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               <FormLabel>Categoría</FormLabel>
               <RadioGroup
                 row
+                /*@ts-ignore*/
                 value={getValues("category")}
                 onChange={(e) =>
+                /*@ts-ignore*/
                   setValue("category", e.target.value, { shouldValidate: true })
                 }
               >
@@ -322,9 +203,11 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 <FormControlLabel
                   key={color}
                   control={
+                /*@ts-ignore*/
                     <Checkbox checked={getValues("colors").includes(color)} />
                   }
                   label={color}
+                /*@ts-ignore*/
                   onChange={() => onChangeColor(color)}
                 />
               ))}
@@ -353,6 +236,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   fullWidth
                   startIcon={<UploadOutlined />}
                   sx={{ mb: 3, color: "white", backgroundColor: "#4caf50" }}
+                  
                   onClick={() => fileInputRef.current?.click()}
                 >
                   Cargar imagen
@@ -364,11 +248,13 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 color="error"
                 variant="outlined"
                 sx={{
+                /*@ts-ignore*/
                   display: getValues("images").length < 1 ? "flex" : "none",
                 }}
               />
 
               <Grid container spacing={2}>
+              {/*@ts-ignore*/}
                 {getValues("images").map((img) => {
                   return (
                     <Grid item xs={4} sm={3} key={img}>
@@ -384,6 +270,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                           <Button
                             fullWidth
                             color="error"
+                /*@ts-ignore*/
                             onClick={() => onDeleteImage(img)}
                           >
                             Borrar
