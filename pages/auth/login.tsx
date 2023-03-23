@@ -1,5 +1,5 @@
-import { useContext, useState } from "react";
-import { AuthContext } from "@/context";
+import { useState } from "react";
+// import { AuthContext } from "@/context";
 
 import { GetServerSideProps } from "next";
 
@@ -10,20 +10,9 @@ import { AuthLayout } from "@/components/layouts";
 import { validations } from "@/utils";
 
 import { ErrorOutline } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  Chip,
-  // Divider,
-  Grid,
-  // Link,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Chip, Grid, TextField, Typography } from "@mui/material";
 
 import { useForm } from "react-hook-form";
-// import axios from "axios";
-import { useRouter } from "next/router";
 
 type FormData = {
   email: string;
@@ -31,11 +20,6 @@ type FormData = {
 };
 
 const LoginPage = () => {
-
-  // const router = useRouter()
-
-  // const {loginUser} = useContext(AuthContext)
-
   const {
     register,
     handleSubmit,
@@ -44,17 +28,11 @@ const LoginPage = () => {
 
   const [showError, setShowError] = useState(false);
 
-  const onLoginUser = async({email, password}: FormData) => {
+  const onLoginUser = async ({ email, password }: FormData) => {
     setShowError(false);
 
     await signIn("credentials", { email, password });
-    // const isValidLogin = await signIn("credentials", { email, password });
-
-    // if(!isValidLogin) {
-    //   setShowError(true);
-    // }
-
-  }
+  };
 
   return (
     <AuthLayout title="Login">
@@ -73,7 +51,6 @@ const LoginPage = () => {
                 className="fadeIn"
                 sx={{ display: showError ? "flex" : "none" }}
               />
-              
             </Grid>
 
             <Grid item xs={12}>
@@ -112,12 +89,14 @@ const LoginPage = () => {
                 className="circular-btn"
                 size="large"
                 fullWidth
-                sx={{border: "1px solid #4caf50", "&:hover": {backgroundColor: "#4caf50", color: "white"}}}
+                sx={{
+                  border: "1px solid #4caf50",
+                  "&:hover": { backgroundColor: "#4caf50", color: "white" },
+                }}
               >
                 Ingresar
               </Button>
             </Grid>
-
           </Grid>
         </Box>
       </form>
@@ -146,6 +125,5 @@ export const getServerSideProps: GetServerSideProps = async ({
     props: {},
   };
 };
-
 
 export default LoginPage;
