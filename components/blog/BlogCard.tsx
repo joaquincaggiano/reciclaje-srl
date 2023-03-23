@@ -20,8 +20,15 @@ import {
   ExpandMore as ExpandMoreIcon,
 } from "@mui/icons-material";
 
+import { ShareComponent } from "../ui";
+
 import { styled } from "@mui/material/styles";
 import { green } from "@mui/material/colors";
+
+interface Props {
+  blog: IBlogSchema;
+  getImageUrl: (url: string) => void;
+}
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -38,12 +45,19 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-interface Props {
-  blog: IBlogSchema;
-}
-
-export const BlogCard: FC<Props> = ({ blog }) => {
+export const BlogCard: FC<Props> = ({ blog, getImageUrl }) => {
+  const [openShareOptions, setOpenShareOptions] = useState<Boolean>(false);
   const [expanded, setExpanded] = useState(false);
+
+  const shareFunction = () => {
+    const awsUrl = blog.images[0].replace(
+      "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
+      ""
+    );
+    const optimizedUrl = `https://ik.imagekit.io/e2ouoknyw/${awsUrl}`;
+    getImageUrl(optimizedUrl);
+    setOpenShareOptions(true);
+  };
 
   //@ts-ignore
   const date = new Date(blog?.createdAt);
@@ -80,10 +94,16 @@ export const BlogCard: FC<Props> = ({ blog }) => {
             {blog.description}
           </Typography>
         </CardContent>
+
         <CardActions disableSpacing>
-          <IconButton aria-label="share">
+          <IconButton aria-label="share" onClick={shareFunction}>
             <ShareIcon />
           </IconButton>
+
+          {openShareOptions && (
+            <ShareComponent link={blog}/>
+          )}
+
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}
@@ -93,6 +113,7 @@ export const BlogCard: FC<Props> = ({ blog }) => {
             <ExpandMoreIcon />
           </ExpandMore>
         </CardActions>
+
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <Typography paragraph>{blog.info}</Typography>

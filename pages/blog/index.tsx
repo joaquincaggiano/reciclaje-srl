@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NextPage } from "next";
 
 import { MainLayout } from "@/components/layouts";
@@ -7,6 +8,12 @@ import { Typography, Divider } from "@mui/material";
 import { BlogList } from "@/components/blog";
 
 const BlogPage: NextPage = () => {
+  const [imageUrl, setImageUrl] = useState("")
+
+  function getImageUrl(url: string){
+    return setImageUrl(url)
+  }
+
   return (
     <MainLayout title={content.blog.title} metaHeader={content.blog.metaHeader}>
       <Typography variant="h1" sx={{ textAlign: "center", mb: 2 }}>
@@ -15,7 +22,7 @@ const BlogPage: NextPage = () => {
 
       <Divider sx={{ mb: 5 }} />
 
-      <BlogList />
+      <BlogList getImageUrl={getImageUrl}/>
     </MainLayout>
   );
 };

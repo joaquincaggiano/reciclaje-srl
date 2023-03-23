@@ -17,6 +17,8 @@ import { ProductCarrousel } from ".";
 import classes from "../../styles/products/TypeColor.module.css";
 import { CircleRounded } from "@mui/icons-material";
 
+import { ShareComponent } from "../ui";
+
 interface Props {
   product: IProductSchema;
   getImageUrl: (url: string) => void;
@@ -84,36 +86,7 @@ export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
             </Button>
           </CardActions>
           {openShareOptions && (
-            <>
-              {/* WPP */}
-              <a
-                href={`https://api.whatsapp.com/send?text=${product.images[0]}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img
-                  style={{
-                    width: "30px",
-                    maxHeight: "30px",
-                    marginRight: "10px",
-                  }}
-                  src="/whatsapp.png"
-                  alt="logo de wpp"
-                />
-              </a>
-              {/* FACEBOOK */}
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${product.images[0]}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img
-                  style={{ width: "30px", maxHeight: "30px" }}
-                  src="/facebook.png"
-                  alt="logo de facebook"
-                />
-              </a>
-            </>
+            <ShareComponent link={product}/>
           )}
         </Box>
       </Card>

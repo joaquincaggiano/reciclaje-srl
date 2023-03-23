@@ -4,7 +4,11 @@ import { Grid, Typography } from "@mui/material";
 import useSWR from "swr";
 import { BlogCard } from "./BlogCard";
 
-export const BlogList: FC = () => {
+interface Props {
+  getImageUrl: (url: string) => void;
+}
+
+export const BlogList: FC<Props> = ({getImageUrl}) => {
   const { data, error } = useSWR<IBlogSchema[]>("/api/blog");
   console.log("data blog", data)
 
@@ -25,7 +29,7 @@ export const BlogList: FC = () => {
       alignItems="center"
     >
       {data!.map((blog, i) => {
-        return <BlogCard blog={blog} key={i} />;
+        return <BlogCard blog={blog} key={i} getImageUrl={getImageUrl}/>;
       })}
     </Grid>
   );

@@ -17,8 +17,6 @@ const ProductsPage: NextPage = () => {
   const { products, isLoading } = useProducts("/products");
   const [imageUrl, setImageUrl] = useState("")
 
-  // console.log("products", products)
-
   function getImageUrl(url: string){
     return setImageUrl(url)
   }
