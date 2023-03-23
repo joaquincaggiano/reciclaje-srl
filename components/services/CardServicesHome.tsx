@@ -1,3 +1,5 @@
+import NextLink from "next/link";
+
 import {
   Card,
   CardActions,
@@ -7,6 +9,7 @@ import {
   Typography,
   CardActionArea,
   Grid,
+  Link,
 } from "@mui/material";
 import { FC } from "react";
 
@@ -14,9 +17,10 @@ interface Props {
   title: string;
   description: string;
   image: string;
+  key: number;
 }
 
-export const CardServicesHome: FC<Props> = ({ title, description, image }) => {
+export const CardServicesHome: FC<Props> = ({ title, description, image, key }) => {
   return (
     <Grid
       item
@@ -39,9 +43,13 @@ export const CardServicesHome: FC<Props> = ({ title, description, image }) => {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="primary">
-            Ver más
-          </Button>
+          <NextLink href={`/services#${title}`} passHref legacyBehavior>
+            <Link>
+              <Button size="small" color="primary">
+                Ver más
+              </Button>
+            </Link>
+          </NextLink>
         </CardActions>
       </Card>
     </Grid>

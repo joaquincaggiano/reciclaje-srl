@@ -22,6 +22,7 @@ export const ServiceCard: FC<Props> = ({ service }) => {
           width: "100%",
           boxShadow: "0px 0px 0px 0px",
         }}
+        id={`${service.title}`}
       >
         <CardContent>
           <Typography
@@ -37,6 +38,7 @@ export const ServiceCard: FC<Props> = ({ service }) => {
           height="500"
           image={service.images[0]}
           alt={service.title}
+         
         />
         <CardContent>
           <Typography variant="body1" sx={{ fontSize: "20px" }}>
