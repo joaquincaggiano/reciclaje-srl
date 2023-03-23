@@ -28,10 +28,13 @@ const LoginPage = () => {
 
   const [showError, setShowError] = useState(false);
 
-  const onLoginUser = async ({ email, password }: FormData) => {
-    setShowError(false);
-
-    await signIn("credentials", { email, password });
+  const onLoginUser = async ({ email, password }: FormData) => {  
+    try {
+      await signIn("credentials", { email, password });
+      setShowError(false);
+    } catch (error) {
+      setShowError(true);
+    }
   };
 
   return (
