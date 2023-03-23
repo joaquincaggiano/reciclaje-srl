@@ -1,3 +1,4 @@
+import { useEffect, useContext, useState } from "react";
 import { NextPage } from "next";
 
 import { useServices } from "@/hooks/useServices";
@@ -9,9 +10,23 @@ import { ModalSubscribe } from "@/components/mailchimp";
 import { Carrousel, FullScreenLoading } from "@/components/ui";
 import { Typography, Divider, Grid } from "@mui/material";
 import { content } from "@/utils";
+import { UiContext } from "@/context";
 
 const HomePage: NextPage = () => {
   const { services, isLoading } = useServices("/services");
+  const { toggleModalOpen } = useContext(UiContext);
+  const [wasModalOpen, setWasModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const wasModalOpen = sessionStorage.getItem("openModal");
+      if (wasModalOpen !== "true") {
+        toggleModalOpen();
+        sessionStorage.setItem("openModal", "true");
+      }
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <MainLayout title={content.home.title} metaHeader={content.home.metaHeader}>
@@ -67,7 +82,6 @@ const HomePage: NextPage = () => {
           })}
         </Grid>
       )}
-
 
       <Divider sx={{ mt: 5 }} />
 
