@@ -1,0 +1,35 @@
+.blanco {
+  color: white;
+}
+
+.gris {
+  color: rgb(98, 98, 98);
+}
+
+.negro {
+  color: black;
+}
+
+.transparente {
+  color: rgba(133, 133, 133, 0.15);
+}
+
+.amarillo {
+  color: yellow;
+}
+
+.verde {
+  color: #4caf50;
+}
+
+.azul {
+  color: #1757ac;
+}
+
+.rojo {
+  color: #e30f0f;
+}
+
+.caramelo {
+  color: #ba7846;
+}
