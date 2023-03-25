@@ -19,6 +19,9 @@ export const lightTheme = createTheme({
       defaultProps: {
         underline: "none",
       },
+      styleOverrides: {
+        root: {color: "#008f39"}
+      }
     },
     MuiAppBar: {
       defaultProps: {
@@ -27,7 +30,7 @@ export const lightTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          backgroundColor: "green",
+          backgroundColor: "#008f39",
           height: 60,
         },
       },
@@ -66,7 +69,7 @@ export const lightTheme = createTheme({
           ":hover": {
             backgroundColor: "rgba(255,255,255, 1)",
             transition: "all 0.3s ease-in-out",
-            color: "#388e3c"
+            color: "#008f39"
           },
         },
       },
@@ -78,11 +81,11 @@ export const lightTheme = createTheme({
       },
       styleOverrides: {
         root: {
-          boxShadow: "5px 5px 5px 0px rgb(48,212,33)",
+          boxShadow: "5px 5px 5px 0px #008f39",
           borderRadius: "10px",
-          border: "2px solid #388e3c ",
+          border: "2px solid #008f39 ",
           ":hover": {
-            boxShadow: "0px 0px 5px 6px rgba(48,212,33,0.75)",
+            boxShadow: "0px 0px 5px 6px #008f39",
           }
         },
       },

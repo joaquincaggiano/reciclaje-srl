@@ -39,12 +39,12 @@ export const Subscribe = () => {
   return (
     <form onSubmit={handleSubmit(onSubscribe)} noValidate>
       <Box>
-        <Typography variant="h4" sx={{ textAlign: "center" }}>
+        <Typography variant="h4" sx={{ textAlign: "center", color: "white" }}>
           Subscribirse a las Novedades
         </Typography>
         <Typography
-          variant="subtitle1"
-          sx={{ textAlign: "center", fontSize: "20px" }}
+          variant="subtitle2"
+          sx={{ textAlign: "center", fontSize: "20px", color: "white" }}
         >
           Notificate sobre todas nuestras novedades de negocios
         </Typography>
@@ -94,12 +94,12 @@ export const Subscribe = () => {
               size="large"
               fullWidth
               sx={{
-                backgroundColor: "#4caf50",
-                color: "white",
+                backgroundColor: "white",
+                color: "#008f39",
                 height: "55px",
-                border: "1px solid white",
+                border: "1px solid #008f39",
                 width: { xs: "100%", sm: "60%" },
-                "&:hover": { backgroundColor: "white", color: "#4caf50" },
+                "&:hover": { backgroundColor: "#008f39", color: "white", border: "1px solid white", },
               }}
             >
               Suscribirse

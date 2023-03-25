@@ -59,18 +59,18 @@ export const MainLayout: FC<Props> = ({
         <Tooltip title="Suscríbete" onClick={toggleModalOpen}>
           <IconButton
             sx={{
-              border: "1px solid #4caf50",
+              border: "1px solid #008f39",
               zIndex: "10000000000",
               position: "fixed",
               top: "73%",
               left: { xs: "77%", sm: "88%", md: "91%", lg: "93%", xl: "95.4%" },
-              "&:hover": { backgroundColor: "#4caf50" },
+              "&:hover": { backgroundColor: "#008f39" },
             }}
           >
             <UnsubscribeOutlined
               sx={{
                 fontSize: "50px",
-                color: "#4caf50",
+                color: "#008f39",
                 "&:hover": { color: "#ffff" },
               }}
             />

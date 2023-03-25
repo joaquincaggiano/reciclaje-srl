@@ -14,7 +14,7 @@ import { content } from "@/utils";
 
 export const Footer = () => {
   return (
-    <footer style={{ backgroundColor: "#4caf50", minHeight: "150px" }}>
+    <footer style={{ backgroundColor: "#008f39", minHeight: "150px" }}>
       <Grid
         container
         spacing={4}
@@ -61,7 +61,7 @@ export const Footer = () => {
             sx={{ mr: 3 }}
           >
             <IconButton>
-              <LocalPhoneOutlined color="info" />
+              <LocalPhoneOutlined sx={{color: "white"}} />
             </IconButton>
             <Typography
               variant="button"
@@ -72,7 +72,7 @@ export const Footer = () => {
           </Box>
           <Box display="flex" justifyContent="center" alignItems="center">
             <IconButton>
-              <EmailOutlined color="info" />
+              <EmailOutlined sx={{color: "white"}} />
             </IconButton>
             <Typography
               variant="button"

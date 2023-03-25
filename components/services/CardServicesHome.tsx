@@ -17,10 +17,9 @@ interface Props {
   title: string;
   description: string;
   image: string;
-  key: number;
 }
 
-export const CardServicesHome: FC<Props> = ({ title, description, image, key }) => {
+export const CardServicesHome: FC<Props> = ({ title, description, image, }) => {
   return (
     <Grid
       item

@@ -32,7 +32,7 @@ const ContactPage: NextPage = () => {
               alignItems="center"
               sx={{ my: 2 }}
             >
-              <IconButton sx={{ border: "1px solid #4caf50", mr: 1 }}>
+              <IconButton sx={{ border: "1px solid #008f39", mr: 1 }}>
                 <LocalPhoneOutlined color="primary" />
               </IconButton>
 

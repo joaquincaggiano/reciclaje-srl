@@ -17,7 +17,7 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "#ffff",
-  border: "5px solid #4caf50",
+  border: "5px solid #008f39",
   boxShadow: 24,
   p: 4,
   borderRadius: "10px",
@@ -114,15 +114,15 @@ export const ModalSubscribe = () => {
               size="large"
               fullWidth
               sx={{
-                backgroundColor: "#4caf50",
+                backgroundColor: "#008f39",
                 color: "white",
                 height: "55px",
                 border: "1px solid white",
                 //   width: { xs: "100%", sm: "60%" },
                 "&:hover": {
                   backgroundColor: "white",
-                  color: "#4caf50",
-                  border: "2px solid #4caf50",
+                  color: "#008f39",
+                  border: "2px solid #008f39",
                 },
               }}
             >
