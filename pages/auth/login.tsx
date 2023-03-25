@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useRouter } from "next/router";
 // import { AuthContext } from "@/context";
 
 import { GetServerSideProps } from "next";
@@ -27,15 +28,24 @@ const LoginPage = () => {
   } = useForm<FormData>();
 
   const [showError, setShowError] = useState(false);
+  const router = useRouter();
 
   const onLoginUser = async ({ email, password }: FormData) => {  
     try {
-      await signIn("credentials", { email, password });
-      setShowError(false);
+      const user = await signIn("credentials", { email, password, redirect: false });
+      console.log("USER", user)
+      if(user?.status !== 200) {
+        console.log("ESTOY EN EL IF")
+        setShowError(true);
+      } else {
+        setShowError(false);
+        router.push("/")
+      }
     } catch (error) {
       setShowError(true);
     }
   };
+  console.log("el show error", showError)
 
   return (
     <AuthLayout title="Login">
@@ -47,7 +57,7 @@ const LoginPage = () => {
                 Iniciar Sesión
               </Typography>
 
-              <Chip
+             <Chip
                 label="No reconocemos ese usuario / contraseña"
                 color="error"
                 icon={<ErrorOutline />}
