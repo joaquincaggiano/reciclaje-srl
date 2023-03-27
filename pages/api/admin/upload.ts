@@ -42,11 +42,12 @@ const postFiles = async (
         .json({ message: "Error al procesar los archivos subidos" });
       return;
     }
-
+      //@ts-ignore
+const keyName = fields.productName ? `${fields.productName}/${files.images.newFilename}` : `${fields.blogName}/${files.images.newFilename}`
     const fileParams = {
       Bucket: process.env.BUCKET_NAME,
       //@ts-ignore
-      Key: `${fields.productName}/${files.images.newFilename}`,
+      Key: keyName,
       //@ts-ignore
       Body: fs.createReadStream(files.images.filepath),
       Expires: 60,

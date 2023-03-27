@@ -1,5 +1,6 @@
-import { ChangeEvent, FC, useRef, useState } from "react";
+import { ChangeEvent, FC, useRef, useState, useContext, useEffect } from "react";
 import { GetServerSideProps } from "next";
+import { UiContext } from "@/context/ui";
 
 import { useRouter } from "next/router";
 
@@ -12,6 +13,9 @@ import { dbBlogs } from "@/database";
 import { useForm } from "react-hook-form";
 
 import axios from "axios";
+
+import { ModalCancelChanges } from "@/components/admin/ModalCancelChanges";
+
 
 import {
   BorderColorOutlined,
@@ -45,11 +49,15 @@ interface Props {
 }
 
 const BlogAdminPage: FC<Props> = ({ blog }) => {
+  const { toggleModalCancelChange } = useContext(UiContext);
   const [isSaving, setIsSaving] = useState(false);
+  const [unsavedChanges, setUnsavedChanges] = useState(false);
+  const [stateUrl, setStateUrl] = useState<string>("");
+
 
   const router = useRouter();
 
-  // const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
@@ -59,35 +67,162 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
     setValue,
   } = useForm<FormData>({ defaultValues: blog });
 
-  // const onFilesSelected = async (e: ChangeEvent<HTMLInputElement>) => {
-  //   if (!e.target.files || e.target.files.length === 0) {
-  //     return;
-  //   }
+  useEffect(() => {
+    const message = "no te vayas plis";
 
-  //   try {
-  //     for (const file of e.target.files) {
-  //       const formData = new FormData();
-  //       formData.append("file", file);
-  //       const { data } = await axios.post<{ message: string }>(
-  //         "/api/admin/upload",
-  //         formData
-  //       );
-  //       setValue("images", [...getValues("images"), data.message], {
-  //         shouldValidate: true,
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+    const routeChangeStart = (url: string) => {
+      setStateUrl(url);
+      if (router.asPath !== url && unsavedChanges) {
+        toggleModalCancelChange();
+        throw "Abort route change. Please ignore this error.";
+      }
+    };
 
-  // const onDeleteImage = (image: string) => {
-  //   setValue(
-  //     "images",
-  //     getValues("images").filter((img) => img !== image),
-  //     { shouldValidate: true }
-  //   );
-  // };
+    const beforeunload = (e: BeforeUnloadEvent) => {
+      if (unsavedChanges) {
+        e.preventDefault();
+        toggleModalCancelChange();
+        e.returnValue = message;
+        return message;
+      }
+    };
+
+    window.addEventListener("beforeunload", beforeunload);
+    router.events.on("routeChangeStart", routeChangeStart);
+
+    return () => {
+      window.removeEventListener("beforeunload", beforeunload);
+      router.events.off("routeChangeStart", routeChangeStart);
+    };
+  }, [unsavedChanges]);
+
+  const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      console.error("No se han seleccionado archivos");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+
+      formData.append(
+        "blogName",
+        `blog/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
+      );
+
+      for (let i = 0; i < e.target.files.length; i++) {
+        formData.append(`images`, e.target.files[i]);
+        const { data } = await axios.post("/api/admin/upload", formData);
+        console.log("response", data);
+        setValue("images", [...getValues("images"), data.url], {
+          shouldValidate: true,
+        });
+        setUnsavedChanges(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleTitleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setValue("title", e.target.value, { shouldValidate: true });
+
+    if (blog.title === getValues("title")) {
+      setUnsavedChanges(false);
+    } else {
+      setUnsavedChanges(true);
+    }
+  };
+  const handleInfoChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setValue("info", e.target.value, { shouldValidate: true });
+
+    if (blog.info === getValues("info")) {
+      setUnsavedChanges(false);
+    } else {
+      setUnsavedChanges(true);
+    }
+  };
+  const handleDescriptionChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setValue("description", e.target.value, { shouldValidate: true });
+
+    if (blog.description === getValues("description")) {
+      setUnsavedChanges(false);
+    } else {
+      setUnsavedChanges(true);
+    }
+  };
+
+  function compareArrays(arr1: string[], arr2: string[]) {
+    if (arr1.length === arr2.length) {
+      return arr1.every(function (element, index) {
+        if (element === arr2[index]) {
+          setUnsavedChanges(false);
+        } else {
+          setUnsavedChanges(true);
+        }
+      });
+    } else {
+      return setUnsavedChanges(true);
+    }
+  }
+
+  const onDeleteImage = async (image: string) => {
+    console.log("DELETED IMAGE", image);
+    const imageName = image.replace(
+      "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
+      ""
+    );
+    await axios.post("/api/admin/deleteImageFromS3", {
+      key: imageName,
+    });
+    setValue(
+      "images",
+      getValues("images").filter((img) => img !== image),
+      { shouldValidate: true }
+    );
+
+    compareArrays(blog.images, getValues("images"));
+    
+  };
+
+  const deleteUnsavedChanges = async () => {
+    try {
+      setUnsavedChanges(false);
+      const blogName = blog.title.replaceAll(" ", "-").toLowerCase();
+
+      const { data } = await axios.post("/api/admin/getFiles", {
+        blogName: blogName,
+      });
+
+      const url = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
+      const imagesInDB = blog.images.map((oneImage) => {
+        return oneImage.replace(url, "");
+      });
+
+      const imagesInS3 = data.objects.filter(
+        (img: string) => !imagesInDB.includes(img)
+      );
+
+      await imagesInS3.map((eachImage: string) => {
+        axios.post("/api/admin/deleteImageFromS3", {
+          key: eachImage,
+        });
+      });
+
+      router.push(stateUrl || "/");
+
+      toggleModalCancelChange();
+    } catch (error) {
+      console.log("ALGO SALIÓ MAL");
+      throw new Error("No se pudieron borrar las imagenes");
+    }
+  };
 
   const onSubmit = async (form: FormData) => {
     if (form.images.length < 1) return;
@@ -161,6 +296,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
               })}
               error={!!errors.title}
               helperText={errors.title?.message}
+              onChange={(e)=>handleTitleChange(e)}
             />
 
             <TextField
@@ -176,6 +312,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
               })}
               error={!!errors.info}
               helperText={errors.info?.message}
+              onChange={(e)=>handleInfoChange(e)}
             />
 
             <TextField
@@ -191,6 +328,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
               })}
               error={!!errors.description}
               helperText={errors.description?.message}
+              onChange={(e)=>handleDescriptionChange(e)}
             />
 
             {/* <Divider sx={{ my: 1 }} /> */}
@@ -207,19 +345,19 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
                 fullWidth
                 startIcon={<UploadOutlined />}
                 sx={{ mb: 3, color: "white", backgroundColor: "#4caf50" }}
-                // onClick={() => fileInputRef.current?.click()}
+                onClick={() => fileInputRef.current?.click()}
               >
                 Cargar imagen
               </Button>
 
-              {/* <input
+              <input
                 ref={fileInputRef}
                 type="file"
                 multiple
                 accept="image/png, image/gif, image/jpeg"
                 style={{ display: "none" }}
-                onChange={onFilesSelected}
-              /> */}
+                onChange={(e)=>selectFile(e)}
+              />
 
               <Chip
                 label="Es necesario al menos 1 imagen"
@@ -231,7 +369,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
               />
 
               <Grid container spacing={2}>
-                {blog.images.map((img) => (
+                {getValues("images").map((img) => (
                   <Grid item xs={4} sm={3} key={img}>
                     <Card>
                       <CardMedia
@@ -241,7 +379,8 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
                         alt={img}
                       />
                       <CardActions>
-                        <Button fullWidth color="error">
+                        <Button fullWidth color="error"
+                        onClick={() => onDeleteImage(img)}>
                           Borrar
                         </Button>
                       </CardActions>
