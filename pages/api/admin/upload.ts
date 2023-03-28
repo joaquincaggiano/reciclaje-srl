@@ -43,11 +43,12 @@ const postFiles = async (
       return;
     }
       //@ts-ignore
-const keyName = fields.productName ? `${fields.productName}/${files.images.newFilename}` : `${fields.blogName}/${files.images.newFilename}`
+    // const keyName = fields.productName ? `${fields.productName}/${files.images.newFilename}` : `${fields.blogName}/${files.images.newFilename}`;
+
     const fileParams = {
       Bucket: process.env.BUCKET_NAME,
       //@ts-ignore
-      Key: keyName,
+      Key: `${fields.type}/${files.images.newFilename}`,
       //@ts-ignore
       Body: fs.createReadStream(files.images.filepath),
       Expires: 60,

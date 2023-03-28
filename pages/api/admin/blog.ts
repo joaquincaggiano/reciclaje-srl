@@ -15,6 +15,8 @@ export default function handler(
       return getBlogs(req, res);
     case "PUT":
       return updateBlog(req, res);
+    case "POST":
+      return createBlog(req, res);
 
     default:
       return res.status(400).json({ message: "Bad Request" });
@@ -60,6 +62,42 @@ const updateBlog = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     await db.disconnect();
 
     return res.status(200).json(blogToUpdate);
+  } catch (error) {
+    console.log(error);
+    await db.disconnect();
+    return res.status(400).json({ message: "Revisar la consola del servidor" });
+  }
+};
+
+const createBlog = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) => {
+  const { images = [] } = req.body as IBlogSchema;
+
+  if (images.length < 1) {
+    return res
+      .status(400)
+      .json({ message: "Es necesario al menos una imágenes" });
+  }
+
+  try {
+    await db.connect();
+    const blogInDB = await Blog.findOne({ title: req.body.title });
+
+    if (blogInDB) {
+      await db.disconnect();
+      return res
+        .status(400)
+        .json({ message: "Ya existe un producto con ese nombre" });
+    }
+
+    const blog = new Blog(req.body);
+    await blog.save();
+
+    await db.disconnect();
+
+    return res.status(201).json(blog);
   } catch (error) {
     console.log(error);
     await db.disconnect();

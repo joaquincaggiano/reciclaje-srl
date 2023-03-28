@@ -132,7 +132,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       const formData = new FormData();
 
       formData.append(
-        "productName",
+        "type",
         `product/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
       );
 
@@ -381,6 +381,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   startIcon={<UploadOutlined />}
                   sx={{ mb: 3, color: "white", backgroundColor: "#4caf50" }}
                   onClick={() => fileInputRef.current?.click()}
+                disabled={getValues("title").trim().length === 0 ? true : false}
                 >
                   Cargar imagen
                 </Button>
@@ -392,6 +393,14 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 variant="outlined"
                 sx={{
                   display: getValues("images").length < 1 ? "flex" : "none",
+                }}
+              />
+               <Chip
+                label="Es necesario incluir un título para subir una imagen"
+                color="error"
+                variant="outlined"
+                sx={{
+                  display: getValues("title").trim().length === 0 ? "flex" : "none",
                 }}
               />
 

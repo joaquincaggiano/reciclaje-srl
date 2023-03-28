@@ -106,7 +106,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
       const formData = new FormData();
 
       formData.append(
-        "blogName",
+        "type",
         `blog/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
       );
 
@@ -230,11 +230,13 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
     setIsSaving(true);
 
     try {
+      setUnsavedChanges(false);
       const { data } = await axios({
         url: "/api/admin/blog",
         method: form._id ? "PUT" : "POST",
         data: form,
       });
+      router.replace(`/admin/blog`);
 
       if (!form._id) {
         router.replace(`/admin/blog/${form.title}`);
@@ -254,6 +256,9 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
         router.asPath === "/admin/blog/new" ? "Crear blog" : "Editar blog"
       }
     >
+       {/*//@ts-ignore*/}
+       <ModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
+
       {router.asPath === "/admin/blog/new" ? (
         <Box display="flex" justifyContent="flex-start" alignItems="center">
           <Typography variant="h1" sx={{ mr: 1 }}>
@@ -346,6 +351,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
                 startIcon={<UploadOutlined />}
                 sx={{ mb: 3, color: "white", backgroundColor: "#4caf50" }}
                 onClick={() => fileInputRef.current?.click()}
+                disabled={getValues("title").trim().length === 0 ? true : false}
               >
                 Cargar imagen
               </Button>
@@ -367,7 +373,14 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
                   display: getValues("images").length < 1 ? "flex" : "none",
                 }}
               />
-
+ <Chip
+                label="Es necesario incluir un título para subir una imagen"
+                color="error"
+                variant="outlined"
+                sx={{
+                  display: getValues("title").trim().length === 0 ? "flex" : "none",
+                }}
+              />
               <Grid container spacing={2}>
                 {getValues("images").map((img) => (
                   <Grid item xs={4} sm={3} key={img}>
@@ -404,7 +417,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (title === "new") {
     const tempBlog = JSON.parse(JSON.stringify(new Blog()));
     delete tempBlog._id;
-    tempBlog.images = ["img1.jpg"];
+    // tempBlog.images = ["img1.jpg"];
     blog = tempBlog;
   } else {
     blog = await dbBlogs.getBlogByTitle(title.toString());
