@@ -4,7 +4,7 @@ import { S3 } from "aws-sdk";
 const s3 = new S3({
   accessKeyId: process.env.ACCESS_KEY,
   secretAccessKey: process.env.SECRET_KEY,
-  region: process.env.AWS_REGION,
+  region: process.env.REGION_AWS,
 });
 
 // type Data = {

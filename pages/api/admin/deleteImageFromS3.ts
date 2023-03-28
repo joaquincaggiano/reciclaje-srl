@@ -7,7 +7,7 @@ import type {
 const s3 = new AWS.S3({
 	accessKeyId: process.env.ACCESS_KEY,
 	secretAccessKey: process.env.SECRET_KEY,
-	region: process.env.AWS_REGION,
+	region: process.env.REGION_AWS,
 });
 
 export default async function handler(
