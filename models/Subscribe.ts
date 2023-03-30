@@ -3,6 +3,7 @@ import { ISubscribe } from '@/interfaces';
 
 const subscribeSchema = new Schema({
     email   : { type: String, required: true, unique: true },
+    status   : { type: String, required: true, default: "null" },
 }, {
     timestamps: true,
 })
