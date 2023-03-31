@@ -65,10 +65,28 @@ const subscribeOrUpdateUser = async (
     if (userInAudience?.status === "unsubscribed"){
       return "Hay que resuscribir al usuario"
     //@ts-ignore
-    } else if (userInAudience?.status === "unsubscribed") {
+    } else if (userInAudience?.status === "subscribed") {
       return "User already subscribed"
     } else {
       const userToSubscribe = await axios.post(urlForPost, data, options )
+      await db.connect();
+      const userSubscribeInDB = await Subscribe.findOne({ email: email });
+      
+      if (userSubscribeInDB?.status === "subscribed") {
+        console.log("USER SUBSCRIBED", userSubscribeInDB)
+        await db.disconnect();
+        return res
+          .status(400)
+          .json({ message: "Ya existe un usuario suscripto con ese nombre" });
+      }
+  
+      const userToDB = new Subscribe(data);
+      await userToDB.save();
+  
+      await db.disconnect();
+  
+      return res.status(201).json({ user: userToDB, message: "success" });
+      // return userToSubscribe
     }
 
   } catch(error) {
