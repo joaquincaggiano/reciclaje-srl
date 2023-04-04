@@ -43,7 +43,7 @@ export const ModalSubscribe = () => {
     setState("Loading");
 
     try {
-      const response = await axios.post("/api/subscribe", { email });
+      const response = await axios.post("/api/subscribe", {email});
       console.log(response);
       setState("Success");
       setEmail("");

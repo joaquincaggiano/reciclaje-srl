@@ -13,6 +13,7 @@
     "@aws-sdk/s3-presigned-post": "^3.279.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.5",
     "@mui/x-data-grid": "^5.17.22",
@@ -46,6 +47,7 @@
     "@types/formidable": "^2.0.5",
     "@types/js-cookie": "^3.0.2",
     "@types/jsonwebtoken": "^9.0.1",
+    "@types/mailchimp__mailchimp_marketing": "^3.0.8",
     "@types/md5": "^2.3.2",
     "@types/multer": "^1.4.7"
   }
