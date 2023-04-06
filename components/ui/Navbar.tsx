@@ -62,6 +62,14 @@ export const Navbar = () => {
             </Link>
           </NextLink>
 
+          <NextLink href="/about-us" passHref legacyBehavior>
+            <Link sx={{ mr: "10px" }}>
+              <Button color={asPath === "/about-us" ? "primary" : "info"}>
+                Nosotros
+              </Button>
+            </Link>
+          </NextLink>
+
           <NextLink href="/contact" passHref legacyBehavior>
             <Link>
               <Button color={asPath === "/contact" ? "primary" : "info"}>

@@ -15,6 +15,8 @@ export default function handler(
       return getServices(req, res);
     case "PUT":
       return updateService(req, res);
+      case "POST":
+        return createService(req, res);
     default:
       return res.status(400).json({ message: "Bad Request" });
   }
@@ -59,6 +61,42 @@ const updateService = async (req: NextApiRequest, res: NextApiResponse<Data>) =>
     await db.disconnect();
 
     return res.status(200).json(serviceToUpdate);
+  } catch (error) {
+    console.log(error);
+    await db.disconnect();
+    return res.status(400).json({ message: "Revisar la consola del servidor" });
+  }
+};
+
+const createService = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) => {
+  const { images = [] } = req.body as IServiceSchema;
+
+  if (images.length < 1) {
+    return res
+      .status(400)
+      .json({ message: "Es necesario al menos una imágenes" });
+  }
+
+  try {
+    await db.connect();
+    const serviceInDB = await Service.findOne({ title: req.body.title });
+
+    if (serviceInDB) {
+      await db.disconnect();
+      return res
+        .status(400)
+        .json({ message: "Ya existe un servicio con ese nombre" });
+    }
+
+    const service = new Service(req.body);
+    await service.save();
+
+    await db.disconnect();
+
+    return res.status(201).json(service);
   } catch (error) {
     console.log(error);
     await db.disconnect();

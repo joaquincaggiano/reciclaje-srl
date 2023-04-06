@@ -1,4 +1,4 @@
-import { IContact, IServices, IProduct, IBlog, IHome } from "./contentInfo";
+import { IContact, IServices, IProduct, IBlog, IHome, IAboutUs } from "./contentInfo";
 
 export interface Content {
   contact: IContact
@@ -6,4 +6,5 @@ export interface Content {
   products: IProduct
   blog: IBlog
   home: IHome
+  aboutUs: IAboutUs
 }

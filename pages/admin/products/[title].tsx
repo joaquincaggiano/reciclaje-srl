@@ -207,7 +207,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     );
 
     compareArrays(product.images, getValues("images"));
-    
   };
 
   const deleteUnsavedChanges = async () => {
@@ -297,7 +296,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
           <Button
             color="secondary"
             startIcon={<SaveOutlined />}
-            sx={{ width: "150px", color: "white", backgroundColor: "#4caf50" }}
+            sx={{ width: "150px", color: "white", backgroundColor: "#008f39" }}
             type="submit"
             disabled={isSaving}
           >
@@ -381,7 +380,9 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   startIcon={<UploadOutlined />}
                   sx={{ mb: 3, color: "white", backgroundColor: "#4caf50" }}
                   onClick={() => fileInputRef.current?.click()}
-                disabled={getValues("title").trim().length === 0 ? true : false}
+                  disabled={
+                    getValues("title").trim().length === 0 ? true : false
+                  }
                 >
                   Cargar imagen
                 </Button>
@@ -395,12 +396,13 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   display: getValues("images").length < 1 ? "flex" : "none",
                 }}
               />
-               <Chip
+              <Chip
                 label="Es necesario incluir un título para subir una imagen"
                 color="error"
                 variant="outlined"
                 sx={{
-                  display: getValues("title").trim().length === 0 ? "flex" : "none",
+                  display:
+                    getValues("title").trim().length === 0 ? "flex" : "none",
                 }}
               />
 

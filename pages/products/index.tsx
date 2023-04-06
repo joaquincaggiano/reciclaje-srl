@@ -41,7 +41,7 @@ const ProductsPage: NextPage = () => {
           >
             <Typography variant="h1">{content.products.title}</Typography>
             <Typography variant="h6">
-              {content.products.productDescription}
+              {content.products.productDescription} {content.contact.datosContacto.whatsapp}
             </Typography>
           </Box>
 

@@ -62,7 +62,7 @@ const Blog = () => {
           startIcon={<AddOutlined />}
           color="secondary"
           href="/admin/blog/new"
-          sx={{ color: "white", backgroundColor: "#4caf50" }}
+          sx={{ color: "white", backgroundColor: "#008f39" }}
         >
           Crear blog
         </Button>

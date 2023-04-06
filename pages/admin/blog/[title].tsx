@@ -279,7 +279,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
           <Button
             color="secondary"
             startIcon={<SaveOutlined />}
-            sx={{ width: "150px", color: "white", backgroundColor: "#4caf50" }}
+            sx={{ width: "150px", color: "white", backgroundColor: "#008f39" }}
             type="submit"
             disabled={isSaving}
           >
@@ -349,7 +349,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
                 color="secondary"
                 fullWidth
                 startIcon={<UploadOutlined />}
-                sx={{ mb: 3, color: "white", backgroundColor: "#4caf50" }}
+                sx={{ mb: 3, color: "white", backgroundColor: "#008f39" }}
                 onClick={() => fileInputRef.current?.click()}
                 disabled={getValues("title").trim().length === 0 ? true : false}
               >

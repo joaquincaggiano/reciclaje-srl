@@ -37,10 +37,9 @@ const postFiles = async (
   form.parse(req, async (err, fields, files) => {
     if (err) {
       console.error(err);
-      res
+      return res
         .status(500)
         .json({ message: "Error al procesar los archivos subidos" });
-      return;
     }
       //@ts-ignore
     // const keyName = fields.productName ? `${fields.productName}/${files.images.newFilename}` : `${fields.blogName}/${files.images.newFilename}`;
@@ -62,11 +61,11 @@ const postFiles = async (
       }).promise();
       //@ts-ignore
       fs.unlinkSync(files.images.filepath);
-      res.status(200).json({ key: result.Key, url: result.Location });
+      return res.status(200).json({ key: result.Key, url: result.Location });
 
     } catch (error) {
       console.log(error);
-      res.status(400).json({ message: "Bad request" });
+      return res.status(400).json({ message: "Bad request" });
     }
   });
 };

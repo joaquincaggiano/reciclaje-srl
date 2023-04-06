@@ -62,9 +62,6 @@ const Users = () => {
 
 export const getServerSideProps: GetServerSideProps =
 	async (ctx) => {
-		//get de updateSubscribeToDb() esto va a comparar los users en mongo y en mailchimp
-		//actualiza el status de los users para mostrar en el front
-		//esto solo hace el llamado a la api (GET O PUT?) para que se actualice una sola vez
 		const usersList = await updateSubscribeToDb();
 		console.log('usersList', usersList);
 
