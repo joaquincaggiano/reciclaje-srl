@@ -1,4 +1,11 @@
-import { ChangeEvent, FC, useRef, useState, useContext, useEffect } from "react";
+import {
+  ChangeEvent,
+  FC,
+  useRef,
+  useState,
+  useContext,
+  useEffect,
+} from "react";
 import { GetServerSideProps } from "next";
 import { UiContext } from "@/context/ui";
 
@@ -15,7 +22,6 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 
 import { ModalCancelChanges } from "@/components/admin/ModalCancelChanges";
-
 
 import {
   BorderColorOutlined,
@@ -53,7 +59,6 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [stateUrl, setStateUrl] = useState<string>("");
-
 
   const router = useRouter();
 
@@ -188,7 +193,6 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
     );
 
     compareArrays(blog.images, getValues("images"));
-    
   };
 
   const deleteUnsavedChanges = async () => {
@@ -256,8 +260,8 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
         router.asPath === "/admin/blog/new" ? "Crear blog" : "Editar blog"
       }
     >
-       {/*//@ts-ignore*/}
-       <ModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
+      {/*//@ts-ignore*/}
+      <ModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
 
       {router.asPath === "/admin/blog/new" ? (
         <Box display="flex" justifyContent="flex-start" alignItems="center">
@@ -301,12 +305,13 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
               })}
               error={!!errors.title}
               helperText={errors.title?.message}
-              onChange={(e)=>handleTitleChange(e)}
+              onChange={(e) => handleTitleChange(e)}
             />
 
             <TextField
               label="Información"
               variant="filled"
+              value={getValues("info") || ""}
               fullWidth
               multiline
               maxRows={3}
@@ -317,12 +322,13 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
               })}
               error={!!errors.info}
               helperText={errors.info?.message}
-              onChange={(e)=>handleInfoChange(e)}
+              onChange={(e) => handleInfoChange(e)}
             />
 
             <TextField
               label="Descripción"
               variant="filled"
+              value={getValues("description") || ""}
               fullWidth
               multiline
               maxRows={3}
@@ -333,7 +339,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
               })}
               error={!!errors.description}
               helperText={errors.description?.message}
-              onChange={(e)=>handleDescriptionChange(e)}
+              onChange={(e) => handleDescriptionChange(e)}
             />
 
             {/* <Divider sx={{ my: 1 }} /> */}
@@ -362,7 +368,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
                 multiple
                 accept="image/png, image/gif, image/jpeg"
                 style={{ display: "none" }}
-                onChange={(e)=>selectFile(e)}
+                onChange={(e) => selectFile(e)}
               />
 
               <Chip
@@ -373,12 +379,13 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
                   display: getValues("images").length < 1 ? "flex" : "none",
                 }}
               />
- <Chip
+              <Chip
                 label="Es necesario incluir un título para subir una imagen"
                 color="error"
                 variant="outlined"
                 sx={{
-                  display: getValues("title").trim().length === 0 ? "flex" : "none",
+                  display:
+                    getValues("title").trim().length === 0 ? "flex" : "none",
                 }}
               />
               <Grid container spacing={2}>
@@ -392,8 +399,11 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
                         alt={img}
                       />
                       <CardActions>
-                        <Button fullWidth color="error"
-                        onClick={() => onDeleteImage(img)}>
+                        <Button
+                          fullWidth
+                          color="error"
+                          onClick={() => onDeleteImage(img)}
+                        >
                           Borrar
                         </Button>
                       </CardActions>

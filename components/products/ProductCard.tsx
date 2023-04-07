@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Card,
-  CardActionArea,
   CardActions,
   CardContent,
   Grid,
@@ -48,36 +47,30 @@ export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
       alignItems="center"
     >
       <Card sx={{ width: 345, minHeight: 350 }}>
-        <CardActionArea>
-          <ProductCarrousel productImages={product.images} />
-          <CardContent sx={{ height: "140px" }}>
-            <Typography gutterBottom variant="h2" component="div">
-              {product.title}
-            </Typography>
-            <Typography variant="body1">Colores disponibles:</Typography>
-            <Box
-              display="flex"
-              justifyContent="space-evenly"
-              alignItems="center"
-            >
-              {product.colors.map((color, i) => {
-                return (
-                  <Tooltip
-                    className={classes[`${color.toLowerCase()}`]}
-                    key={i}
-                    title={color}
-                  >
-                    <IconButton>
-                      <CircleRounded
-                        sx={{ border: "1px solid black", borderRadius: "50%" }}
-                      />
-                    </IconButton>
-                  </Tooltip>
-                );
-              })}
-            </Box>
-          </CardContent>
-        </CardActionArea>
+        <ProductCarrousel productImages={product.images} />
+        <CardContent sx={{ height: "140px" }}>
+          <Typography gutterBottom variant="h2" component="div">
+            {product.title}
+          </Typography>
+          <Typography variant="body1">Colores disponibles:</Typography>
+          <Box display="flex" justifyContent="space-evenly" alignItems="center">
+            {product.colors.map((color, i) => {
+              return (
+                <Tooltip
+                  className={classes[`${color.toLowerCase()}`]}
+                  key={i}
+                  title={color}
+                >
+                  <IconButton>
+                    <CircleRounded
+                      sx={{ border: "1px solid black", borderRadius: "50%" }}
+                    />
+                  </IconButton>
+                </Tooltip>
+              );
+            })}
+          </Box>
+        </CardContent>
 
         <Box display="flex" alignItems="center">
           <CardActions>
@@ -85,9 +78,7 @@ export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
               Compartir
             </Button>
           </CardActions>
-          {openShareOptions && (
-            <ShareComponent link={product}/>
-          )}
+          {openShareOptions && <ShareComponent link={product} />}
         </Box>
       </Card>
     </Grid>

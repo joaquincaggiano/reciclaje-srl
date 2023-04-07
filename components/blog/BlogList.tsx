@@ -10,7 +10,6 @@ interface Props {
 
 export const BlogList: FC<Props> = ({getImageUrl}) => {
   const { data, error } = useSWR<IBlogSchema[]>("/api/blog");
-  console.log("data blog", data)
 
   if (!error && !data) {
     return <></>;

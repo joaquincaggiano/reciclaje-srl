@@ -79,6 +79,7 @@ const HomePage: NextPage = () => {
           {services.map((svc, i) => {
             return (
               <Grid
+                key={i}
                 item
                 xs={12}
                 md={6}
@@ -92,7 +93,6 @@ const HomePage: NextPage = () => {
                   legacyBehavior
                 >
                   <Button
-                    key={i}
                     sx={{
                       backgroundColor: "#008f39",
                       width: "70%",

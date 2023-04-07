@@ -20,7 +20,6 @@ const ProductsPage: NextPage = () => {
   function getImageUrl(url: string){
     return setImageUrl(url)
   }
-  console.log("imageUrl",imageUrl)
 
   return (
     <MainLayout

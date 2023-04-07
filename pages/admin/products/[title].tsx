@@ -378,7 +378,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   color="secondary"
                   fullWidth
                   startIcon={<UploadOutlined />}
-                  sx={{ mb: 3, color: "white", backgroundColor: "#4caf50" }}
+                  sx={{ mb: 3, color: "white", backgroundColor: "#008f39" }}
                   onClick={() => fileInputRef.current?.click()}
                   disabled={
                     getValues("title").trim().length === 0 ? true : false
