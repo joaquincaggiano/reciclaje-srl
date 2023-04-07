@@ -29,7 +29,7 @@ export const Navbar = () => {
 
         <Box flex={1} />
 
-        <Box className="fadeIn" sx={{ display: { xs: "none", sm: "flex" } }}>
+        <Box className="fadeIn" sx={{ display: { xs: "none", md: "flex" } }}>
           <NextLink href="/" passHref legacyBehavior>
             <Link sx={{ mr: "10px" }}>
               <Button color={asPath === "/" ? "primary" : "info"}>

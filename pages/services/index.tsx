@@ -6,11 +6,7 @@ import { ServicesList } from "@/components/services";
 import { content } from "@/utils";
 import { useServices } from "@/hooks";
 import { FullScreenLoading } from "@/components/ui";
-import {
-  Box,
-  Divider,
-  Typography,
-} from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 
 const ServicesPage: NextPage = () => {
   const { services, isLoading } = useServices("/services");

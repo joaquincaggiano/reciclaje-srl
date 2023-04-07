@@ -15,11 +15,11 @@ import { FC } from "react";
 
 interface Props {
   title: string;
-  description: string;
-  image: string;
+  // description: string;
+  // image: string;
 }
 
-export const CardServicesHome: FC<Props> = ({ title, description, image, }) => {
+export const CardServicesHome: FC<Props> = ({ title/*, description, image,*/ }) => {
   return (
     <Grid
       item
@@ -29,7 +29,8 @@ export const CardServicesHome: FC<Props> = ({ title, description, image, }) => {
       justifyContent="space-evenly"
       alignItems="center"
     >
-      <Card sx={{ width: 320, minHeight: 370 }}>
+      <Button sx={{border: "3px solid red"}}>{title}</Button>
+      {/* <Card sx={{ width: 320, minHeight: 370 }}>
         <CardActionArea>
           <CardMedia component="img" height="200" image={image} alt={title} />
           <CardContent>
@@ -50,7 +51,7 @@ export const CardServicesHome: FC<Props> = ({ title, description, image, }) => {
             </Link>
           </NextLink>
         </CardActions>
-      </Card>
+      </Card> */}
     </Grid>
   );
 };

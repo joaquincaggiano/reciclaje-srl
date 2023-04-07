@@ -9,7 +9,7 @@ interface Props {
 
 export const ServicesList: FC<Props> = ({ services }) => {
   return (
-    <Grid container spacing={4}>
+    <Grid container spacing={2}>
       {services.map((service, i) => {
         return <ServiceCard service={service} key={i} />;
       })}
