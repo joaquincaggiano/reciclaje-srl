@@ -46,10 +46,11 @@ export const ModalSubscribe = () => {
       const response = await axios.post("/api/subscribe", {email});
       console.log(response);
       setState("Success");
-      setEmail("");
       setMessage("Fabuloso, has sido suscripto!");
+      setEmail("");
       setTimeout(() => {
         setState("idle");
+        toggleModalOpen()
       }, 2000);
     } catch (error) {
       console.log(error);
@@ -90,6 +91,7 @@ export const ModalSubscribe = () => {
               type="email"
               label="Correo"
               variant="filled"
+              value={email}
               sx={{
                 backgroundColor: "white",
                 borderRadius: "8px",
