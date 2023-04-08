@@ -1,0 +1,7 @@
+1. en la consola configurar las credenciales de aws con el comando aws configure.
+2. en el package.json en el encabezado "scripts" debemos agregar una propiedad "deploy" con su value en "npx serverless"
+3. en la raíz del proyecto necesitamos crear un archivo serverless.yml, con el siguiente contenido:
+myNextApplication:
+    component: "@sls-next/serverless-component"
+
+4. Ahora en la terminal corremos el comando npm run-script deploy. Cuando esto termine nos dara un appUrl el cual tiene un enlace donde estará desplegada nuestra aplicación
