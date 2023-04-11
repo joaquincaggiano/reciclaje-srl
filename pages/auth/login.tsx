@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-// import { AuthContext } from "@/context";
 
 import { GetServerSideProps } from "next";
 
@@ -33,9 +32,7 @@ const LoginPage = () => {
   const onLoginUser = async ({ email, password }: FormData) => {  
     try {
       const user = await signIn("credentials", { email, password, redirect: false });
-      console.log("USER", user)
       if(user?.status !== 200) {
-        console.log("ESTOY EN EL IF")
         setShowError(true);
       } else {
         setShowError(false);
@@ -45,7 +42,6 @@ const LoginPage = () => {
       setShowError(true);
     }
   };
-  console.log("el show error", showError)
 
   return (
     <AuthLayout title="Login">

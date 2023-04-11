@@ -58,9 +58,6 @@ const updateProduct = async (
         .status(400)
         .json({ message: "No existe un producto con ese ID" });
     }
-
-    // toDo: eliminar las fotos del servidor donde las alojemos (AWS)
-
     await productToUpdate.update(req.body);
     await db.disconnect();
 

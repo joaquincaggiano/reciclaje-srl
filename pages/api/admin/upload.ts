@@ -41,9 +41,7 @@ const postFiles = async (
         .status(500)
         .json({ message: "Error al procesar los archivos subidos" });
     }
-      //@ts-ignore
-    // const keyName = fields.productName ? `${fields.productName}/${files.images.newFilename}` : `${fields.blogName}/${files.images.newFilename}`;
-
+   
     const fileParams = {
       Bucket: process.env.BUCKET_NAME,
       //@ts-ignore

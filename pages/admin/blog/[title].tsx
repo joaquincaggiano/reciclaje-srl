@@ -178,7 +178,6 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
   }
 
   const onDeleteImage = async (image: string) => {
-    console.log("DELETED IMAGE", image);
     const imageName = image.replace(
       "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
       ""
@@ -223,7 +222,6 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
 
       toggleModalCancelChange();
     } catch (error) {
-      console.log("ALGO SALIÓ MAL");
       throw new Error("No se pudieron borrar las imagenes");
     }
   };

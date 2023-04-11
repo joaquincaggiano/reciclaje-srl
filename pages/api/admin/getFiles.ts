@@ -7,10 +7,6 @@ const s3 = new S3({
   region: process.env.REGION_AWS,
 });
 
-// type Data = {
-//     message: string
-// } |
-
 export default function (req: NextApiRequest, res: NextApiResponse /*<Data>*/) {
   switch (req.method) {
     case "POST":
@@ -19,7 +15,6 @@ export default function (req: NextApiRequest, res: NextApiResponse /*<Data>*/) {
     default:
       res.status(200).json({ message: "Bad request" });
   }
-  // res.status(200).json({ message: 'Example' })
 }
 
 const getListFiles = async (

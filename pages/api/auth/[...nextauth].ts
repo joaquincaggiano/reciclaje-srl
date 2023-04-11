@@ -58,7 +58,6 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, account, user }) {
-      // console.log({ token, account, user });
 
       if(account?.type === "credentials") {
         token.accessToken = account.access_token;
@@ -86,7 +85,6 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token, user }) {
-      // console.log({ session, token, user });
 
       session.accessToken = token.accessToken as any;
       session.user = token.user as any;

@@ -15,7 +15,6 @@ export default async function handler(
 	res: NextApiResponse
 ) {
 	const { key } = req.body;
-	console.log('EL KEY!!!!', key);
 
 	const params = {
 		Bucket: process.env.BUCKET_NAME as string,
@@ -57,47 +56,3 @@ export default async function handler(
 			.json({ message: 'Error deleting image' });
 	}
 }
-
-// const deleteS3Object = async (
-//   bucketName: string,
-//   filePath: string,
-// ): Promise<void> => {
-//   const params = {
-//     Bucket: bucketName,
-//     Key: filePath,
-//   };
-
-//   try {
-//     const { Versions, DeleteMarkers } = await s3
-//       .listObjectVersions(params)
-//       .promise();
-// console.log("LAS VERSIONS!", Versions)
-// console.log("LAS deletemarkers!", DeleteMarkers)
-
-//     const versionsToDelete = Versions!.map((v) => ({
-//       Key: v.Key,
-//       VersionId: v.VersionId,
-//     }));
-//     const deleteMarkersToDelete = DeleteMarkers!.map((m) => ({
-//       Key: m.Key,
-//       VersionId: m.VersionId,
-//     }));
-
-//     const deleteParams = {
-//       Bucket: bucketName,
-//       Delete: {
-//         Objects: [...versionsToDelete, ...deleteMarkersToDelete],
-//         Quiet: false,
-//       },
-//     };
-
-//     await s3.deleteObjects(deleteParams).promise();
-
-//     console.log(`Archivo eliminado: ${filePath}`);
-//   } catch (error) {
-//     console.error(`Error al eliminar el archivo ${filePath}:`, error);
-//     throw new Error(`Error al eliminar el archivo ${filePath}: ${error}`);
-//   }
-// };
-
-// export default deleteS3Object;

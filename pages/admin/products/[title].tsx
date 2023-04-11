@@ -192,7 +192,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   };
 
   const onDeleteImage = async (image: string) => {
-    console.log("DELETED IMAGE", image);
     const imageName = image.replace(
       "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
       ""
