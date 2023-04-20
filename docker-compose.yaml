@@ -1,23 +1,26 @@
 version: '3'
 
 services:
-  web:
-    build: 
-      dockerfile: Dockerfile.production
+  app:
+    container_name: nextjs-app
+    image: nextjs-app
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
       - MONGO_URL=mongodb+srv://reciclajeJaviSRL:UGHaJtrkasEANGUN@reciclajesrldev.206bmci.mongodb.net/test
-      - JWT_SECRET_SEED=EstoEsUnaSeedSecreta
       - NEXTAUTH_SECRET=EstoEsUnaSeedSecreta
     depends_on:
-      - db
-  db:
+      - mongodb
+  mongodb:
+    container_name: mongodb
     image: mongo
+    volumes:
+      - mongodb-data:/data/db
     ports:
       - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
 volumes:
-  mongo-data:
+  mongodb-data:
