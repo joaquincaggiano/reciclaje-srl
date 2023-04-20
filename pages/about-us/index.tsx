@@ -1,8 +1,9 @@
+import React from "react";
 import { NextPage } from "next";
+import Image from 'next/image'
 import { MainLayout } from "@/components/layouts";
 import { content } from "@/utils";
 import { Box, Divider, Typography } from "@mui/material";
-import React from "react";
 
 const AboutUsPage: NextPage = () => {
 
@@ -40,8 +41,8 @@ const AboutUsPage: NextPage = () => {
           alignItems="baseline"
           sx={{ width: "100%", mb: 3 }}
         >
-          <img src="/todo-rec-logo-3.png" height="200px" />
-          <img src="/reciclaje1.png" height="250px" />
+          <Image src="/todo-rec-logo-3.png" height={200} alt="todorec logo" />
+          <Image src="/reciclaje1.png" height={250} alt="reciclaje logo"/>
         </Box>
         
         <Box sx={{width: "70%"}}>

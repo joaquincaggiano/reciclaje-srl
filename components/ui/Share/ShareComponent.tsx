@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import Image from 'next/image'
 
 interface Props {
     // link: string; va a ser un string en el futuro
@@ -16,7 +17,7 @@ export const ShareComponent: FC<Props> = ({link}) => {
                 target="_blank"
                 rel="noreferrer"
               >
-                <img
+                <Image
                   style={{
                     width: "30px",
                     maxHeight: "30px",
@@ -32,11 +33,7 @@ export const ShareComponent: FC<Props> = ({link}) => {
                 target="_blank"
                 rel="noreferrer"
               >
-                <img
-                  style={{ width: "30px", maxHeight: "30px" }}
-                  src="/facebook.png"
-                  alt="logo de facebook"
-                />
+                <Image src="/facebook.png"  width={30} style={{maxHeight: "30px"}} alt="logo de facebook"/>
               </a>
             </>
   )
