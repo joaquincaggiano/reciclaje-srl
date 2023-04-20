@@ -1,8 +1,49 @@
+version: '3'
+
 services:
-  reciclajedb:
-    image: mongo:5.0.0
-    container_name: reciclaje-database
+  app:
+    container_name: nextjs-app
+    image: nextjs-app
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - 27017:27017
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGO_URL=mongodb+srv://reciclajeJaviSRL:UGHaJtrkasEANGUN@reciclajesrldev.206bmci.mongodb.net/test
+      - NEXTAUTH_SECRET=EstoEsUnaSeedSecreta
+    depends_on:
+      - mongodb
+  mongodb:
+    container_name: mongodb
+    image: mongo
     volumes:
-      - ./mongo:/data/db
+      - mongodb-data:/data/db
+    ports:
+      - "27017:27017"
+volumes:
+  mongodb-data:
+
+# version: '3'
+
+# services:
+#   web:
+#     build: 
+#       dockerfile: .
+#     ports:
+#       - "3000:3000"
+#     environment:
+#       - NODE_ENV=production
+#       - MONGO_URL=mongodb+srv://reciclajeJaviSRL:UGHaJtrkasEANGUN@reciclajesrldev.206bmci.mongodb.net/test
+#       - NEXTAUTH_SECRET=EstoEsUnaSeedSecreta
+#     depends_on:
+#       - db
+#   db:
+#     image: mongo
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - mongo-data:/data/db
+# volumes:
+#   mongo-data:
