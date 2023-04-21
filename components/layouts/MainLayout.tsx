@@ -10,7 +10,7 @@ import { Navbar, SideMenu, Footer } from "../ui";
 import { ModalSubscribe } from "../mailchimp";
 
 import { IconButton, Link, Tooltip } from "@mui/material";
-import { EmailOutlined, UnsubscribeOutlined } from "@mui/icons-material";
+import { EmailOutlined } from "@mui/icons-material";
 import { content } from "@/utils";
 
 interface Props {
@@ -92,9 +92,14 @@ export const MainLayout: FC<Props> = ({
             legacyBehavior
             replace={true}
           >
-            <Link>
-              <Image src="/whatsapp.png" width={65} height={65} alt={"whatsapp logo"} />
-            </Link>
+            <a target="_blank" rel="noopener noreferrer">
+              <Image
+                src="/whatsapp.png"
+                width={65}
+                height={65}
+                alt={"whatsapp logo"}
+              />
+            </a>
           </NextLink>
         </IconButton>
       </main>

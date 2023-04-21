@@ -1,4 +1,5 @@
 import { NextPage } from "next";
+import NextLink from "next/link";
 import { MainLayout } from "@/components/layouts";
 import { content } from "../../utils";
 import { Box, Divider, Grid, IconButton, Typography } from "@mui/material";
@@ -10,7 +11,9 @@ const ContactPage: NextPage = () => {
       title={content.contact.title}
       metaHeader={content.contact.metaHeader}
     >
-      <Typography variant="h1" textAlign="center" sx={{mb:4}}>{content.contact.title}</Typography>
+      <Typography variant="h1" textAlign="center" sx={{ mb: 4 }}>
+        {content.contact.title}
+      </Typography>
 
       <Grid
         container
@@ -19,7 +22,7 @@ const ContactPage: NextPage = () => {
         sx={{ flexDirection: { xs: "column", sm: "row" } }}
       >
         <Grid item>
-          <Typography variant="subtitle1">
+          <Typography variant="subtitle1" sx={{ fontSize: "22px" }}>
             {content.contact.metaHeader}
           </Typography>
 
@@ -32,11 +35,22 @@ const ContactPage: NextPage = () => {
               alignItems="center"
               sx={{ my: 2 }}
             >
-              <IconButton sx={{ border: "1px solid #008f39", mr: 1 }}>
-                <LocalPhoneOutlined color="primary" />
-              </IconButton>
+              <NextLink
+                href={`https://wa.me/${content.contact.datosContacto.whatsapp}`}
+                passHref
+                legacyBehavior
+                replace={true}
+              >
+                <a target="_blank" rel="noopener noreferrer">
+                  <IconButton sx={{ border: "1px solid #008f39", mr: 1 }}>
+                    <LocalPhoneOutlined color="primary" />
+                  </IconButton>
+                </a>
+              </NextLink>
 
-              <Typography>{content.contact.datosContacto.whatsapp}</Typography>
+              <Typography fontSize="20px">
+                {content.contact.datosContacto.whatsapp}
+              </Typography>
             </Box>
 
             <Box
@@ -45,11 +59,21 @@ const ContactPage: NextPage = () => {
               alignItems="center"
               sx={{ mb: 2 }}
             >
-              <IconButton sx={{ border: "1px solid #3C99DC", mr: 1 }}>
-                <EmailOutlined sx={{ color: "#3C99DC" }} />
-              </IconButton>
-
-              <Typography>{content.contact.datosContacto.email}</Typography>
+              <NextLink
+                href={`https://mail.google.com/mail/?view=cm&to=joaquincaggiano@gmail.com&su=Consulta%20sobre%20servicios`}
+                passHref
+                legacyBehavior
+                replace={true}
+              >
+                <a target="_blank" rel="noopener noreferrer">
+                  <IconButton sx={{ border: "1px solid #3C99DC", mr: 1 }}>
+                    <EmailOutlined sx={{ color: "#3C99DC" }} />
+                  </IconButton>
+                </a>
+              </NextLink>
+              <Typography fontSize="20px">
+                {content.contact.datosContacto.email}
+              </Typography>
             </Box>
           </Box>
         </Grid>

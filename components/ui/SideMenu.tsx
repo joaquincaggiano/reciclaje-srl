@@ -4,9 +4,9 @@ import { AuthContext, UiContext } from "@/context";
 import { useRouter } from "next/router";
 
 import {
-  AccountCircleOutlined,
   CategoryOutlined,
   DashboardOutlined,
+  Diversity3Outlined,
   GroupOutlined,
   LoginOutlined,
   NewspaperOutlined,
@@ -95,6 +95,17 @@ export const SideMenu = () => {
               <NewspaperOutlined />
             </ListItemIcon>
             <ListItemText primary={"Novedades"} />
+          </ListItem>
+
+          <ListItem
+            button
+            sx={{ display: { xs: "flex", md: "none" } }}
+            onClick={() => navigateTo("/about-us")}
+          >
+            <ListItemIcon>
+              <Diversity3Outlined />
+            </ListItemIcon>
+            <ListItemText primary={"Nosotros"} />
           </ListItem>
 
           <ListItem

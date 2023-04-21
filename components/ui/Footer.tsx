@@ -60,9 +60,18 @@ export const Footer = () => {
             alignItems="center"
             sx={{ mr: 3 }}
           >
-            <IconButton>
-              <LocalPhoneOutlined sx={{color: "white"}} />
-            </IconButton>
+            <NextLink
+                href={`https://wa.me/${content.contact.datosContacto.whatsapp}`}
+                passHref
+                legacyBehavior
+                replace={true}
+              >
+                <a target="_blank" rel="noopener noreferrer">
+                  <IconButton sx={{ border: "1px solid #ffff", mr: 1, "&:hover": {backgroundColor: "#ffffff83"} }}>
+                    <LocalPhoneOutlined sx={{ color: "#ffff" }} />
+                  </IconButton>
+                </a>
+              </NextLink>
             <Typography
               variant="button"
               sx={{ fontSize: "20px", color: "white" }}
@@ -71,9 +80,18 @@ export const Footer = () => {
             </Typography>
           </Box>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <IconButton>
-              <EmailOutlined sx={{color: "white"}} />
-            </IconButton>
+            <NextLink
+              href={`https://mail.google.com/mail/?view=cm&to=joaquincaggiano@gmail.com&su=Consulta%20sobre%20servicios`}
+              passHref
+              legacyBehavior
+              replace={true}
+            >
+              <a target="_blank" rel="noopener noreferrer">
+                <IconButton sx={{ border: "1px solid #ffff", mr: 1, "&:hover": {backgroundColor: "#ffffff83"} }}>
+                  <EmailOutlined sx={{ color: "#ffff" }} />
+                </IconButton>
+              </a>
+            </NextLink>
             <Typography
               variant="button"
               sx={{ fontSize: "20px", color: "white" }}
