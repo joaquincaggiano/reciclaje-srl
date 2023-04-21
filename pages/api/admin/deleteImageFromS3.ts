@@ -12,7 +12,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { key } = req.body;
-  console.log("EL KEY CUANDO LLAMAMOS DESDE OTRA API", key)
 
   const params = {
     Bucket: process.env.BUCKET_NAME as string,

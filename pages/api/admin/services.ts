@@ -15,8 +15,10 @@ export default function handler(
       return getServices(req, res);
     case "PUT":
       return updateService(req, res);
-      case "POST":
-        return createService(req, res);
+    case "POST":
+      return createService(req, res);
+    case "DELETE":
+      return deleteService(req, res);
     default:
       return res.status(400).json({ message: "Bad Request" });
   }
@@ -30,7 +32,10 @@ const getServices = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   res.status(200).json(services);
 };
 
-const updateService = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+const updateService = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) => {
   const { _id = "", images = [] } = req.body as IServiceSchema;
 
   if (!isValidObjectId(_id)) {
@@ -100,6 +105,30 @@ const createService = async (
   } catch (error) {
     console.log(error);
     await db.disconnect();
+    return res.status(400).json({ message: "Revisar la consola del servidor" });
+  }
+};
+
+const deleteService = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Data>
+) => {
+  const { id = "" } = req.query;
+  if (!isValidObjectId(id)) {
+    return res.status(400).json({ message: "El ID del servicio no es válido" });
+  }
+
+  try {
+    await db.connect();
+    await Service.deleteOne({ _id: id });
+    await db.disconnect();
+
+    return res
+      .status(200)
+      .json({ message: `Servicio con id: ${id}, fue borrado con éxito` });
+  } catch (error) {
+    await db.disconnect();
+    console.log(error);
     return res.status(400).json({ message: "Revisar la consola del servidor" });
   }
 };

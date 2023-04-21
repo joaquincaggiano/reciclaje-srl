@@ -17,6 +17,8 @@ export default function handler(
       return updateProduct(req, res);
     case "POST":
       return createProduct(req, res);
+    case "DELETE":
+      return deleteProduct(req, res)
 
     default:
       return res.status(400).json({ message: "Bad Request" });
@@ -104,3 +106,25 @@ const createProduct = async (
     return res.status(400).json({ message: "Revisar la consola del servidor" });
   }
 };
+
+const deleteProduct = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  const {id = ""} = req.query;
+  if (!isValidObjectId(id)) {
+    return res.status(400).json({ message: "El ID del producto no es válido" });
+  }
+
+  try {
+  
+    await db.connect();
+      await Product.deleteOne({_id: id})
+    await db.disconnect();
+  
+    return res.status(200).json({message: `Producto con id: ${id}, fue borrado con éxito`})
+  } catch (error) {
+    await db.disconnect();
+    console.log(error);
+    return res.status(400).json({ message: "Revisar la consola del servidor" });
+  }
+
+  
+}

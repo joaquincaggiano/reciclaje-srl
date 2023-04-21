@@ -182,7 +182,6 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
       "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
       ""
     );
-    console.log("imageName", imageName);
     await axios.post("/api/admin/deleteImageFromS3", {
       key: imageName,
     });

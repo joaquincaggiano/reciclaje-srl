@@ -24,23 +24,6 @@ export const ModalCancelChanges: FC<Props> = ({deleteUnsavedChanges}) => {
   const { isModalCancelChange, toggleModalCancelChange } =
     useContext(UiContext);
 
-  // // const [open, setOpen] = useState<boolean>(true);
-  // const [email, setEmail] = useState<string>("");
-  // const [state, setState] = useState<string>("idle");
-  // const [message, setMessage] = useState<string>("");
-
-  // const onSubscribe = async () => {
-  //   setState("Loading");
-
-  //   try {
-
-  //   } catch (error) {
-  //     console.log(error);
-  //     setState("Error");
-  //     setMessage("Algo salío mal");
-  //   }
-  // };
-
   return (
     <>
       <Modal open={isModalCancelChange} onClose={toggleModalCancelChange}>
@@ -90,7 +73,6 @@ export const ModalCancelChanges: FC<Props> = ({deleteUnsavedChanges}) => {
                 color: "white",
                 height: "55px",
                 border: "1px solid white",
-                //   width: { xs: "100%", sm: "60%" },
                 "&:hover": {
                   backgroundColor: "white",
                   color: "#4caf50",
@@ -112,7 +94,6 @@ export const ModalCancelChanges: FC<Props> = ({deleteUnsavedChanges}) => {
                 color: "white",
                 height: "55px",
                 border: "1px solid white",
-                //   width: { xs: "100%", sm: "60%" },
                 "&:hover": {
                   backgroundColor: "white",
                   color: "#4caf50",

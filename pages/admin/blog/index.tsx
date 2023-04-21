@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { MainLayout } from "@/components/layouts";
 
 import { useRouter } from "next/router";
@@ -12,10 +11,9 @@ import { Box, Button, CardMedia, Grid, Link } from "@mui/material";
 import { AddOutlined } from "@mui/icons-material";
 
 const Blog = () => {
-  
   const { data, error } = useSWR<IBlogSchema[]>("/api/admin/blog");
-  const router = useRouter()
-  
+  const router = useRouter();
+
   if (!data && !error) return <></>;
 
   const columns: GridColDef[] = [
@@ -80,15 +78,20 @@ const Blog = () => {
       //@ts-ignore
       const blogToDelete = await axios.delete(`/api/admin/blog?id=${id}`);
 
-      if (blogToDelete.status === 200){
-        img.map(async(eachImage)=> {
-          const imageName = eachImage.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/", "")
-          await axios.post('/api/admin/deleteImageFromS3', {key: `${imageName}`} )
-        })
-        router.reload()
+      if (blogToDelete.status === 200) {
+        img.map(async (eachImage) => {
+          const imageName = eachImage.replace(
+            "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
+            ""
+          );
+          await axios.post("/api/admin/deleteImageFromS3", {
+            key: `${imageName}`,
+          });
+        });
+        router.reload();
       }
     } catch (error) {
-      console.log("ERROR EN DeleteBlog function", error)
+      console.log(error);
     }
   };
 
@@ -119,8 +122,4 @@ const Blog = () => {
   );
 };
 
-
-
 export default Blog;
-
-

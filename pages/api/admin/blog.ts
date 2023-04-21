@@ -3,7 +3,7 @@ import { db } from "@/database";
 import { Blog } from "@/models";
 import { IBlogSchema } from "../../../interfaces";
 import { isValidObjectId } from "mongoose";
-import axios from 'axios'
+import axios from "axios";
 
 type Data = { message: string } | IBlogSchema[] | IBlogSchema;
 
@@ -19,7 +19,7 @@ export default function handler(
     case "POST":
       return createBlog(req, res);
     case "DELETE":
-      return deleteBlog(req, res)
+      return deleteBlog(req, res);
 
     default:
       return res.status(400).json({ message: "Bad Request" });
@@ -54,9 +54,7 @@ const updateBlog = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
     if (!blogToUpdate) {
       await db.disconnect();
-      return res
-        .status(400)
-        .json({ message: "No existe un blog con ese ID" });
+      return res.status(400).json({ message: "No existe un blog con ese ID" });
     }
 
     // toDo: eliminar las fotos del servidor donde las alojemos (AWS)
@@ -72,10 +70,7 @@ const updateBlog = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   }
 };
 
-const createBlog = async (
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) => {
+const createBlog = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { images = [] } = req.body as IBlogSchema;
 
   if (images.length < 1) {
@@ -109,24 +104,22 @@ const createBlog = async (
 };
 
 const deleteBlog = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  const {id = "", category="", title=""} = req.query;
-  console.log("id desde la api", id)
+  const { id = "" } = req.query;
   if (!isValidObjectId(id)) {
     return res.status(400).json({ message: "El ID del blog no es válido" });
   }
 
   try {
-  
     await db.connect();
-      await Blog.deleteOne({_id: id})
+    await Blog.deleteOne({ _id: id });
     await db.disconnect();
-  
-    return res.status(200).json({message: `Blog con id: ${id}, fue borrado con éxito`})
+
+    return res
+      .status(200)
+      .json({ message: `Blog con id: ${id}, fue borrado con éxito` });
   } catch (error) {
     await db.disconnect();
     console.log(error);
     return res.status(400).json({ message: "Revisar la consola del servidor" });
   }
-
-  // return res.status(200).json({message: "probando delete"})
-}
+};
