@@ -10,7 +10,7 @@ import { Navbar, SideMenu, Footer } from "../ui";
 import { ModalSubscribe } from "../mailchimp";
 
 import { IconButton, Link, Tooltip } from "@mui/material";
-import { UnsubscribeOutlined } from "@mui/icons-material";
+import { EmailOutlined, UnsubscribeOutlined } from "@mui/icons-material";
 import { content } from "@/utils";
 
 interface Props {
@@ -68,7 +68,7 @@ export const MainLayout: FC<Props> = ({
               "&:hover": { backgroundColor: "#008f39" },
             }}
           >
-            <UnsubscribeOutlined
+            <EmailOutlined
               sx={{
                 fontSize: "50px",
                 color: "#008f39",

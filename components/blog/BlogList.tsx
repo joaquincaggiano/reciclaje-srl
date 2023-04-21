@@ -1,16 +1,18 @@
 import { FC } from "react";
-import { IBlogSchema } from "@/interfaces";
-import { Grid, Typography } from "@mui/material";
+
 import useSWR from "swr";
 import { BlogCard } from "./BlogCard";
+import { IBlogSchema } from "@/interfaces";
+
+import { Grid, Typography } from "@mui/material";
+import { NotBlogsMessage } from "./NotBlogsMessage";
 
 interface Props {
   getImageUrl: (url: string) => void;
 }
 
-export const BlogList: FC<Props> = ({getImageUrl}) => {
+export const BlogList: FC<Props> = ({ getImageUrl }) => {
   const { data, error } = useSWR<IBlogSchema[]>("/api/blog");
-  console.log("data", data)
 
   if (!error && !data) {
     return <></>;
@@ -28,9 +30,13 @@ export const BlogList: FC<Props> = ({getImageUrl}) => {
       justifyContent="space-evenly"
       alignItems="center"
     >
-      {data!.length === 0 ? <Typography>Suscríbete para conocer las novedades</Typography> : data!.map((blog, i) => {
-        return <BlogCard blog={blog} key={i} getImageUrl={getImageUrl}/>;
-      })}
+      {data!.length === 0 ? (
+        <NotBlogsMessage />
+      ) : (
+        data!.map((blog, i) => {
+          return <BlogCard blog={blog} key={i} getImageUrl={getImageUrl} />;
+        })
+      )}
     </Grid>
   );
 };
