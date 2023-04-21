@@ -78,7 +78,7 @@ export const Footer = () => {
               variant="button"
               sx={{ fontSize: "20px", color: "white" }}
             >
-              alguien@gmail.com
+              {content.contact.datosContacto.email}
             </Typography>
           </Box>
         </Grid>

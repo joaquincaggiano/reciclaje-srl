@@ -99,8 +99,8 @@ const LoginPage = () => {
                 size="large"
                 fullWidth
                 sx={{
-                  border: "1px solid #4caf50",
-                  "&:hover": { backgroundColor: "#4caf50", color: "white" },
+                  border: "1px solid #008f39",
+                  "&:hover": { backgroundColor: "#008f39", color: "white" },
                 }}
               >
                 Ingresar

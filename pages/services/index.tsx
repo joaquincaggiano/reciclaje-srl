@@ -28,7 +28,7 @@ const ServicesPage: NextPage = () => {
             sx={{ mb: 3 }}
           >
             <Typography variant="h1">{content.services.title}</Typography>
-            <Typography variant="h6">
+            <Typography variant="h6" sx={{textAlign: "center", mt: 2}}>
               {content.services.serviceDescription}
             </Typography>
           </Box>

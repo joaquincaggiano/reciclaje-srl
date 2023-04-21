@@ -3,6 +3,7 @@ import { db } from "@/database";
 import { Blog } from "@/models";
 import { IBlogSchema } from "../../../interfaces";
 import { isValidObjectId } from "mongoose";
+import axios from 'axios'
 
 type Data = { message: string } | IBlogSchema[] | IBlogSchema;
 
@@ -17,6 +18,8 @@ export default function handler(
       return updateBlog(req, res);
     case "POST":
       return createBlog(req, res);
+    case "DELETE":
+      return deleteBlog(req, res)
 
     default:
       return res.status(400).json({ message: "Bad Request" });
@@ -104,3 +107,26 @@ const createBlog = async (
     return res.status(400).json({ message: "Revisar la consola del servidor" });
   }
 };
+
+const deleteBlog = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  const {id = "", category="", title=""} = req.query;
+  console.log("id desde la api", id)
+  if (!isValidObjectId(id)) {
+    return res.status(400).json({ message: "El ID del blog no es válido" });
+  }
+
+  try {
+  
+    await db.connect();
+      await Blog.deleteOne({_id: id})
+    await db.disconnect();
+  
+    return res.status(200).json({message: `Blog con id: ${id}, fue borrado con éxito`})
+  } catch (error) {
+    await db.disconnect();
+    console.log(error);
+    return res.status(400).json({ message: "Revisar la consola del servidor" });
+  }
+
+  // return res.status(200).json({message: "probando delete"})
+}

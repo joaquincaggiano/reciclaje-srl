@@ -68,14 +68,18 @@ export const ServiceCard: FC<Props> = ({ service }) => {
           width: "80%",
           // minHeight: "600px",
           boxShadow: "0px 0px 0px 0px",
+          border: "2px solid #12B454",
+          "&:hover": {boxShadow: "0px 0px 5px 6px rgba(18,180,84,0.75)"}
+          
         }}
         id={`${service.title}`}
       >
-        <CardContent>
+      {/* #008f39 */}
+        <CardContent sx={{backgroundColor: "#12B454"}}>
           <Typography
             variant="h2"
             component="div"
-            sx={{ textAlign: "center", fontSize: "30px" }}
+            sx={{ textAlign: "center", fontSize: "30px", color: "#ffff" }}
           >
             {service.title}
           </Typography>
@@ -89,7 +93,7 @@ export const ServiceCard: FC<Props> = ({ service }) => {
         />
         <CardActions disableSpacing>
           {!expanded && (
-            <Typography>{service.description.slice(0, 45)}...</Typography>
+            <Typography sx={{fontSize: "24px"}}>{service.description.slice(0, 45)}...</Typography>
           )}
 
           <ExpandMore
@@ -105,7 +109,7 @@ export const ServiceCard: FC<Props> = ({ service }) => {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph textAlign="justify">{service.description}</Typography>
+            <Typography paragraph sx={{fontSize: "24px", textAlign: {md: "justify"}}}>{service.description}</Typography>
           </CardContent>
         </Collapse>
       </Card>

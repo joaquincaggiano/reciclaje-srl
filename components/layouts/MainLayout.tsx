@@ -4,6 +4,7 @@ import { UiContext } from "@/context";
 
 import Head from "next/head";
 import NextLink from "next/link";
+import Image from "next/image";
 
 import { Navbar, SideMenu, Footer } from "../ui";
 import { ModalSubscribe } from "../mailchimp";
@@ -92,7 +93,7 @@ export const MainLayout: FC<Props> = ({
             replace={true}
           >
             <Link>
-              <img src="/whatsapp.png" style={{ width: "65px" }} />
+              <Image src="/whatsapp.png" width={65} height={65} alt={"whatsapp logo"} />
             </Link>
           </NextLink>
         </IconButton>

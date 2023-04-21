@@ -10,6 +10,7 @@ interface Props {
 
 export const BlogList: FC<Props> = ({getImageUrl}) => {
   const { data, error } = useSWR<IBlogSchema[]>("/api/blog");
+  console.log("data", data)
 
   if (!error && !data) {
     return <></>;
@@ -27,7 +28,7 @@ export const BlogList: FC<Props> = ({getImageUrl}) => {
       justifyContent="space-evenly"
       alignItems="center"
     >
-      {data!.map((blog, i) => {
+      {data!.length === 0 ? <Typography>Suscríbete para conocer las novedades</Typography> : data!.map((blog, i) => {
         return <BlogCard blog={blog} key={i} getImageUrl={getImageUrl}/>;
       })}
     </Grid>

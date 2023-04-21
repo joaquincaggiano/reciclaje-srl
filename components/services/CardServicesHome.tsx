@@ -12,46 +12,36 @@ import {
   Link,
 } from "@mui/material";
 import { FC } from "react";
+import { IServiceSchema } from "@/interfaces";
 
 interface Props {
-  title: string;
-  // description: string;
-  // image: string;
+  service: IServiceSchema
 }
 
-export const CardServicesHome: FC<Props> = ({ title/*, description, image,*/ }) => {
+export const CardServicesHome: FC<Props> = ({
+  service 
+}) => {
   return (
     <Grid
       item
       xs={12}
-      md={4}
+      md={6}
       display="flex"
       justifyContent="space-evenly"
       alignItems="center"
     >
-      <Button sx={{border: "3px solid red"}}>{title}</Button>
-      {/* <Card sx={{ width: 320, minHeight: 370 }}>
-        <CardActionArea>
-          <CardMedia component="img" height="200" image={image} alt={title} />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {title}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {description.slice(0, 70) + "..."}
-            </Typography>
-          </CardContent>
-        </CardActionArea>
-        <CardActions>
-          <NextLink href={`/services#${title}`} passHref legacyBehavior>
-            <Link>
-              <Button size="small" color="primary">
-                Ver más
-              </Button>
-            </Link>
-          </NextLink>
-        </CardActions>
-      </Card> */}
+      <NextLink href={`/services#${service.title}`} passHref legacyBehavior>
+        <Button
+          sx={{
+            backgroundColor: "#008f39",
+            width: "70%",
+            height: "120%",
+            "&:hover": { border: "2px solid #008f39" },
+          }}
+        >
+          {service.title}
+        </Button>
+      </NextLink>
     </Grid>
   );
 };

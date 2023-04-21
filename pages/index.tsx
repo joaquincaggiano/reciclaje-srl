@@ -7,6 +7,7 @@ import { useServices } from "@/hooks/useServices";
 import { MainLayout } from "../components/layouts";
 import { CardServicesHome } from "@/components/services";
 import { ModalSubscribe } from "@/components/mailchimp";
+import { DescriptionHome } from '../components/home/DescriptionHome';
 
 import { Carrousel, FullScreenLoading } from "@/components/ui";
 import { Typography, Divider, Grid, Button, Box, Link } from "@mui/material";
@@ -17,7 +18,7 @@ import { LocationOnOutlined } from "@mui/icons-material";
 const HomePage: NextPage = () => {
   const { services, isLoading } = useServices("/services");
   const { toggleModalOpen } = useContext(UiContext);
-  const [wasModalOpen, setWasModalOpen] = useState<boolean>(false);
+  // const [wasModalOpen, setWasModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -46,14 +47,16 @@ const HomePage: NextPage = () => {
 
       <Divider sx={{ mt: 5 }} />
 
-      <Typography
-        variant="h2"
-        sx={{ textAlign: "center", my: 4, fontSize: "34px" }}
-      >
-        {content.home.descriptionTitle}
-      </Typography>
+      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+        <Typography
+          variant="h2"
+          sx={{ textAlign: "center", my: 4, fontSize: "34px" }}
+        >
+          {content.home.descriptionTitle}
+        </Typography>
 
-      <Typography variant="body1">{content.home.descriptionInfo}</Typography>
+        <DescriptionHome />
+      </Box>
 
       <Divider sx={{ mt: 5 }} />
 
@@ -71,39 +74,14 @@ const HomePage: NextPage = () => {
           container
           spacing={4}
           width="100%"
-          sx={{ flexDirection: { xs: "column", sm: "row" }, flexWrap: "wrap" }}
           display="flex"
           justifyContent="center"
           alignItems="center"
+          // sx={{ flexDirection: { xs: "column", sm: "row" }, flexWrap: "wrap" }}
         >
           {services.map((svc, i) => {
             return (
-              <Grid
-                key={i}
-                item
-                xs={12}
-                md={6}
-                display="flex"
-                justifyContent="space-evenly"
-                alignItems="center"
-              >
-                <NextLink
-                  href={`/services#${svc.title}`}
-                  passHref
-                  legacyBehavior
-                >
-                  <Button
-                    sx={{
-                      backgroundColor: "#008f39",
-                      width: "70%",
-                      height: "120%",
-                      "&:hover": { border: "2px solid #008f39" },
-                    }}
-                  >
-                    {svc.title}
-                  </Button>
-                </NextLink>
-              </Grid>
+              <CardServicesHome service={svc} key={i}/>
             );
           })}
         </Grid>
