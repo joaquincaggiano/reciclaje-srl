@@ -7,7 +7,7 @@ export const content: Content = {
     imageFullUrl: "",
     datosContacto: {
       whatsapp: "+5493415034581",
-      email: "@gmail.com",
+      email: "jaruca1959@gmail.com",
     },
   },
   services: {

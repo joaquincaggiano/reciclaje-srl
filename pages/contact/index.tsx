@@ -60,7 +60,7 @@ const ContactPage: NextPage = () => {
               sx={{ mb: 2 }}
             >
               <NextLink
-                href={`https://mail.google.com/mail/?view=cm&to=joaquincaggiano@gmail.com&su=Consulta%20sobre%20servicios`}
+                href={`https://mail.google.com/mail/?view=cm&to=${content.contact.datosContacto.email}&su=Consulta%20sobre%20servicios`}
                 passHref
                 legacyBehavior
                 replace={true}
