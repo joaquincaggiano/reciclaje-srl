@@ -80,7 +80,7 @@ const ContactPage: NextPage = () => {
 
         <Grid item>
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d497.5300291294314!2d-60.64673352873913!3d-32.97820004482624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95b7abbc8c011071%3A0x4a32208737d1a0af!2sValdes%201163%2C%20S2000%20Rosario%2C%20Santa%20Fe!5e0!3m2!1ses!2sar!4v1674076905543!5m2!1ses!2sar"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3347.558514688312!2d-60.701267024422755!3d-32.96266357358659!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95b7aceb45a2f071%3A0x9f0aa68dff077896!2sTte.%20Agneta%202917%2C%20S2010DFC%20Rosario%2C%20Santa%20Fe!5e0!3m2!1ses!2sar!4v1682124906147!5m2!1ses!2sar"
             width="100%"
             height="450"
             loading="lazy"

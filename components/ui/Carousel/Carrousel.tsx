@@ -3,8 +3,9 @@ import { Item } from "./Item";
 import { ArrowBackIosNewOutlined, ArrowForwardIosOutlined } from "@mui/icons-material";
 
 const images = [
-  "https://pbs.twimg.com/media/FZ_IEv5WAAEgh40?format=jpg&name=medium",
-  "https://pbs.twimg.com/media/CWgztjyUsAAWLFm?format=jpg&name=medium",
+  "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/banner/frente1.jpg",
+  "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/banner/adentro4.jpg",
+  "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/banner/adentro1.jpg",
 ];
 
 export const Carrousel = () => {
