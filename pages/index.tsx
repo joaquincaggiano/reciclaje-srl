@@ -9,7 +9,7 @@ import { CardServicesHome } from "@/components/services";
 import { ModalSubscribe } from "@/components/mailchimp";
 import { DescriptionHome } from "../components/home/DescriptionHome";
 
-import { Carrousel, FullScreenLoading } from "@/components/ui";
+import { FullScreenLoading } from "@/components/ui";
 import  Typography  from "@mui/material/Typography";
 import  Divider  from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
@@ -18,6 +18,13 @@ import Box  from "@mui/material/Box";
 import { content } from "@/utils";
 import { UiContext } from "@/context";
 import LocationOnOutlined from "@mui/icons-material/LocationOnOutlined";
+import { ProductSlideCarrousel } from "@/components/products";
+
+const images = [
+  "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/banner/frente1.jpg",
+  "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/banner/adentro4.jpg",
+  "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/banner/adentro2.jpg",
+];
 
 const HomePage: NextPage = () => {
   const { services, isLoading } = useServices("/services");
@@ -48,7 +55,8 @@ const HomePage: NextPage = () => {
         {content.home.title}
       </Typography>
 
-      <Carrousel />
+      {/* <Carrousel /> */}
+      <ProductSlideCarrousel images={images} height="600px"/>
 
       <Divider sx={{ mt: 5 }} />
 

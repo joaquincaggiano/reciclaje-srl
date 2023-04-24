@@ -11,12 +11,11 @@ import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
 import  Tooltip from "@mui/material/Tooltip";
 
-
-import { ProductCarrousel } from ".";
 import classes from "../../styles/products/TypeColor.module.css";
 import CircleRounded  from "@mui/icons-material/CircleRounded";
 
 import { ShareComponent } from "../ui";
+import { ProductSlideCarrousel } from ".";
 
 interface Props {
   product: IProductSchema;
@@ -47,7 +46,8 @@ export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
       alignItems="center"
     >
       <Card sx={{ width: 345, minHeight: 350 }}>
-        <ProductCarrousel productImages={product.images} />
+       
+        <ProductSlideCarrousel height="250px" images={product.images}/>
         <CardContent sx={{ height: "140px" }}>
           <Typography gutterBottom variant="h2" component="div">
             {product.title}
