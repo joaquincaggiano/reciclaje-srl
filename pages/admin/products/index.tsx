@@ -8,8 +8,15 @@ import useSWR from "swr";
 import axios from "axios";
 
 import { IProductSchema } from "@/interfaces";
-import { CardMedia, Grid, Link, Box, Button } from "@mui/material";
-import { AddOutlined } from "@mui/icons-material";
+
+import  CardMedia from "@mui/material/CardMedia";
+import Link  from "@mui/material/Link";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import  Box from "@mui/material/Box";
+
+import AddOutlined from "@mui/icons-material/AddOutlined";
+
 
 const Products = () => {
   const { data, error } = useSWR<IProductSchema[]>("/api/admin/products");

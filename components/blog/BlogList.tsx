@@ -4,7 +4,9 @@ import useSWR from "swr";
 import { BlogCard } from "./BlogCard";
 import { IBlogSchema } from "@/interfaces";
 
-import { Grid, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Typography  from "@mui/material/Typography";
+
 import { NotBlogsMessage } from "./NotBlogsMessage";
 
 interface Props {

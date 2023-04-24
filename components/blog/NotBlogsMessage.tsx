@@ -1,7 +1,10 @@
 import { FC, useContext } from "react";
 import { UiContext } from "@/context";
-import { EmailOutlined } from '@mui/icons-material'
-import { Box, Typography } from '@mui/material'
+import EmailOutlined from '@mui/icons-material/EmailOutlined'
+
+import Box from "@mui/material/Box";
+import Typography  from "@mui/material/Typography";
+
 import React from 'react'
 
 export const NotBlogsMessage: FC = () => {

@@ -1,5 +1,7 @@
 import { FC } from "react";
-import { Paper, CardMedia } from "@mui/material";
+import  Paper  from "@mui/material/Paper";
+import CardMedia from "@mui/material/CardMedia";
+
 
 interface Props {
   image: string;

@@ -2,7 +2,12 @@ import { FC } from "react";
 
 import NextLink from "next/link";
 
-import { Card, CardContent, Grid, Typography, Link } from "@mui/material";
+import CardContent from "@mui/material/CardContent";
+import Typography  from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import Grid from "@mui/material/Grid";
+import Link  from "@mui/material/Link";
+
 
 interface Props {
   title: string | number;

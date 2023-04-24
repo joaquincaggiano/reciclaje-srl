@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import Head from "next/head";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import { Footer, Navbar, SideMenu } from "../ui";
 
 interface Props {

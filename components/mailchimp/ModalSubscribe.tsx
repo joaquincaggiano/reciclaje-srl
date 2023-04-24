@@ -1,5 +1,12 @@
 import { useState, useContext } from 'react';
-import { Box, Button, Chip, Modal, TextField, Typography } from "@mui/material";
+
+import Button from "@mui/material/Button";
+import  Chip  from "@mui/material/Chip";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Typography  from "@mui/material/Typography";
+import Modal  from "@mui/material/Modal";
+
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { validations } from "@/utils";

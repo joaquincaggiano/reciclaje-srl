@@ -1,19 +1,20 @@
 import { FC, useState } from "react";
 import { IBlogSchema } from "@/interfaces";
-import {
-  Avatar,
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Collapse,
-  Grid,
-  IconButton,
-  IconButtonProps,
-  Typography,
-} from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import Collapse from "@mui/material/Collapse";
+import IconButton from "@mui/material/IconButton";
+import {IconButtonProps } from "@mui/material";
+import {styled} from "@mui/material/styles";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Grid from "@mui/material/Grid";
+import Typography  from "@mui/material/Typography";
+
+import { green } from "@mui/material/colors";
+
 
 import {
   Share as ShareIcon,
@@ -21,9 +22,6 @@ import {
 } from "@mui/icons-material";
 
 import { ShareComponent } from "../ui";
-
-import { styled } from "@mui/material/styles";
-import { green } from "@mui/material/colors";
 
 interface Props {
   blog: IBlogSchema;

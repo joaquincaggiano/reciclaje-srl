@@ -10,10 +10,14 @@ import { ModalSubscribe } from "@/components/mailchimp";
 import { DescriptionHome } from "../components/home/DescriptionHome";
 
 import { Carrousel, FullScreenLoading } from "@/components/ui";
-import { Typography, Divider, Grid, Button, Box, Link } from "@mui/material";
+import  Typography  from "@mui/material/Typography";
+import  Divider  from "@mui/material/Divider";
+import Grid from "@mui/material/Grid";
+import Box  from "@mui/material/Box";
+
 import { content } from "@/utils";
 import { UiContext } from "@/context";
-import { LocationOnOutlined } from "@mui/icons-material";
+import LocationOnOutlined from "@mui/icons-material/LocationOnOutlined";
 
 const HomePage: NextPage = () => {
   const { services, isLoading } = useServices("/services");
@@ -29,8 +33,8 @@ const HomePage: NextPage = () => {
       }
     }, 5000);
     return () => clearTimeout(timer);
-    // eslint-disable-line react-hooks/exhaustive-deps
-  }, []);
+   
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <MainLayout title={content.home.title} metaHeader={content.home.metaHeader}>

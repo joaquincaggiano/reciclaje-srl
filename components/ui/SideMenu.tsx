@@ -3,27 +3,27 @@ import { AuthContext, UiContext } from "@/context";
 
 import { useRouter } from "next/router";
 
-import {
-  CategoryOutlined,
-  DashboardOutlined,
-  Diversity3Outlined,
-  GroupOutlined,
-  LoginOutlined,
-  NewspaperOutlined,
-  PhoneOutlined,
-  PrecisionManufacturing,
-  VpnKeyOutlined,
-} from "@mui/icons-material";
-import {
-  Box,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListSubheader,
-} from "@mui/material";
+import DashboardOutlined from "@mui/icons-material/DashboardOutlined";
+import Diversity3Outlined from "@mui/icons-material/Diversity3Outlined";
+import LoginOutlined from "@mui/icons-material/LoginOutlined";
+import PhoneOutlined from "@mui/icons-material/PhoneOutlined";
+import VpnKeyOutlined from "@mui/icons-material/VpnKeyOutlined";
+
+import CategoryOutlined from "@mui/icons-material/CategoryOutlined";
+import GroupOutlined from "@mui/icons-material/GroupOutlined";
+import NewspaperOutlined from "@mui/icons-material/NewspaperOutlined";
+import PrecisionManufacturing from "@mui/icons-material/PrecisionManufacturing";
+
+
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import  ListSubheader from "@mui/material/ListSubheader";
+import Box from "@mui/material/Box";
+import Divider  from "@mui/material/Divider";
+
 
 export const SideMenu = () => {
   const { isMenuOpen, toggleSideMenu } = useContext(UiContext);

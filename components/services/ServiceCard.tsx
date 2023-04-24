@@ -1,24 +1,23 @@
 import { FC, useState } from "react";
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Collapse,
-  Grid,
-  IconButton,
-  IconButtonProps,
-  Tooltip,
-  Typography,
-  TooltipProps,
-  tooltipClasses,
-} from "@mui/material";
+import { TooltipProps, tooltipClasses} from "@mui/material";
+
+import Grid from "@mui/material/Grid";
+import Typography  from "@mui/material/Typography";
+import CardMedia from "@mui/material/CardMedia";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import IconButton from "@mui/material/IconButton";
+import  Tooltip from "@mui/material/Tooltip";
+import Collapse from "@mui/material/Collapse";
+import {IconButtonProps } from "@mui/material";
+import {styled} from "@mui/material/styles";
+
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
-import { styled } from "@mui/material/styles";
 
 const ExpandMore = styled((props: ExpandMoreProps) => {
   const { expand, ...other } = props;

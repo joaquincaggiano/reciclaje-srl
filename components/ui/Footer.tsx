@@ -1,13 +1,15 @@
 import NextLink from "next/link";
-import {
-  Box,
-  IconButton,
-  Grid,
-  Typography,
-  CardMedia,
-  Link,
-} from "@mui/material";
-import { EmailOutlined, LocalPhoneOutlined } from "@mui/icons-material";
+
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography  from "@mui/material/Typography";
+import Link  from "@mui/material/Link";
+import CardMedia from "@mui/material/CardMedia";
+import IconButton from "@mui/material/IconButton";
+
+import  LocalPhoneOutlined  from "@mui/icons-material/LocalPhoneOutlined";
+import EmailOutlined from "@mui/icons-material/EmailOutlined";
+
 
 import { Subscribe } from "../mailchimp";
 import { content } from "@/utils";

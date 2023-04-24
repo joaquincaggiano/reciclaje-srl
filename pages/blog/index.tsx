@@ -4,7 +4,8 @@ import { NextPage } from "next";
 import { MainLayout } from "@/components/layouts";
 import { content } from "@/utils";
 
-import { Typography, Divider } from "@mui/material";
+import  Divider from "@mui/material/Divider";
+import Typography  from "@mui/material/Typography";
 import { BlogList } from "@/components/blog";
 
 const BlogPage: NextPage = () => {

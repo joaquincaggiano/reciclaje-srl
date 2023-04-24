@@ -9,8 +9,10 @@ import Image from "next/image";
 import { Navbar, SideMenu, Footer } from "../ui";
 import { ModalSubscribe } from "../mailchimp";
 
-import { IconButton, Link, Tooltip } from "@mui/material";
-import { EmailOutlined } from "@mui/icons-material";
+import IconButton from "@mui/material/IconButton";
+import  Tooltip from "@mui/material/Tooltip";
+
+import EmailOutlined from "@mui/icons-material/EmailOutlined";
 import { content } from "@/utils";
 
 interface Props {

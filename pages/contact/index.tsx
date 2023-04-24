@@ -2,8 +2,14 @@ import { NextPage } from "next";
 import NextLink from "next/link";
 import { MainLayout } from "@/components/layouts";
 import { content } from "../../utils";
-import { Box, Divider, Grid, IconButton, Typography } from "@mui/material";
-import { EmailOutlined, LocalPhoneOutlined } from "@mui/icons-material";
+import IconButton from "@mui/material/IconButton";
+import Grid from "@mui/material/Grid";
+import  Box from "@mui/material/Box";
+import  Divider from "@mui/material/Divider";
+import Typography  from "@mui/material/Typography";
+import EmailOutlined from "@mui/icons-material/EmailOutlined";
+import LocalPhoneOutlined from "@mui/icons-material/LocalPhoneOutlined";
+
 
 const ContactPage: NextPage = () => {
   return (

@@ -1,6 +1,7 @@
 import Carousel from "react-material-ui-carousel";
 import { Item } from "./Item";
-import { ArrowBackIosNewOutlined, ArrowForwardIosOutlined } from "@mui/icons-material";
+import ArrowBackIosNewOutlined from "@mui/icons-material/ArrowBackIosNewOutlined";
+import  ArrowForwardIosOutlined  from "@mui/icons-material/ArrowForwardIosOutlined";
 
 const images = [
   "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/banner/frente1.jpg",

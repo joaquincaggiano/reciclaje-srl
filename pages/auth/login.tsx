@@ -10,7 +10,13 @@ import { AuthLayout } from "@/components/layouts";
 import { validations } from "@/utils";
 
 import { ErrorOutline } from "@mui/icons-material";
-import { Box, Button, Chip, Grid, TextField, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import  Chip  from "@mui/material/Chip";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import  Box from "@mui/material/Box";
+import Typography  from "@mui/material/Typography";
+
 
 import { useForm } from "react-hook-form";
 

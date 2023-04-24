@@ -1,5 +1,7 @@
 import { content } from "@/utils";
-import { Box, Typography } from "@mui/material";
+
+import Box from "@mui/material/Box";
+import Typography  from "@mui/material/Typography";
 
 export const DescriptionHome = () => {
   return (

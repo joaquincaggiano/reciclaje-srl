@@ -1,16 +1,8 @@
 import NextLink from "next/link";
 
-import {
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Button,
-  Typography,
-  CardActionArea,
-  Grid,
-  Link,
-} from "@mui/material";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+
 import { FC } from "react";
 import { IServiceSchema } from "@/interfaces";
 

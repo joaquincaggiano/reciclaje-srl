@@ -1,7 +1,10 @@
 import { useContext, FC } from "react";
-import { Box, Button, Modal, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+import Modal  from "@mui/material/Modal";
+import  Box from "@mui/material/Box";
+import Typography  from "@mui/material/Typography";
 import { UiContext } from "@/context";
-import { CancelOutlined } from "@mui/icons-material";
+import CancelOutlined from "@mui/icons-material/CancelOutlined";
 
 const style = {
   position: "absolute" as "absolute",

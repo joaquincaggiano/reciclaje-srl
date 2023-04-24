@@ -7,8 +7,13 @@ import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import axios from "axios";
 import useSWR from "swr";
 import { IServiceSchema } from "@/interfaces";
-import { Box, Button, CardMedia, Grid, Link } from "@mui/material";
-import { AddOutlined } from "@mui/icons-material";
+
+import  CardMedia from "@mui/material/CardMedia";
+import Link  from "@mui/material/Link";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import  Box from "@mui/material/Box";
+import AddOutlined from "@mui/icons-material/AddOutlined";
 
 const Services = () => {
   const { data, error } = useSWR<IServiceSchema[]>("/api/admin/services");

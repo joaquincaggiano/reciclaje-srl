@@ -23,31 +23,29 @@ import { ModalCancelChanges } from "@/components/admin/ModalCancelChanges";
 
 import axios from "axios";
 
-import {
-  BorderColorOutlined,
-  SaveOutlined,
-  UploadOutlined,
-} from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  capitalize,
-  Card,
-  CardActions,
-  CardMedia,
-  Checkbox,
-  Chip,
-  Divider,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  Grid,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from "@mui/material";
+import BorderColorOutlined from "@mui/icons-material/BorderColorOutlined";
+import SaveOutlined from "@mui/icons-material/SaveOutlined";
+import UploadOutlined from "@mui/icons-material/UploadOutlined";
+
+import {capitalize} from "@mui/material/utils";
+import Checkbox from "@mui/material/Checkbox";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import Button from "@mui/material/Button";
+import  Chip  from "@mui/material/Chip";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import  Box from "@mui/material/Box";
+import Typography  from "@mui/material/Typography";
+import  Divider  from "@mui/material/Divider";
+import  CardMedia from "@mui/material/CardMedia";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import FormLabel from "@mui/material/FormLabel";
+
 import { Product } from "@/models";
 
 const validCategories = ["Polietileno", "Molienda"];
@@ -120,8 +118,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       window.removeEventListener("beforeunload", beforeunload);
       router.events.off("routeChangeStart", routeChangeStart);
     };
-    // eslint-disable-line react-hooks/exhaustive-deps
-  }, [unsavedChanges]);
+   
+  }, [unsavedChanges]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {

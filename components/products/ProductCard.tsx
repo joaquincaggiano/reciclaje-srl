@@ -1,20 +1,20 @@
 import { FC, useState } from "react";
 import { IProductSchema } from "@/interfaces";
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  IconButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography  from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import IconButton from "@mui/material/IconButton";
+import  Tooltip from "@mui/material/Tooltip";
+
 
 import { ProductCarrousel } from ".";
 import classes from "../../styles/products/TypeColor.module.css";
-import { CircleRounded } from "@mui/icons-material";
+import CircleRounded  from "@mui/icons-material/CircleRounded";
 
 import { ShareComponent } from "../ui";
 

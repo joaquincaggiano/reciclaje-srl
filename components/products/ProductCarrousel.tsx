@@ -1,7 +1,9 @@
 import { FC } from "react";
 import Carousel from "react-material-ui-carousel";
 import {ItemCarrousel} from "./ItemCarrousel"
-import { ArrowBackIosNewOutlined, ArrowForwardIosOutlined } from "@mui/icons-material";
+import ArrowBackIosNewOutlined from "@mui/icons-material/ArrowBackIosNewOutlined";
+import  ArrowForwardIosOutlined  from "@mui/icons-material/ArrowForwardIosOutlined";
+
 
 interface Props {
   productImages: string[];
