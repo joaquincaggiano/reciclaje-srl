@@ -120,6 +120,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       window.removeEventListener("beforeunload", beforeunload);
       router.events.off("routeChangeStart", routeChangeStart);
     };
+    // eslint-disable-line react-hooks/exhaustive-deps
   }, [unsavedChanges]);
 
   const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {

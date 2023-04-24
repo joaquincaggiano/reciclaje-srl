@@ -29,6 +29,7 @@ const HomePage: NextPage = () => {
       }
     }, 5000);
     return () => clearTimeout(timer);
+    // eslint-disable-line react-hooks/exhaustive-deps
   }, []);
 
   return (
