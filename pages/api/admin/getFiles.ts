@@ -7,7 +7,7 @@ const s3 = new S3({
   region: process.env.REGION_AWS,
 });
 
-export default function (req: NextApiRequest, res: NextApiResponse /*<Data>*/) {
+export default function handler (req: NextApiRequest, res: NextApiResponse /*<Data>*/) {
   switch (req.method) {
     case "POST":
       return getListFiles(req, res);
