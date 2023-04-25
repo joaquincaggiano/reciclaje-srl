@@ -43,7 +43,7 @@ const Blog = () => {
         </Button>
       </Box>
 
-      <TableComponent data={dataBlog} typeS3="blog"/>
+      <TableComponent data={dataBlog} typeS3="blog" urlKit="BlogTodoRec"/>
     </MainLayout>
   );
 };

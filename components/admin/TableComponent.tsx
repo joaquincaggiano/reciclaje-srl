@@ -27,9 +27,10 @@ import { dataUsers } from "@/pages/admin/users";
 interface Props {
   data: dataBlog[] | dataProducts[] | dataServices[] | dataUsers[];
   typeS3: string;
+  urlKit: string;
 }
 
-export const TableComponent: FC<Props> = ({ data, typeS3 }) => {
+export const TableComponent: FC<Props> = ({ data, typeS3, urlKit }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
 
@@ -58,12 +59,10 @@ export const TableComponent: FC<Props> = ({ data, typeS3 }) => {
 
       if (imageToDelete.status === 200) {
         img.map(async (eachImage) => {
-          const imageName = eachImage.replace(
-            "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
-            ""
-          );
+          const imageUrlKit = "https://ik.imagekit.io/e2ouoknyw/" + urlKit;
+          const imageName = eachImage.split(imageUrlKit).join(typeS3)
           await axios.post("/api/admin/deleteImageFromS3", {
-            key: `${imageName}`,
+            key: imageName,
           });
         });
         router.reload();
@@ -73,22 +72,22 @@ export const TableComponent: FC<Props> = ({ data, typeS3 }) => {
     }
   };
 
-  const rowNames = Object.keys(data[0]).map((key, i) => {
+  const rowNames = data.length > 0 ? (Object.keys(data[0]).map((key, i) => {
       if (key === "id"){
         return;
       }else{
         return <TableCell key={i}>{key}</TableCell>;
       }
-    });
+    })) : ("no rows to show");
 
     const columnArray:string[] = []
-  const columnFills = Object.keys(data[0]).map((key, i) => {
+  const columnFills = data.length > 0 ?  (Object.keys(data[0]).map((key, i) => {
     if (key == "id" || key == "images" || key == "title"){
       return;
     }else{
       return columnArray.push(key)
     }
-  });
+  })) : ("no columns to show");
 
   return (
     <Grid container className="fadeIn">
@@ -104,10 +103,13 @@ export const TableComponent: FC<Props> = ({ data, typeS3 }) => {
             <TableBody>
               {rowsToShow.map((row, index) => (
                 <TableRow key={index}>
+                  {/* @ts-ignore */}
                   {row!.images?.length > 0 && 
                   <TableCell>
                     <Image
+                     //@ts-ignore
                       src={row.images[0]}
+                       //@ts-ignore
                       alt={row.title}
                       width={100}
                       height={80}
@@ -116,10 +118,12 @@ export const TableComponent: FC<Props> = ({ data, typeS3 }) => {
                   }
                   <TableCell>
                     <NextLink
+                     //@ts-ignore
                       href={`/admin/${typeS3}/${row.title}`}
                       passHref
                       legacyBehavior
                     >
+                      {/* @ts-ignore */}
                       <Link underline="always">{row.title}</Link>
                     </NextLink>
                   </TableCell>
@@ -127,9 +131,10 @@ export const TableComponent: FC<Props> = ({ data, typeS3 }) => {
                     //@ts-ignore
                     return <TableCell key={i}>{row[eachKey]}</TableCell>
                   })}
-              
+                  {/* @ts-ignore */}
                   <TableCell onClick={() => deleteButton(row.id, row.images)}>
                     <Button
+                     //@ts-ignore
                       onClick={() => deleteButton(row.id, row.images)}
                       color="error"
                       sx={{
