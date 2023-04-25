@@ -58,6 +58,8 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [stateUrl, setStateUrl] = useState<string>("");
 
+  const s3URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/"
+
   const router = useRouter();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -117,8 +119,12 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
       for (let i = 0; i < e.target.files.length; i++) {
         formData.append(`images`, e.target.files[i]);
         const { data } = await axios.post("/api/admin/upload", formData);
-        console.log("response", data);
-        setValue("images", [...getValues("images"), data.url], {
+        console.log("response EN BLOG TITLE", data);
+
+        const imageKitURL = data.url.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/blog/", "https://ik.imagekit.io/e2ouoknyw/BlogTodoRec/")
+        console.log("IMAGE KIT URL", imageKitURL)
+
+        setValue("images", [...getValues("images"), imageKitURL], {
           shouldValidate: true,
         });
         setUnsavedChanges(true);
@@ -178,8 +184,8 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
 
   const onDeleteImage = async (image: string) => {
     const imageName = image.replace(
-      "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
-      ""
+      "https://ik.imagekit.io/e2ouoknyw/BlogTodoRec/",
+      "blog/"
     );
     await axios.post("/api/admin/deleteImageFromS3", {
       key: imageName,
@@ -202,9 +208,8 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
         blogName: blogName,
       });
 
-      const url = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
       const imagesInDB = blog.images.map((oneImage) => {
-        return oneImage.replace(url, "");
+        return oneImage.replace(s3URL, "");
       });
 
       const imagesInS3 = data.objects.filter(

@@ -21,9 +21,9 @@ import LocationOnOutlined from "@mui/icons-material/LocationOnOutlined";
 import { ProductSlideCarrousel } from "@/components/products";
 
 const images = [
-  "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/banner/frente1.jpg",
-  "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/banner/adentro4.jpg",
-  "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/banner/adentro2.jpg",
+  "https://ik.imagekit.io/e2ouoknyw/BannersTodoRec/frente1.jpg",
+  "https://ik.imagekit.io/e2ouoknyw/BannersTodoRec/adentro4.jpg",
+  "https://ik.imagekit.io/e2ouoknyw/BannersTodoRec/adentro2.jpg",
 ];
 
 const HomePage: NextPage = () => {

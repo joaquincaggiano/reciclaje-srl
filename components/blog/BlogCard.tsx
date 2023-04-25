@@ -52,7 +52,7 @@ export const BlogCard: FC<Props> = ({ blog, getImageUrl }) => {
       "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
       ""
     );
-    const optimizedUrl = `https://ik.imagekit.io/e2ouoknyw/${awsUrl}`;
+    const optimizedUrl = `https://ik.imagekit.io/e2ouoknyw/BlogTodoRec/${awsUrl}`;
     getImageUrl(optimizedUrl);
     setOpenShareOptions(true);
   };

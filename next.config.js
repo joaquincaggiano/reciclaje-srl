@@ -5,7 +5,8 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ['todorecsrl-test-dev.s3.sa-east-1.amazonaws.com'],
+    domains: ['todorecsrl-test-dev.s3.sa-east-1.amazonaws.com', 
+    'ik.imagekit.io'],
   }
 }
 const withBundleAnalyzer = require('@next/bundle-analyzer')({

@@ -30,7 +30,7 @@ export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
       "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
       ""
     );
-    const optimizedUrl = `https://ik.imagekit.io/e2ouoknyw/${awsUrl}`;
+    const optimizedUrl = `https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/${awsUrl}`;
     getImageUrl(optimizedUrl);
     setOpenShareOptions(true);
   };
