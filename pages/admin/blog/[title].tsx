@@ -122,7 +122,6 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
         console.log("response EN BLOG TITLE", data);
 
         const imageKitURL = data.url.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/blog/", "https://ik.imagekit.io/e2ouoknyw/BlogTodoRec/")
-        console.log("IMAGE KIT URL", imageKitURL)
 
         setValue("images", [...getValues("images"), imageKitURL], {
           shouldValidate: true,

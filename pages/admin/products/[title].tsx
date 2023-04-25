@@ -81,6 +81,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [stateUrl, setStateUrl] = useState<string>("");
 
+  const s3URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/"
+
   const {
     register,
     handleSubmit,
@@ -139,7 +141,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         formData.append(`images`, e.target.files[i]);
         const { data } = await axios.post("/api/admin/upload", formData);
         console.log("response", data);
-        setValue("images", [...getValues("images"), data.url], {
+        const imageKitURL = data.url.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/product/", "https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/")
+        setValue("images", [...getValues("images"), imageKitURL], {
           shouldValidate: true,
         });
         setUnsavedChanges(true);
@@ -192,9 +195,10 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   const onDeleteImage = async (image: string) => {
     const imageName = image.replace(
-      "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
-      ""
+      "https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/",
+      "product/"
     );
+    console.log("IMAGE NAME!", imageName)
     await axios.post("/api/admin/deleteImageFromS3", {
       key: imageName,
     });
@@ -216,9 +220,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         productName: productName,
       });
 
-      const url = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
       const imagesInDB = product.images.map((oneImage) => {
-        return oneImage.replace(url, "");
+        return oneImage.replace(s3URL, "");
       });
 
       const imagesInS3 = data.objects.filter(
@@ -246,7 +249,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     try {
       setUnsavedChanges(false);
       const { data } = await axios({
-        url: "/api/admin/products",
+        url: "/api/admin/product",
         method: form._id ? "PUT" : "POST",
         data: form,
       });

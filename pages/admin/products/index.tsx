@@ -20,7 +20,7 @@ export interface dataProducts {
 }
 
 const Products = () => {
-  const { data, error } = useSWR<IProductSchema[]>("/api/admin/products");
+  const { data, error } = useSWR<IProductSchema[]>("/api/admin/product");
 
   if (!data && !error) return <></>;
 
@@ -54,7 +54,7 @@ const Products = () => {
       </Box>
 
    
-      <TableComponent data={dataProducts} typeS3="products"/>
+      <TableComponent data={dataProducts} typeS3="product" urlKit="ProductTodoRec"/>
 
     </MainLayout>
   );
