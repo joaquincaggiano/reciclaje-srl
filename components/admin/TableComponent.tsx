@@ -19,11 +19,13 @@ import TablePagination from "@mui/material/TablePagination";
 import Paper from "@mui/material/Paper";
 
 import { dataBlog } from "@/pages/admin/blog";
-// import { dataProduct } from "@/pages/admin/products";
-// import { dataServices } from "@/pages/admin/services";
+import { dataProducts } from "@/pages/admin/products";
+import { dataServices } from "@/pages/admin/services";
+import { dataUsers } from "@/pages/admin/users";
+
 
 interface Props {
-  data: dataBlog[] /*| dataProduct[] | dataServices[]*/;
+  data: dataBlog[] | dataProducts[] | dataServices[] | dataUsers[];
   typeS3: string;
 }
 
@@ -71,6 +73,23 @@ export const TableComponent: FC<Props> = ({ data, typeS3 }) => {
     }
   };
 
+  const rowNames = Object.keys(data[0]).map((key, i) => {
+      if (key === "id"){
+        return;
+      }else{
+        return <TableCell key={i}>{key}</TableCell>;
+      }
+    });
+
+    const columnArray:string[] = []
+  const columnFills = Object.keys(data[0]).map((key, i) => {
+    if (key == "id" || key == "images" || key == "title"){
+      return;
+    }else{
+      return columnArray.push(key)
+    }
+  });
+
   return (
     <Grid container className="fadeIn">
       <Grid item xs={12} sx={{ height: 650, width: "100%" }}>
@@ -78,21 +97,14 @@ export const TableComponent: FC<Props> = ({ data, typeS3 }) => {
           <Table>
             <TableHead>
               <TableRow>
-                {data.map((eachData, i) => {
-                  return Object.keys(eachData).map((key) => {
-                    if (key === "id"){
-                      return;
-                    }else{
-                      return <TableCell key={i}>{key}</TableCell>;
-                    }
-                  });
-                })}
+                {rowNames}
                 <TableCell>Borrar</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {rowsToShow.map((row, index) => (
                 <TableRow key={index}>
+                  {row!.images?.length > 0 && 
                   <TableCell>
                     <Image
                       src={row.images[0]}
@@ -101,6 +113,7 @@ export const TableComponent: FC<Props> = ({ data, typeS3 }) => {
                       height={80}
                     />
                   </TableCell>
+                  }
                   <TableCell>
                     <NextLink
                       href={`/admin/${typeS3}/${row.title}`}
@@ -110,8 +123,11 @@ export const TableComponent: FC<Props> = ({ data, typeS3 }) => {
                       <Link underline="always">{row.title}</Link>
                     </NextLink>
                   </TableCell>
-                  <TableCell>{row.info}</TableCell>
-                  <TableCell>{row.description}</TableCell>
+                  {columnArray.map((eachKey, i)=>{
+                    //@ts-ignore
+                    return <TableCell key={i}>{row[eachKey]}</TableCell>
+                  })}
+              
                   <TableCell onClick={() => deleteButton(row.id, row.images)}>
                     <Button
                       onClick={() => deleteButton(row.id, row.images)}

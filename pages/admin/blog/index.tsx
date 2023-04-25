@@ -29,9 +29,6 @@ const Blog = () => {
       description: eachData.description,
     }
   })
-  const allIDs = data!.map((blog) => {
-    return blog._id;
-  })
 
   return (
     <MainLayout title="Blog-Dashboard" metaHeader="Administración del Blog">

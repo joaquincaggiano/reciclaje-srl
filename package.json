@@ -16,7 +16,6 @@
     "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.5",
-    "@mui/x-data-grid": "^5.17.22",
     "@next/bundle-analyzer": "^13.3.1",
     "@next/font": "13.1.2",
     "@types/bcryptjs": "^2.4.2",
