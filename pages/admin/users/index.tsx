@@ -5,7 +5,7 @@ import { GetServerSideProps } from "next";
 
 import useSWR from "swr";
 import { ISubscribe } from "@/interfaces";
-import { updateSubscribeToDb } from "@/pages/api/subscribe";
+import { updateSubscribeToDb } from "@/pages/api/mailchimp/subscribe";
 
 
 export interface dataUsers {
@@ -15,7 +15,7 @@ export interface dataUsers {
 }
 
 const Users = () => {
-  const { data, error } = useSWR<ISubscribe[]>("/api/admin/subscribe");
+  const { data, error } = useSWR<ISubscribe[]>("/api/admin/mailchimp/subscribe");
 
   if (!data && !error) return <></>;
 

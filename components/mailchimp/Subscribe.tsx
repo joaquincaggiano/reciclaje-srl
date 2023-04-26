@@ -30,7 +30,7 @@ export const Subscribe = () => {
     setState("Loading");
 
     try {
-      const response = await axios.post("/api/subscribe", { email });
+      const response = await axios.post("/api/mailchimp/subscribe", { email });
       console.log(response);
       setState("Success");
       setEmail("");

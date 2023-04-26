@@ -20,6 +20,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/api/s3/uploadFile.ts", "pages/api/s3-upload.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/api/s3/uploadFile.ts"],
   "exclude": ["node_modules"]
 }
