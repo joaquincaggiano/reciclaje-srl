@@ -204,7 +204,8 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
       const blogName = blog.title.replaceAll(" ", "-").toLowerCase();
 
       const { data } = await axios.post("/api/admin/getFiles", {
-        blogName: blogName,
+        name: blogName,
+        type: "blog"
       });
 
       const imagesInDB = blog.images.map((oneImage) => {

@@ -51,7 +51,7 @@ export const UsersTable: FC<Props> = ({ data }) => {
 
   return (
     <Grid container className="fadeIn">
-      <Grid item xs={12} sx={{ height: 650, width: "100%" }}>
+      <Grid item xs={12} sx={{ width: "100%" }}>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>

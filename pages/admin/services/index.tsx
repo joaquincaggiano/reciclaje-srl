@@ -44,7 +44,7 @@ const Services = () => {
         </Button>
       </Box>
 
-      <TableComponent data={dataServices} typeS3="services"/>
+      <TableComponent data={dataServices} typeS3="services" urlKit="ServiceTodoRec"/>
      
     </MainLayout>
   );

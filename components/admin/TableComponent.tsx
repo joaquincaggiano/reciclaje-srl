@@ -25,7 +25,7 @@ import { dataUsers } from "@/pages/admin/users";
 
 
 interface Props {
-  data: dataBlog[] | dataProducts[] | dataServices[] | dataUsers[];
+  data: dataBlog[] | dataProducts[] | dataServices[];
   typeS3: string;
   urlKit: string;
 }
@@ -92,7 +92,7 @@ export const TableComponent: FC<Props> = ({ data, typeS3, urlKit }) => {
 
   return (
     <Grid container className="fadeIn">
-      <Grid item xs={12} sx={{ height: 650, width: "100%" }}>
+      <Grid item xs={12} sx={{ width: "100%" }}>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -120,7 +120,7 @@ export const TableComponent: FC<Props> = ({ data, typeS3, urlKit }) => {
                   <TableCell>
                     <NextLink
                      //@ts-ignore
-                      href={`/admin/${typeS3}s/${row.title}`}
+                      href={`/admin/${typeS3}/${row.title}`}
                       passHref
                       legacyBehavior
                     >

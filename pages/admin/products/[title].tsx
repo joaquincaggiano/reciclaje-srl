@@ -134,7 +134,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
       formData.append(
         "type",
-        `product/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
+        `products/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
       );
 
       for (let i = 0; i < e.target.files.length; i++) {
@@ -217,7 +217,8 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       const productName = product.title.replaceAll(" ", "-").toLowerCase();
 
       const { data } = await axios.post("/api/admin/getFiles", {
-        productName: productName,
+        name: productName,
+        type: "products"
       });
 
       const imagesInDB = product.images.map((oneImage) => {
@@ -249,7 +250,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     try {
       setUnsavedChanges(false);
       const { data } = await axios({
-        url: "/api/admin/product",
+        url: "/api/admin/products",
         method: form._id ? "PUT" : "POST",
         data: form,
       });

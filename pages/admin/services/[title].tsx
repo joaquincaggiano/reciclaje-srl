@@ -111,7 +111,7 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
 
       formData.append(
         "type",
-        `service/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
+        `services/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
       );
 
       for (let i = 0; i < e.target.files.length; i++) {
@@ -193,7 +193,8 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
       const serviceName = service.title.replaceAll(" ", "-").toLowerCase();
 
       const { data } = await axios.post("/api/admin/getFiles", {
-        serviceName: serviceName,
+        name: serviceName,
+        type: "services"
       });
 
       const url = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
