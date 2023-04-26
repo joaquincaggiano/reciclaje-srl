@@ -141,7 +141,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         formData.append(`images`, e.target.files[i]);
         const { data } = await axios.post("/api/admin/upload", formData);
         console.log("response", data);
-        const imageKitURL = data.url.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/product/", "https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/")
+        const imageKitURL = data.url.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/products/", "https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/")
         setValue("images", [...getValues("images"), imageKitURL], {
           shouldValidate: true,
         });
@@ -196,7 +196,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const onDeleteImage = async (image: string) => {
     const imageName = image.replace(
       "https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/",
-      "product/"
+      "products/"
     );
     console.log("IMAGE NAME!", imageName)
     await axios.post("/api/admin/deleteImageFromS3", {
