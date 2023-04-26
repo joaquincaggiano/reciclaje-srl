@@ -1,5 +1,5 @@
 import { MainLayout } from "@/components/layouts";
-import { TableComponent } from "@/components/admin";
+import { UsersTable } from "@/components/admin";
 
 import { GetServerSideProps } from "next";
 
@@ -32,7 +32,7 @@ const Users = () => {
       title="Users-Dashboard"
       metaHeader="Administración de los usuarios"
     >
-      <TableComponent data={dataUsers} typeS3="users"/>
+      <UsersTable data={dataUsers} />
    
     </MainLayout>
   );

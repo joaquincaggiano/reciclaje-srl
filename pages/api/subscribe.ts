@@ -25,7 +25,7 @@ mailchimp.setConfig({
 
 export default async function handler(
 	req: NextApiRequest,
-	res: NextApiResponse <Data>
+	res: NextApiResponse<Data>
 ) {
 	switch (req.method) {
 		case 'POST':
@@ -58,13 +58,11 @@ const subscribeOrUpdateUser = async (
 			);
 
 		if (responseGet?.status === 'subscribed') {
-			return res
-				.status(409)
-				.json({
-					message:
-						'Ya existe un usuario suscripto con ese nombre',
-					response: responseGet,
-				});
+			return res.status(409).json({
+				message:
+					'Ya existe un usuario suscripto con ese nombre',
+				response: responseGet,
+			});
 		}
 
 		if (responseGet?.status === 'unsubscribed') {
@@ -75,12 +73,10 @@ const subscribeOrUpdateUser = async (
 					{ status: 'subscribed' }
 				);
 			updateSubscribeToDb();
-			return res
-				.status(200)
-				.json({
-					message: 'Usuario actualizado',
-					user: responseUpdate,
-				});
+			return res.status(200).json({
+				message: 'Usuario actualizado',
+				user: responseUpdate,
+			});
 		}
 	} catch {
 		const responsePost =
@@ -131,10 +127,7 @@ const subscribeToDb = async (email: string) => {
 
 export const updateSubscribeToDb = async () => {
 	//@ts-ignore
-	const listUserInMailchimp = await mailchimp.lists.getListMembersInfo(
-			`${AUDIENCE_ID}`,
-			{ count: 1000 }
-		);
+	const listUserInMailchimp = await mailchimp.lists.getListMembersInfo(`${AUDIENCE_ID}`, { count: 1000 } );
 
 	try {
 		await db.connect();
@@ -175,10 +168,6 @@ export const updateSubscribeToDb = async () => {
 
 				return userToSubscribe;
 			}
-		);
-		console.log(
-			'assigned objects',
-			assignedObjects
 		);
 		await db.disconnect();
 
