@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
+import dynamic from 'next/dynamic'
 
 import { GetServerSideProps } from "next";
 
 // NextAuth
 import { getSession, signIn } from "next-auth/react";
 
-import { AuthLayout } from "@/components/layouts";
 import { validations } from "@/utils";
 
 import { ErrorOutline } from "@mui/icons-material";
@@ -16,6 +16,10 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import  Box from "@mui/material/Box";
 import Typography  from "@mui/material/Typography";
+
+const DynamicAuthLayout = dynamic(() =>
+import("../../components/layouts").then((mod) => mod.AuthLayout)
+);
 
 
 import { useForm } from "react-hook-form";
@@ -50,7 +54,7 @@ const LoginPage = () => {
   };
 
   return (
-    <AuthLayout title="Login">
+    <DynamicAuthLayout title="Login">
       <form onSubmit={handleSubmit(onLoginUser)} noValidate>
         <Box sx={{ width: 350, padding: "10px 20px" }}>
           <Grid container spacing={2}>
@@ -115,7 +119,7 @@ const LoginPage = () => {
           </Grid>
         </Box>
       </form>
-    </AuthLayout>
+    </DynamicAuthLayout>
   );
 };
 

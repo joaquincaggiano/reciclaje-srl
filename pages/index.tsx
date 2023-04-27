@@ -5,6 +5,8 @@ import dynamic from "next/dynamic";
 
 import { useServices } from "@/hooks/useServices";
 
+// import {MainLayout} from '../components/layouts'
+
 const DynamicMainLayout = dynamic(() =>
   import("../components/layouts").then((mod) => mod.MainLayout)
 );
@@ -22,8 +24,8 @@ const DynamicDescriptionHome = dynamic(() =>
 const DynamicProductSlideCarrousel = dynamic(() =>
   import("../components/products").then((mod) => mod.ProductSlideCarrousel)
 );
+const LazyFullScreenLoading = dynamic(() => import('../components/ui').then((mod)=> mod.FullScreenLoading))
 
-import { FullScreenLoading } from "@/components/ui";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
@@ -98,7 +100,7 @@ const HomePage: NextPage = () => {
       </Typography>
 
       {isLoading ? (
-        <FullScreenLoading />
+        <LazyFullScreenLoading />
       ) : (
         <Grid
           container

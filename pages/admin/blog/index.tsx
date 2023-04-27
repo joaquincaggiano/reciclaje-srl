@@ -1,5 +1,4 @@
-import { MainLayout } from "@/components/layouts";
-import { TableComponent } from "@/components/admin";
+import dynamic from 'next/dynamic';
 
 import useSWR from "swr";
 import { IBlogSchema } from "@/interfaces";
@@ -15,6 +14,15 @@ export interface dataBlog {
     info: string;
     description: string;
 }
+
+import {MainLayout} from '../../../components/layouts'
+
+const DynamicMainLayout = dynamic(() =>
+  import("../../../components/layouts").then((mod) => mod.MainLayout)
+);
+const DynamicTableComponent = dynamic(() =>
+  import("../../../components/admin").then((mod) => mod.TableComponent)
+);
 
 const Blog = () => {
   const { data, error } = useSWR<IBlogSchema[]>("/api/admin/blog");
@@ -43,7 +51,7 @@ const Blog = () => {
         </Button>
       </Box>
 
-      <TableComponent data={dataBlog} typeS3="blog" urlKit="BlogTodoRec"/>
+      <DynamicTableComponent data={dataBlog} typeS3="blog" urlKit="BlogTodoRec"/>
     </MainLayout>
   );
 };

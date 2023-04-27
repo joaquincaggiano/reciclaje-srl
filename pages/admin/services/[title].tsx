@@ -6,12 +6,13 @@ import {
   useRef,
   useState,
 } from "react";
+import dynamic from 'next/dynamic';
+
 import { GetServerSideProps } from "next";
 import { UiContext } from "@/context/ui";
 
 import { useRouter } from "next/router";
 
-import { MainLayout } from "../../../components/layouts";
 import { IServiceSchema } from "../../../interfaces";
 import { Service } from "@/models";
 
@@ -20,8 +21,6 @@ import { dbServices } from "@/database";
 import { useForm } from "react-hook-form";
 
 import axios from "axios";
-
-import { ModalCancelChanges } from "@/components/admin/ModalCancelChanges";
 
 import BorderColorOutlined from "@mui/icons-material/BorderColorOutlined";
 import SaveOutlined from "@mui/icons-material/SaveOutlined";
@@ -38,6 +37,15 @@ import  CardMedia from "@mui/material/CardMedia";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import FormLabel from "@mui/material/FormLabel";
+
+import {MainLayout} from '../../../components/layouts'
+
+const DynamicMainLayout = dynamic(() =>
+  import("../../../components/layouts").then((mod) => mod.MainLayout)
+);
+const DynamicModalCancelChanges = dynamic(() =>
+  import("../../../components/admin/ModalCancelChanges").then((mod) => mod.ModalCancelChanges)
+);
 
 interface FormData {
   _id?: string;
@@ -256,7 +264,7 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
       }
     >
       {/*//@ts-ignore*/}
-      <ModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
+      <DynamicModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
       {router.asPath === "/admin/services/new" ? (
         <Box display="flex" justifyContent="flex-start" alignItems="center">
           <Typography variant="h1" sx={{ mr: 1 }}>

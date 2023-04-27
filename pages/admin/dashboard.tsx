@@ -16,6 +16,8 @@ import Grid from "@mui/material/Grid";
 
 import { DashboardCounterResponse } from "@/interfaces";
 
+import {MainLayout} from '../../components/layouts'
+
 const DynamicMainLayout = dynamic(() =>
   import("../../components/layouts").then((mod) => mod.MainLayout)
 );
@@ -58,7 +60,7 @@ const DashboardPage = () => {
   } = data!;
 
   return (
-    <DynamicMainLayout
+    <MainLayout
       title="Dashboard General"
       metaHeader="Mantenimiento general del dashboard"
     >
@@ -100,7 +102,7 @@ const DashboardPage = () => {
           url=""
         />
       </Grid>
-    </DynamicMainLayout>
+    </MainLayout>
   );
 };
 

@@ -10,13 +10,15 @@ import Typography  from "@mui/material/Typography";
 import EmailOutlined from "@mui/icons-material/EmailOutlined";
 import LocalPhoneOutlined from "@mui/icons-material/LocalPhoneOutlined";
 
+import {MainLayout} from '../../components/layouts'
+
 const DynamicMainLayout = dynamic(() =>
   import("../../components/layouts").then((mod) => mod.MainLayout)
 );
 
 const ContactPage: NextPage = () => {
   return (
-    <DynamicMainLayout
+    <MainLayout
       title={content.contact.title}
       metaHeader={content.contact.metaHeader}
     >
@@ -96,7 +98,7 @@ const ContactPage: NextPage = () => {
           ></iframe>
         </Grid>
       </Grid>
-    </DynamicMainLayout>
+    </MainLayout>
   );
 };
 

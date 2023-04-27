@@ -6,13 +6,14 @@ import { content } from "@/utils";
 import Divider from "@mui/material/Divider";
 import Typography  from "@mui/material/Typography";
 
+import {MainLayout} from '../../components/layouts'
+
 const DynamicMainLayout = dynamic(() =>
   import("../../components/layouts").then((mod) => mod.MainLayout)
 );
 const DynamicBlogList = dynamic(() =>
 import("../../components/blog").then((mod) => mod.BlogList)
 );
-
 const BlogPage: NextPage = () => {
   const [imageUrl, setImageUrl] = useState("")
 
@@ -21,7 +22,7 @@ const BlogPage: NextPage = () => {
   }
 
   return (
-    <DynamicMainLayout title={content.blog.title} metaHeader={content.blog.metaHeader}>
+    <MainLayout title={content.blog.title} metaHeader={content.blog.metaHeader}>
       <Typography variant="h1" sx={{ textAlign: "center", mb: 2 }}>
         {content.blog.title}
       </Typography>
@@ -29,7 +30,7 @@ const BlogPage: NextPage = () => {
       <Divider sx={{ mb: 5 }} />
 
       <DynamicBlogList getImageUrl={getImageUrl}/>
-    </DynamicMainLayout>
+    </MainLayout>
   );
 };
 

@@ -8,6 +8,8 @@ import  Box from "@mui/material/Box";
 import  Divider from "@mui/material/Divider";
 import Typography  from "@mui/material/Typography";
 
+import {MainLayout} from '../../components/layouts'
+
 const DynamicMainLayout = dynamic(() =>
   import("../../components/layouts").then((mod) => mod.MainLayout)
 );
@@ -22,7 +24,7 @@ const AboutUsPage: NextPage = () => {
   ));
 
   return (
-    <DynamicMainLayout
+    <MainLayout
       title={content.aboutUs.title}
       metaHeader={content.aboutUs.metaHeader}
     >
@@ -61,7 +63,7 @@ const AboutUsPage: NextPage = () => {
           </Typography>
         </Box>
       </Box>
-    </DynamicMainLayout>
+    </MainLayout>
   );
 };
 

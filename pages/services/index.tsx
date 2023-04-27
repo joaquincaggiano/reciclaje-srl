@@ -8,6 +8,8 @@ import  Box from "@mui/material/Box";
 import  Divider from "@mui/material/Divider";
 import Typography  from "@mui/material/Typography";
 
+import {MainLayout} from '../../components/layouts'
+
 const DynamicMainLayout = dynamic(() =>
   import("../../components/layouts").then((mod) => mod.MainLayout)
 );
@@ -24,7 +26,7 @@ const ServicesPage: NextPage = () => {
   const { services, isLoading } = useServices("/services");
 
   return (
-    <DynamicMainLayout
+    <MainLayout
       title={content.services.title}
       metaHeader={content.services.metaHeader}
     >
@@ -50,7 +52,7 @@ const ServicesPage: NextPage = () => {
           <DynamicServicesList services={services} />
         </>
       )}
-    </DynamicMainLayout>
+    </MainLayout>
   );
 };
 

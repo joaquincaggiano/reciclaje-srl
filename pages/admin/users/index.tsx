@@ -1,5 +1,4 @@
-import { MainLayout } from "@/components/layouts";
-import { UsersTable } from "@/components/admin";
+import dynamic from 'next/dynamic';
 
 import { GetServerSideProps } from "next";
 
@@ -7,6 +6,14 @@ import useSWR from "swr";
 import { ISubscribe } from "@/interfaces";
 import { updateSubscribeToDb } from "@/pages/api/mailchimp/subscribe";
 
+import {MainLayout} from '../../../components/layouts'
+
+const DynamicMainLayout = dynamic(() =>
+  import("../../../components/layouts").then((mod) => mod.MainLayout)
+);
+const DynamicUsersTable= dynamic(() =>
+  import("../../../components/admin").then((mod) => mod.UsersTable)
+);
 
 export interface dataUsers {
   id: string;
@@ -32,7 +39,7 @@ const Users = () => {
       title="Users-Dashboard"
       metaHeader="Administración de los usuarios"
     >
-      <UsersTable data={dataUsers} />
+      <DynamicUsersTable data={dataUsers} />
    
     </MainLayout>
   );

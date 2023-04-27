@@ -9,6 +9,8 @@ import Typography  from "@mui/material/Typography";
 
 import { useProducts } from "@/hooks";
 
+import {MainLayout} from '../../components/layouts'
+
 const DynamicMainLayout = dynamic(() =>
   import("../../components/layouts").then((mod) => mod.MainLayout)
 );
@@ -28,7 +30,7 @@ const ProductsPage: NextPage = () => {
   }
 
   return (
-    <DynamicMainLayout
+    <MainLayout
       title={content.products.title}
       metaHeader={content.products.metaHeader}
       imageFullUrl={imageUrl}
@@ -55,7 +57,7 @@ const ProductsPage: NextPage = () => {
           <DynamicProductList products={products} getImageUrl={getImageUrl}/>
         </>
       )}
-    </DynamicMainLayout>
+    </MainLayout>
   );
 };
 

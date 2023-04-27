@@ -1,5 +1,4 @@
-import { MainLayout } from "@/components/layouts";
-import { TableComponent } from "@/components/admin";
+import dynamic from 'next/dynamic';
 
 import useSWR from "swr";
 import { IServiceSchema } from "@/interfaces";
@@ -7,6 +6,15 @@ import { IServiceSchema } from "@/interfaces";
 import Button from "@mui/material/Button";
 import  Box from "@mui/material/Box";
 import AddOutlined from "@mui/icons-material/AddOutlined";
+
+import {MainLayout} from '../../../components/layouts'
+
+const DynamicMainLayout = dynamic(() =>
+  import("../../../components/layouts").then((mod) => mod.MainLayout)
+);
+const DynamicTableComponent = dynamic(() =>
+  import("../../../components/admin").then((mod) => mod.TableComponent)
+);
 
 export interface dataServices {
   id: string;
@@ -44,7 +52,7 @@ const Services = () => {
         </Button>
       </Box>
 
-      <TableComponent data={dataServices} typeS3="services" urlKit="ServiceTodoRec"/>
+      <DynamicTableComponent data={dataServices} typeS3="services" urlKit="ServiceTodoRec"/>
      
     </MainLayout>
   );

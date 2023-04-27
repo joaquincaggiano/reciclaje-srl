@@ -6,12 +6,12 @@ import {
   useContext,
   useEffect,
 } from "react";
+import dynamic from 'next/dynamic'
 import { GetServerSideProps } from "next";
 import { UiContext } from "@/context/ui";
 
 import { useRouter } from "next/router";
 
-import { MainLayout } from "../../../components/layouts";
 import { IBlogSchema } from "../../../interfaces";
 import { Blog } from "@/models";
 
@@ -20,8 +20,6 @@ import { dbBlogs } from "@/database";
 import { useForm } from "react-hook-form";
 
 import axios from "axios";
-
-import { ModalCancelChanges } from "@/components/admin/ModalCancelChanges";
 
 import BorderColorOutlined from "@mui/icons-material/BorderColorOutlined";
 import SaveOutlined from "@mui/icons-material/SaveOutlined";
@@ -39,6 +37,14 @@ import Typography  from "@mui/material/Typography";
 import  Divider  from "@mui/material/Divider";
 import  CardMedia from "@mui/material/CardMedia";
 
+import {MainLayout} from '../../../components/layouts'
+
+const DynamicMainLayout = dynamic(() =>
+  import("../../../components/layouts").then((mod) => mod.MainLayout)
+);
+const DynamicModalCancelChanges = dynamic(() =>
+  import("../../../components/admin/ModalCancelChanges").then((mod) => mod.ModalCancelChanges)
+);
 
 interface FormData {
   _id?: string;
@@ -263,7 +269,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
       }
     >
       {/*//@ts-ignore*/}
-      <ModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
+      <DynamicModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
 
       {router.asPath === "/admin/blog/new" ? (
         <Box display="flex" justifyContent="flex-start" alignItems="center">

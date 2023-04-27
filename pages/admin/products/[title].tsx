@@ -7,19 +7,18 @@ import {
   useContext,
 } from "react";
 import { GetServerSideProps } from "next";
+import dynamic from 'next/dynamic';
+
 
 import { UiContext } from "@/context/ui";
 
 import { useRouter } from "next/router";
 
-import { MainLayout } from "../../../components/layouts";
 import { IProductSchema } from "../../../interfaces";
 
 import { dbProducts } from "@/database";
 
 import { useForm } from "react-hook-form";
-
-import { ModalCancelChanges } from "@/components/admin/ModalCancelChanges";
 
 import axios from "axios";
 
@@ -45,6 +44,15 @@ import  CardMedia from "@mui/material/CardMedia";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import FormLabel from "@mui/material/FormLabel";
+
+import {MainLayout} from '../../../components/layouts'
+
+const DynamicMainLayout = dynamic(() =>
+  import("../../../components/layouts").then((mod) => mod.MainLayout)
+);
+const DynamicModalCancelChanges = dynamic(() =>
+  import("../../../components/admin/ModalCancelChanges").then((mod) => mod.ModalCancelChanges)
+);
 
 import { Product } from "@/models";
 
@@ -276,7 +284,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       }
     >
       {/*//@ts-ignore*/}
-      <ModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
+      <DynamicModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
 
       {router.asPath === "/admin/products/new" ? (
         <Box display="flex" justifyContent="flex-start" alignItems="center">
