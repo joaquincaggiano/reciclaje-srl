@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import NextLink from "next/link";
-import { MainLayout } from "@/components/layouts";
+import dynamic from 'next/dynamic'
 import { content } from "../../utils";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
@@ -10,10 +10,13 @@ import Typography  from "@mui/material/Typography";
 import EmailOutlined from "@mui/icons-material/EmailOutlined";
 import LocalPhoneOutlined from "@mui/icons-material/LocalPhoneOutlined";
 
+const DynamicMainLayout = dynamic(() =>
+  import("../../components/layouts").then((mod) => mod.MainLayout)
+);
 
 const ContactPage: NextPage = () => {
   return (
-    <MainLayout
+    <DynamicMainLayout
       title={content.contact.title}
       metaHeader={content.contact.metaHeader}
     >
@@ -93,7 +96,7 @@ const ContactPage: NextPage = () => {
           ></iframe>
         </Grid>
       </Grid>
-    </MainLayout>
+    </DynamicMainLayout>
   );
 };
 

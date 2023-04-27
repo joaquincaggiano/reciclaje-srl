@@ -1,12 +1,16 @@
-import React from "react";
 import { NextPage } from "next";
+import dynamic from 'next/dynamic'
 import Image from "next/image";
-import { MainLayout } from "@/components/layouts";
+
 import { content } from "@/utils";
 
 import  Box from "@mui/material/Box";
 import  Divider from "@mui/material/Divider";
 import Typography  from "@mui/material/Typography";
+
+const DynamicMainLayout = dynamic(() =>
+  import("../../components/layouts").then((mod) => mod.MainLayout)
+);
 
 const AboutUsPage: NextPage = () => {
   const lines = content.aboutUs.description.split("\n").map((line, index) => (
@@ -18,7 +22,7 @@ const AboutUsPage: NextPage = () => {
   ));
 
   return (
-    <MainLayout
+    <DynamicMainLayout
       title={content.aboutUs.title}
       metaHeader={content.aboutUs.metaHeader}
     >
@@ -37,23 +41,14 @@ const AboutUsPage: NextPage = () => {
             mb: 5,
           }}
         />
-        {/* <Box
-          display="flex"
-          justifyContent="space-evenly"
-          alignItems="baseline"
-          sx={{ width: "100%", mb: 3 }}
-        > */}
 
         <Image
-          src="/todo-rec-logo-3.png"
+          src="https://ik.imagekit.io/e2ouoknyw/BannersTodoRec/todo-rec-logo-3.png"
           layout="intrinsic"
           width={380}
           height={200}
           alt="todorec logo"
         />
-
-        {/* <Image src="/reciclaje1.png" width={380} height={250} alt="reciclaje logo" /> */}
-        {/* </Box> */}
 
         <Box sx={{ width: "70%" }}>
           <Typography
@@ -66,7 +61,7 @@ const AboutUsPage: NextPage = () => {
           </Typography>
         </Box>
       </Box>
-    </MainLayout>
+    </DynamicMainLayout>
   );
 };
 

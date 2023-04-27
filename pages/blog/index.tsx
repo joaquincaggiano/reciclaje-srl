@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { NextPage } from "next";
-
-import { MainLayout } from "@/components/layouts";
+import dynamic from "next/dynamic";
 import { content } from "@/utils";
 
-import  Divider from "@mui/material/Divider";
+import Divider from "@mui/material/Divider";
 import Typography  from "@mui/material/Typography";
-import { BlogList } from "@/components/blog";
+
+const DynamicMainLayout = dynamic(() =>
+  import("../../components/layouts").then((mod) => mod.MainLayout)
+);
+const DynamicBlogList = dynamic(() =>
+import("../../components/blog").then((mod) => mod.BlogList)
+);
 
 const BlogPage: NextPage = () => {
   const [imageUrl, setImageUrl] = useState("")
@@ -16,15 +21,15 @@ const BlogPage: NextPage = () => {
   }
 
   return (
-    <MainLayout title={content.blog.title} metaHeader={content.blog.metaHeader}>
+    <DynamicMainLayout title={content.blog.title} metaHeader={content.blog.metaHeader}>
       <Typography variant="h1" sx={{ textAlign: "center", mb: 2 }}>
         {content.blog.title}
       </Typography>
 
       <Divider sx={{ mb: 5 }} />
 
-      <BlogList getImageUrl={getImageUrl}/>
-    </MainLayout>
+      <DynamicBlogList getImageUrl={getImageUrl}/>
+    </DynamicMainLayout>
   );
 };
 

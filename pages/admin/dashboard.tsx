@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
+import dynamic from 'next/dynamic';
 
 import useSWR from "swr";
 
-import { CounterInfo } from "@/components/admin";
-import { MainLayout } from "@/components/layouts";
 
 import AccessTimeOutlined from "@mui/icons-material/AccessTimeOutlined";
 import CategoryOutlined from "@mui/icons-material/CategoryOutlined";
@@ -16,6 +15,11 @@ import Typography  from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 
 import { DashboardCounterResponse } from "@/interfaces";
+
+const DynamicMainLayout = dynamic(() =>
+  import("../../components/layouts").then((mod) => mod.MainLayout)
+);
+const DynamicCouterInfo = dynamic(() => import("../../components/admin").then((mod) => mod.CounterInfo));
 
 const DashboardPage = () => {
   const { data, error } = useSWR<DashboardCounterResponse>(
@@ -54,19 +58,19 @@ const DashboardPage = () => {
   } = data!;
 
   return (
-    <MainLayout
+    <DynamicMainLayout
       title="Dashboard General"
       metaHeader="Mantenimiento general del dashboard"
     >
       <Grid container spacing={2}>
-        <CounterInfo
+        <DynamicCouterInfo
           icon={<CategoryOutlined color="error" sx={{ fontSize: 40 }} />}
           title={numbersOfProducts}
           subTitle={"Productos"}
           url={"/admin/products"}
         />
 
-        <CounterInfo
+        <DynamicCouterInfo
           icon={
             <PrecisionManufacturing color="warning" sx={{ fontSize: 40 }} />
           }
@@ -75,28 +79,28 @@ const DashboardPage = () => {
           url={"/admin/services"}
         />
 
-        <CounterInfo
+        <DynamicCouterInfo
           icon={<NewspaperOutlined sx={{ fontSize: 40, color: "#3C99DC" }} />}
           title={numbersOfBlogs}
           subTitle={"Blog"}
           url={"/admin/blog"}
         />
 
-        <CounterInfo
+        <DynamicCouterInfo
           icon={<GroupOutlined sx={{ fontSize: 40, color: "#4caf50" }} />}
           title={numbersOfSubscribes}
           subTitle={"Suscriptores"}
           url={"/admin/users"}
         />
 
-        <CounterInfo
+        <DynamicCouterInfo
           icon={<AccessTimeOutlined sx={{ fontSize: 40, color: "#3A64D8" }} />}
           title={refreshIn}
           subTitle={"Refresh"}
           url=""
         />
       </Grid>
-    </MainLayout>
+    </DynamicMainLayout>
   );
 };
 

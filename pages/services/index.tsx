@@ -1,26 +1,35 @@
 import { NextPage } from "next";
-
-import { MainLayout } from "@/components/layouts";
-import { ServicesList } from "@/components/services";
+import dynamic from "next/dynamic";
 
 import { content } from "@/utils";
 import { useServices } from "@/hooks";
-import { FullScreenLoading } from "@/components/ui";
+
 import  Box from "@mui/material/Box";
 import  Divider from "@mui/material/Divider";
 import Typography  from "@mui/material/Typography";
+
+const DynamicMainLayout = dynamic(() =>
+  import("../../components/layouts").then((mod) => mod.MainLayout)
+);
+const DynamicServicesList = dynamic(() =>
+import("../../components/services").then((mod) => mod.ServicesList)
+);
+const DynamicFullScreenLoading = dynamic(() =>
+import("../../components/ui").then((mod) => mod.FullScreenLoading)
+);
+
 
 
 const ServicesPage: NextPage = () => {
   const { services, isLoading } = useServices("/services");
 
   return (
-    <MainLayout
+    <DynamicMainLayout
       title={content.services.title}
       metaHeader={content.services.metaHeader}
     >
       {isLoading ? (
-        <FullScreenLoading />
+        <DynamicFullScreenLoading />
       ) : (
         <>
           <Box
@@ -38,10 +47,10 @@ const ServicesPage: NextPage = () => {
 
           <Divider sx={{ mb: 5 }} />
 
-          <ServicesList services={services} />
+          <DynamicServicesList services={services} />
         </>
       )}
-    </MainLayout>
+    </DynamicMainLayout>
   );
 };
 

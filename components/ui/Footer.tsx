@@ -1,4 +1,5 @@
 import NextLink from "next/link";
+import dynamic from "next/dynamic";
 
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -10,9 +11,9 @@ import IconButton from "@mui/material/IconButton";
 import  LocalPhoneOutlined  from "@mui/icons-material/LocalPhoneOutlined";
 import EmailOutlined from "@mui/icons-material/EmailOutlined";
 
-
-import { Subscribe } from "../mailchimp";
 import { content } from "@/utils";
+
+const DynamicNavbar = dynamic(() => import("../../components/mailchimp").then((mod) => mod.Subscribe));
 
 export const Footer = () => {
   return (
@@ -33,7 +34,7 @@ export const Footer = () => {
               <CardMedia
                 component="img"
                 height="200"
-                image="/todo-rec-logo-2.png"
+                image="https://ik.imagekit.io/e2ouoknyw/BannersTodoRec/todo-rec-logo-2.png"
                 alt="Logo Todo-Rec"
               />
             </Link>
@@ -46,7 +47,7 @@ export const Footer = () => {
           justifyContent="space-evenly"
           alignItems="center"
         >
-          <Subscribe />
+          <DynamicNavbar />
         </Grid>
 
         <Grid

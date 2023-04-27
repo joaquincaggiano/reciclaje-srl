@@ -1,4 +1,5 @@
 import { FC, ReactNode } from "react";
+import dynamic from "next/dynamic";
 import { useContext } from "react";
 import { UiContext } from "@/context";
 
@@ -6,14 +7,17 @@ import Head from "next/head";
 import NextLink from "next/link";
 import Image from "next/image";
 
-import { Navbar, SideMenu, Footer } from "../ui";
-import { ModalSubscribe } from "../mailchimp";
-
 import IconButton from "@mui/material/IconButton";
-import  Tooltip from "@mui/material/Tooltip";
 
 import EmailOutlined from "@mui/icons-material/EmailOutlined";
 import { content } from "@/utils";
+
+const DynamicNavbar = dynamic(() => import("../ui").then((mod) => mod.Navbar));
+const DynamicSideMenu = dynamic(() =>
+  import("../ui").then((mod) => mod.SideMenu)
+);
+const DynamicFooter = dynamic(() => import("../ui").then((mod) => mod.Footer));
+const DynamicModalSubscribe = dynamic(() => import("../../components/mailchimp").then((mod) => mod.ModalSubscribe));
 
 interface Props {
   title: string;
@@ -44,10 +48,10 @@ export const MainLayout: FC<Props> = ({
       </Head>
 
       <nav>
-        <Navbar />
+        <DynamicNavbar />
       </nav>
 
-      <SideMenu />
+      <DynamicSideMenu />
 
       <main
         style={{
@@ -57,28 +61,28 @@ export const MainLayout: FC<Props> = ({
           minHeight: "65vh",
         }}
       >
-        <ModalSubscribe />
+        <DynamicModalSubscribe />
         {children}
-        <Tooltip title="Suscríbete" onClick={toggleModalOpen}>
-          <IconButton
+
+        <IconButton
+          sx={{
+            border: "1px solid #008f39",
+            zIndex: "10000000000",
+            position: "fixed",
+            top: "73%",
+            left: { xs: "77%", sm: "88%", md: "91%", lg: "93%", xl: "95.4%" },
+            "&:hover": { backgroundColor: "#008f39" },
+          }}
+          onClick={toggleModalOpen}
+        >
+          <EmailOutlined
             sx={{
-              border: "1px solid #008f39",
-              zIndex: "10000000000",
-              position: "fixed",
-              top: "73%",
-              left: { xs: "77%", sm: "88%", md: "91%", lg: "93%", xl: "95.4%" },
-              "&:hover": { backgroundColor: "#008f39" },
+              fontSize: "50px",
+              color: "#008f39",
+              "&:hover": { color: "#ffff" },
             }}
-          >
-            <EmailOutlined
-              sx={{
-                fontSize: "50px",
-                color: "#008f39",
-                "&:hover": { color: "#ffff" },
-              }}
-            />
-          </IconButton>
-        </Tooltip>
+          />
+        </IconButton>
 
         <IconButton
           sx={{
@@ -106,7 +110,7 @@ export const MainLayout: FC<Props> = ({
         </IconButton>
       </main>
 
-      <Footer />
+      <DynamicFooter />
     </>
   );
 };

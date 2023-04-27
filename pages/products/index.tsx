@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NextPage } from "next";
-import { MainLayout } from "@/components/layouts";
+import dynamic from "next/dynamic";
+
 import { content } from "@/utils";
 import  Box from "@mui/material/Box";
 import  Divider from "@mui/material/Divider";
@@ -8,8 +9,15 @@ import Typography  from "@mui/material/Typography";
 
 import { useProducts } from "@/hooks";
 
-import { FullScreenLoading } from "@/components/ui";
-import { ProductList } from "@/components/products";
+const DynamicMainLayout = dynamic(() =>
+  import("../../components/layouts").then((mod) => mod.MainLayout)
+);
+const DynamicProductList = dynamic(() =>
+import("../../components/products").then((mod) => mod.ProductList)
+);
+const DynamicFullScreenLoading = dynamic(() =>
+import("../../components/ui").then((mod) => mod.FullScreenLoading)
+);
 
 const ProductsPage: NextPage = () => {
   const { products, isLoading } = useProducts("/products");
@@ -20,13 +28,13 @@ const ProductsPage: NextPage = () => {
   }
 
   return (
-    <MainLayout
+    <DynamicMainLayout
       title={content.products.title}
       metaHeader={content.products.metaHeader}
       imageFullUrl={imageUrl}
     >
       {isLoading ? (
-        <FullScreenLoading />
+        <DynamicFullScreenLoading />
       ) : (
         <>
           <Box
@@ -44,10 +52,10 @@ const ProductsPage: NextPage = () => {
 
           <Divider sx={{ mb: 5 }} />
 
-          <ProductList products={products} getImageUrl={getImageUrl}/>
+          <DynamicProductList products={products} getImageUrl={getImageUrl}/>
         </>
       )}
-    </MainLayout>
+    </DynamicMainLayout>
   );
 };
 
