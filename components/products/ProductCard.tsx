@@ -21,10 +21,11 @@ interface Props {
   product: IProductSchema;
   getImageUrl: (url: string) => void;
 }
+console.log("CLASSES ", classes)
 
 export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
   const [openShareOptions, setOpenShareOptions] = useState<Boolean>(false);
-
+  console.log("PRODUCT CARD", product.colors)
   const shareFunction = () => {
     const awsUrl = product.images[0].replace(
       "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
@@ -64,6 +65,7 @@ export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
                   <IconButton>
                     <CircleRounded
                       sx={{ border: "1px solid black", borderRadius: "50%" }}
+                  className={classes[`${color.toLowerCase()}`]}
                     />
                   </IconButton>
                 </Tooltip>

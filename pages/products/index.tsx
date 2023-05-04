@@ -11,9 +11,6 @@ import { useProducts } from "@/hooks";
 
 import {MainLayout} from '../../components/layouts'
 
-const DynamicMainLayout = dynamic(() =>
-  import("../../components/layouts").then((mod) => mod.MainLayout)
-);
 const DynamicProductList = dynamic(() =>
 import("../../components/products").then((mod) => mod.ProductList)
 );
