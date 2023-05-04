@@ -22,11 +22,16 @@ export default function handler(
 }
 
 const getServices = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  await db.connect();
-  const services = await Service.find()
-    .select("title images description -_id")
-    .lean();
-  await db.disconnect();
-
-  return res.status(200).json(services);
+  try {
+    await db.connect();
+    const services = await Service.find()
+      .select("title images description -_id")
+      .lean();
+    await db.disconnect();
+  
+    return res.status(200).json(services);
+  } catch (error) {
+    await db.disconnect();
+    console.log(error);
+  }
 };

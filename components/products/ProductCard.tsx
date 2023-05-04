@@ -21,7 +21,7 @@ interface Props {
   product: IProductSchema;
   getImageUrl: (url: string) => void;
 }
-console.log("CLASSES ", classes)
+// console.log("CLASSES ", classes)
 
 export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
   const [openShareOptions, setOpenShareOptions] = useState<Boolean>(false);

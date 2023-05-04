@@ -24,7 +24,9 @@ const DynamicDescriptionHome = dynamic(() =>
 const DynamicProductSlideCarrousel = dynamic(() =>
   import("../components/products").then((mod) => mod.ProductSlideCarrousel)
 );
-const LazyFullScreenLoading = dynamic(() => import('../components/ui').then((mod)=> mod.FullScreenLoading))
+const LazyFullScreenLoading = dynamic(() =>
+  import("../components/ui").then((mod) => mod.FullScreenLoading)
+);
 
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -34,6 +36,9 @@ import Box from "@mui/material/Box";
 import { content } from "@/utils";
 import LocationOnOutlined from "@mui/icons-material/LocationOnOutlined";
 
+import { IServiceSchema } from "@/interfaces";
+import useSWR from "swr";
+
 const images = [
   "https://ik.imagekit.io/e2ouoknyw/BannersTodoRec/frente1.jpg",
   "https://ik.imagekit.io/e2ouoknyw/BannersTodoRec/adentro4.jpg",
@@ -41,9 +46,6 @@ const images = [
 ];
 
 const HomePage: NextPage = () => {
-  const { services, isLoading } = useServices("/services");
-  const { toggleModalOpen } = useContext(UiContext);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       const wasModalOpen = sessionStorage.getItem("openModal");
@@ -54,6 +56,18 @@ const HomePage: NextPage = () => {
     }, 5000);
     return () => clearTimeout(timer);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const { data, error } = useSWR<IServiceSchema[]>("/api/services");
+  const { toggleModalOpen } = useContext(UiContext);
+
+  if (!error && !data) {
+    return <></>;
+  }
+
+  if (error) {
+    console.log(error);
+    return <Typography>Error al cargar la información</Typography>;
+  }
 
   return (
     <DynamicMainLayout
@@ -99,7 +113,7 @@ const HomePage: NextPage = () => {
         {content.services.title}
       </Typography>
 
-      {isLoading ? (
+      {!error && !data ? (
         <LazyFullScreenLoading />
       ) : (
         <Grid
@@ -111,7 +125,7 @@ const HomePage: NextPage = () => {
           alignItems="center"
           // sx={{ flexDirection: { xs: "column", sm: "row" }, flexWrap: "wrap" }}
         >
-          {services.map((svc, i) => {
+          {data!.map((svc, i) => {
             return <DynamicCardServicesHome service={svc} key={i} />;
           })}
         </Grid>

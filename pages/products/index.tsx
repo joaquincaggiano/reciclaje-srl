@@ -1,29 +1,40 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
 
 import { content } from "@/utils";
-import  Box from "@mui/material/Box";
-import  Divider from "@mui/material/Divider";
-import Typography  from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
 
 import { useProducts } from "@/hooks";
 
-import {MainLayout} from '../../components/layouts'
+import { MainLayout } from "../../components/layouts";
+import useSWR from "swr";
+import { IProductSchema } from "@/interfaces";
 
 const DynamicProductList = dynamic(() =>
-import("../../components/products").then((mod) => mod.ProductList)
+  import("../../components/products").then((mod) => mod.ProductList)
 );
 const DynamicFullScreenLoading = dynamic(() =>
-import("../../components/ui").then((mod) => mod.FullScreenLoading)
+  import("../../components/ui").then((mod) => mod.FullScreenLoading)
 );
 
 const ProductsPage: NextPage = () => {
-  const { products, isLoading } = useProducts("/products");
-  const [imageUrl, setImageUrl] = useState("")
+  const [imageUrl, setImageUrl] = useState("");
+  const { data, error } = useSWR<IProductSchema[]>("/api/products");
 
-  function getImageUrl(url: string){
-    return setImageUrl(url)
+  if (!error && !data) {
+    return <></>;
+  }
+
+  if (error) {
+    console.log(error);
+    return <Typography>Error al cargar la información</Typography>;
+  }
+
+  function getImageUrl(url: string) {
+    return setImageUrl(url);
   }
 
   return (
@@ -32,7 +43,7 @@ const ProductsPage: NextPage = () => {
       metaHeader={content.products.metaHeader}
       imageFullUrl={imageUrl}
     >
-      {isLoading ? (
+      {!error && !data ? (
         <DynamicFullScreenLoading />
       ) : (
         <>
@@ -43,15 +54,18 @@ const ProductsPage: NextPage = () => {
             alignItems="center"
             sx={{ mb: 3 }}
           >
-            <Typography variant="h1" textAlign="center" >{content.products.title}</Typography>
-            <Typography variant="h6" sx={{textAlign: "center", mt: 2}}>
-              {content.products.productDescription} {content.contact.datosContacto.whatsapp}
+            <Typography variant="h1" textAlign="center">
+              {content.products.title}
+            </Typography>
+            <Typography variant="h6" sx={{ textAlign: "center", mt: 2 }}>
+              {content.products.productDescription}{" "}
+              {content.contact.datosContacto.whatsapp}
             </Typography>
           </Box>
 
           <Divider sx={{ mb: 5 }} />
 
-          <DynamicProductList products={products} getImageUrl={getImageUrl}/>
+          <DynamicProductList products={data!} getImageUrl={getImageUrl} />
         </>
       )}
     </MainLayout>

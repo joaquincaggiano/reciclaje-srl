@@ -8,9 +8,9 @@ import Typography  from "@mui/material/Typography";
 
 import {MainLayout} from '../../components/layouts'
 
-const DynamicMainLayout = dynamic(() =>
-  import("../../components/layouts").then((mod) => mod.MainLayout)
-);
+// const DynamicMainLayout = dynamic(() =>
+//   import("../../components/layouts").then((mod) => mod.MainLayout)
+// );
 const DynamicBlogList = dynamic(() =>
 import("../../components/blog").then((mod) => mod.BlogList)
 );
