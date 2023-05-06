@@ -24,6 +24,7 @@ interface Props {
   title: string;
   metaHeader: string;
   imageFullUrl?: string;
+  url?: string;
   children: ReactNode;
 }
 
@@ -31,7 +32,7 @@ export const MainLayout: FC<Props> = ({
   children,
   title,
   metaHeader,
-  imageFullUrl,
+  imageFullUrl
 }) => {
   const { toggleModalOpen } = useContext(UiContext);
 

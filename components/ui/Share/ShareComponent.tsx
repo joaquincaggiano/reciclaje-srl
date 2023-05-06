@@ -21,7 +21,6 @@ export const ShareComponent: FC<Props> = ({ link }) => {
           width={30}
           height={30}
           style={{
-            // width: "30px",
             maxHeight: "30px",
             marginRight: "10px",
           }}

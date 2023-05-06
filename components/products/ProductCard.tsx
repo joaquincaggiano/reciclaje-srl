@@ -4,15 +4,15 @@ import { IProductSchema } from "@/interfaces";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import Typography  from "@mui/material/Typography";
+import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
-import  Tooltip from "@mui/material/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 
 import classes from "../../styles/products/TypeColor.module.css";
-import CircleRounded  from "@mui/icons-material/CircleRounded";
+import CircleRounded from "@mui/icons-material/CircleRounded";
 
 import { ShareComponent } from "../ui";
 import { ProductSlideCarrousel } from ".";
@@ -25,7 +25,6 @@ interface Props {
 
 export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
   const [openShareOptions, setOpenShareOptions] = useState<Boolean>(false);
-  console.log("PRODUCT CARD", product.colors)
   const shareFunction = () => {
     const awsUrl = product.images[0].replace(
       "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/",
@@ -47,8 +46,7 @@ export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
       alignItems="center"
     >
       <Card sx={{ width: 345, minHeight: 350 }}>
-       
-        <ProductSlideCarrousel height="250px" images={product.images}/>
+        <ProductSlideCarrousel height="250px" images={product.images} />
         <CardContent sx={{ height: "140px" }}>
           <Typography gutterBottom variant="h2" component="div">
             {product.title}
@@ -65,7 +63,7 @@ export const ProductCard: FC<Props> = ({ product, getImageUrl }) => {
                   <IconButton>
                     <CircleRounded
                       sx={{ border: "1px solid black", borderRadius: "50%" }}
-                  className={classes[`${color.toLowerCase()}`]}
+                      className={classes[`${color.toLowerCase()}`]}
                     />
                   </IconButton>
                 </Tooltip>
