@@ -11,6 +11,7 @@ import IconButton from "@mui/material/IconButton";
 
 import EmailOutlined from "@mui/icons-material/EmailOutlined";
 import { content } from "@/utils";
+import { Box } from "@mui/material";
 
 const DynamicNavbar = dynamic(() => import("../ui").then((mod) => mod.Navbar));
 const DynamicSideMenu = dynamic(() =>
@@ -64,50 +65,59 @@ export const MainLayout: FC<Props> = ({
         <DynamicModalSubscribe />
         {children}
 
-        <IconButton
-          sx={{
-            border: "1px solid #008f39",
-            zIndex: "10000000000",
-            position: "fixed",
-            top: "73%",
-            left: { xs: "77%", sm: "88%", md: "91%", lg: "93%", xl: "95.4%" },
-            "&:hover": { backgroundColor: "#008f39" },
-          }}
-          onClick={toggleModalOpen}
-        >
-          <EmailOutlined
+        <Box display="flex" flexDirection="column" justifyContent="space-between" alignItems="center" sx={{
+          zIndex: "10000000000",
+          position: "fixed",
+          top: "60%",
+          left: { xs: "77%", sm: "85%", md: "90%", lg: "93%", xl: "95.4%" },
+          // height: "200px",
+          // border: "3px solid red"
+        }}>
+          <IconButton
             sx={{
-              fontSize: "50px",
-              color: "#008f39",
-              "&:hover": { color: "#ffff" },
+              border: "1px solid #008f39",
+              // zIndex: "10000000000",
+              // position: "fixed",
+              // top: "73%",
+              // left: { xs: "77%", sm: "88%", md: "91%", lg: "93%", xl: "95.4%" },
+              "&:hover": { backgroundColor: "#008f39" },
             }}
-          />
-        </IconButton>
-
-        <IconButton
-          sx={{
-            position: "fixed",
-            top: { xs: "65%", xl: "63%" },
-            left: { xs: "75%", sm: "87%", md: "90%", lg: "92.2%", xl: "95%" },
-            zIndex: "10000000000",
-          }}
-        >
-          <NextLink
-            href={`https://wa.me/${content.contact.datosContacto.whatsapp}`}
-            passHref
-            legacyBehavior
-            replace={true}
+            onClick={toggleModalOpen}
           >
-            <a target="_blank" rel="noopener noreferrer">
-              <Image
-                src="/whatsapp.png"
-                width={65}
-                height={65}
-                alt={"whatsapp logo"}
-              />
-            </a>
-          </NextLink>
-        </IconButton>
+            <EmailOutlined
+              sx={{
+                fontSize: "50px",
+                color: "#008f39",
+                "&:hover": { color: "#ffff" },
+              }}
+            />
+          </IconButton>
+
+          <IconButton
+            sx={{
+              // position: "fixed",
+              // top: { xs: "65%", xl: "63%" },
+              // left: { xs: "75%", sm: "87%", md: "90%", lg: "92.2%", xl: "95%" },
+              // zIndex: "10000000000",
+            }}
+          >
+            <NextLink
+              href={`https://wa.me/${content.contact.datosContacto.whatsapp}`}
+              passHref
+              legacyBehavior
+              replace={true}
+            >
+              <a target="_blank" rel="noopener noreferrer">
+                <Image
+                  src="/whatsapp.png"
+                  width={65}
+                  height={65}
+                  alt={"whatsapp logo"}
+                />
+              </a>
+            </NextLink>
+          </IconButton>
+        </Box>
       </main>
 
       <DynamicFooter />

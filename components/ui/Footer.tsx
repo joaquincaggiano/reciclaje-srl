@@ -3,17 +3,20 @@ import dynamic from "next/dynamic";
 
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import Typography  from "@mui/material/Typography";
-import Link  from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 import CardMedia from "@mui/material/CardMedia";
 import IconButton from "@mui/material/IconButton";
 
-import  LocalPhoneOutlined  from "@mui/icons-material/LocalPhoneOutlined";
+import LocalPhoneOutlined from "@mui/icons-material/LocalPhoneOutlined";
 import EmailOutlined from "@mui/icons-material/EmailOutlined";
 
 import { content } from "@/utils";
+import { Divider } from "@mui/material";
 
-const DynamicNavbar = dynamic(() => import("../../components/mailchimp").then((mod) => mod.Subscribe));
+const DynamicNavbar = dynamic(() =>
+  import("../../components/mailchimp").then((mod) => mod.Subscribe)
+);
 
 export const Footer = () => {
   return (
@@ -44,6 +47,7 @@ export const Footer = () => {
         <Grid
           item
           display="flex"
+          // flexDirection="column"
           justifyContent="space-evenly"
           alignItems="center"
         >
@@ -55,26 +59,32 @@ export const Footer = () => {
           display="flex"
           justifyContent="space-evenly"
           alignItems="center"
-          sx={{ flexDirection: { xs: "column", sm: "row" } }}
+          sx={{ flexDirection: { xs: "column", sm: "row", lg: "column" } }}
         >
           <Box
             display="flex"
             justifyContent="center"
             alignItems="center"
-            sx={{ mr: 3 }}
+            sx={{ mr: 3, mb: {xs: 2, sm: 0, lg: 2} }}
           >
             <NextLink
-                href={`https://wa.me/${content.contact.datosContacto.whatsapp}`}
-                passHref
-                legacyBehavior
-                replace={true}
-              >
-                <a target="_blank" rel="noopener noreferrer">
-                  <IconButton sx={{ border: "1px solid #ffff", mr: 1, "&:hover": {backgroundColor: "#ffffff83"} }}>
-                    <LocalPhoneOutlined sx={{ color: "#ffff" }} />
-                  </IconButton>
-                </a>
-              </NextLink>
+              href={`https://wa.me/${content.contact.datosContacto.whatsapp}`}
+              passHref
+              legacyBehavior
+              replace={true}
+            >
+              <a target="_blank" rel="noopener noreferrer">
+                <IconButton
+                  sx={{
+                    border: "1px solid #ffff",
+                    mr: 1,
+                    "&:hover": { backgroundColor: "#ffffff83" },
+                  }}
+                >
+                  <LocalPhoneOutlined sx={{ color: "#ffff" }} />
+                </IconButton>
+              </a>
+            </NextLink>
             <Typography
               variant="button"
               sx={{ fontSize: "20px", color: "white" }}
@@ -90,7 +100,13 @@ export const Footer = () => {
               replace={true}
             >
               <a target="_blank" rel="noopener noreferrer">
-                <IconButton sx={{ border: "1px solid #ffff", mr: 1, "&:hover": {backgroundColor: "#ffffff83"} }}>
+                <IconButton
+                  sx={{
+                    border: "1px solid #ffff",
+                    mr: 1,
+                    "&:hover": { backgroundColor: "#ffffff83" },
+                  }}
+                >
                   <EmailOutlined sx={{ color: "#ffff" }} />
                 </IconButton>
               </a>
@@ -104,6 +120,38 @@ export const Footer = () => {
           </Box>
         </Grid>
       </Grid>
+      <Box
+        sx={{ mt: 3 }}
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-evenly"
+        alignItems="center"
+      >
+        <Divider sx={{ width: "100%" }} />
+
+        <Typography
+          variant="h6"
+          sx={{
+            color: "#000000",
+            p: 2,
+            fontSize: { xs: "16px" },
+            textAlign: "center",
+          }}
+        >
+          © 2023 |{" "}
+          <NextLink href="https://github.com/CataQuarleri" passHref legacyBehavior>
+            <Link sx={{color: "black"}} target="_blank" rel="noreferrer">
+              Cata Quarleri
+            </Link>
+          </NextLink>{" "}
+          -{" "}
+          <NextLink href="https://github.com/joaquincaggiano" passHref legacyBehavior>
+            <Link sx={{color: "black"}} target="_blank" rel="noreferrer">
+              Joaquín Caggiano
+            </Link>
+          </NextLink>
+        </Typography>
+      </Box>
     </footer>
   );
 };
