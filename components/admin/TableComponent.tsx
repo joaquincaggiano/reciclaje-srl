@@ -61,7 +61,6 @@ export const TableComponent: FC<Props> = ({ data, typeS3, urlKit }) => {
         img.map(async (eachImage) => {
           const imageUrlKit = "https://ik.imagekit.io/e2ouoknyw/" + urlKit;
           const imageName = eachImage.split(imageUrlKit).join(typeS3)
-          console.log("IMAGE NAME EN DELEtE TABLE COMPONENT", imageName)
           await axios.post("/api/admin/deleteImageFromS3", {
             key: imageName,
           });

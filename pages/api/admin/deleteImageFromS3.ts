@@ -12,7 +12,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const { key } = req.body;
-console.log("EL KEY EN DELETE", key)
+
   const params = {
     Bucket: process.env.BUCKET_NAME as string,
     Prefix: key as string,

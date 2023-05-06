@@ -46,7 +46,7 @@ export const MainLayout: FC<Props> = ({
         <meta name="og:title" content={title} />
         <meta name="og:description" content={metaHeader} />
 
-        {imageFullUrl && <meta name="og:image" content={imageFullUrl} />}
+        {imageFullUrl && <meta property="og:image" content={imageFullUrl} />}
       </Head>
 
       <nav>

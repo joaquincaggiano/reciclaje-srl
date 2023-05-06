@@ -13,7 +13,7 @@ export const ShareComponent: FC<Props> = ({ link }) => {
     <>
       {/* WPP */}
       <a
-        href={`https://api.whatsapp.com/send?text=${link.images[0]}`}
+        href="https://api.whatsapp.com/send?text=www.todorec.com.ar/products"
         target="_blank"
         rel="noreferrer"
       >
@@ -30,7 +30,7 @@ export const ShareComponent: FC<Props> = ({ link }) => {
       </a>
       {/* FACEBOOK */}
       <a
-        href={`https://www.facebook.com/sharer/sharer.php?u=${link.images[0]}`}
+        href="https://www.facebook.com/sharer/sharer.php?u=www.todorec.com.ar/products"
         target="_blank"
         rel="noreferrer"
       >

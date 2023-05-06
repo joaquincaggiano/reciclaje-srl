@@ -125,7 +125,6 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
       for (let i = 0; i < e.target.files.length; i++) {
         formData.append(`images`, e.target.files[i]);
         const { data } = await axios.post("/api/admin/upload", formData);
-        console.log("response EN BLOG TITLE", data);
 
         const imageKitURL = data.url.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/blog/", "https://ik.imagekit.io/e2ouoknyw/BlogTodoRec/")
 

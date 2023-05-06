@@ -29,7 +29,6 @@ export const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials):Promise<any> {
-        console.log({ credentials });
 
         return await dbUsers.checkUserEmailPassword(
           credentials!.email,
@@ -57,6 +56,7 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
+    //@ts-ignore
     async jwt({ token, account, user }) {
 
       if(account?.type === "credentials") {
@@ -84,6 +84,7 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
 
+    //@ts-ignore
     async session({ session, token, user }) {
 
       session.accessToken = token.accessToken as any;

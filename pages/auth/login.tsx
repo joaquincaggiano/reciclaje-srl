@@ -17,10 +17,11 @@ import Grid from "@mui/material/Grid";
 import  Box from "@mui/material/Box";
 import Typography  from "@mui/material/Typography";
 
-const DynamicAuthLayout = dynamic(() =>
-import("../../components/layouts").then((mod) => mod.AuthLayout)
-);
+// const DynamicAuthLayout = dynamic(() =>
+// import("../../components/layouts").then((mod) => mod.AuthLayout)
+// );
 
+import { AuthLayout } from "../../components/layouts";
 
 import { useForm } from "react-hook-form";
 
@@ -42,6 +43,7 @@ const LoginPage = () => {
   const onLoginUser = async ({ email, password }: FormData) => {  
     try {
       const user = await signIn("credentials", { email, password, redirect: false });
+      //@ts-ignore
       if(user?.status !== 200) {
         setShowError(true);
       } else {
@@ -54,7 +56,7 @@ const LoginPage = () => {
   };
 
   return (
-    <DynamicAuthLayout title="Login">
+    <AuthLayout title="Login">
       <form onSubmit={handleSubmit(onLoginUser)} noValidate>
         <Box sx={{ width: 350, padding: "10px 20px" }}>
           <Grid container spacing={2}>
@@ -119,7 +121,7 @@ const LoginPage = () => {
           </Grid>
         </Box>
       </form>
-    </DynamicAuthLayout>
+    </AuthLayout>
   );
 };
 
