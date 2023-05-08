@@ -227,7 +227,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
         });
       });
 
-      router.push(stateUrl || "/");
+      router.push(stateUrl || "https://www.todorec.com.ar/");
 
       toggleModalCancelChange();
     } catch (error) {

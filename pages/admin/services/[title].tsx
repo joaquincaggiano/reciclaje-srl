@@ -221,7 +221,7 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
         });
       });
 
-      router.push(stateUrl || "/");
+      router.push(stateUrl || "https://www.todorec.com.ar/");
 
       toggleModalCancelChange();
     } catch (error) {
