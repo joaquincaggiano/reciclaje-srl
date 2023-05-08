@@ -21,13 +21,14 @@ const AUTH_INITIAL_STATE: AuthState = {
 
 export const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
-
+  
   // Session
   const {data, status} = useSession();
-
+  
   useEffect(() => {
+    // console.log(status)
+    // console.log(data)
     if (status === "authenticated") {
-      //@ts-ignore
       dispatch({type: "[Auth] - Login", payload: data?.user as IUser})
     }
   }, [status, data])

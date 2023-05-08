@@ -39,11 +39,11 @@ import  CardMedia from "@mui/material/CardMedia";
 
 import {MainLayout} from '../../../components/layouts'
 
-const DynamicMainLayout = dynamic(() =>
-  import("../../../components/layouts").then((mod) => mod.MainLayout)
-);
+// const DynamicMainLayout = dynamic(() =>
+//   import("../../../components/layouts").then((mod) => mod.MainLayout)
+// );
 const DynamicModalCancelChanges = dynamic(() =>
-  import("../../../components/admin/ModalCancelChanges").then((mod) => mod.ModalCancelChanges)
+  import("../../../components/admin").then((mod) => mod.ModalCancelChanges)
 );
 
 interface FormData {

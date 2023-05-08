@@ -29,6 +29,7 @@ export const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials):Promise<any> {
+        console.log({ credentials });
 
         return await dbUsers.checkUserEmailPassword(
           credentials!.email,
@@ -56,19 +57,36 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    //@ts-ignore
     async jwt({ token, account, user }) {
+      // console.log({ token, account, user });
 
       if(account?.type === "credentials") {
         token.accessToken = account.access_token;
         token.user = user;
       }
 
+      // if (account) {
+      //   token.accessToken = account.access_token
+
+      //   switch (account.type) {
+      //     // case "oauth":
+      //     //   token.user = await dbUsers.oAUthToDbUser(
+      //     //     user?.email || "",
+      //     //     user?.name || ""
+      //     //   );
+      //     //   break;
+
+      //     case "credentials":
+      //       token.user = user;
+      //       break;
+      //   }
+      // }
+
       return token;
     },
 
-    //@ts-ignore
     async session({ session, token, user }) {
+      // console.log({ session, token, user });
 
       session.accessToken = token.accessToken as any;
       session.user = token.user as any;

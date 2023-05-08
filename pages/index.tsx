@@ -3,7 +3,7 @@ import { UiContext } from "@/context";
 import { NextPage } from "next";
 import dynamic from "next/dynamic";
 
-import { useServices } from "@/hooks/useServices";
+// import { useServices } from "@/hooks/useServices";
 
 // import {MainLayout} from '../components/layouts'
 

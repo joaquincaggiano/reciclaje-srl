@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import dynamic from 'next/dynamic'
+// import dynamic from 'next/dynamic'
 
 import { GetServerSideProps } from "next";
 
@@ -40,15 +40,18 @@ const LoginPage = () => {
   const [showError, setShowError] = useState(false);
   const router = useRouter();
 
-  const onLoginUser = async ({ email, password }: FormData) => {  
+  const onLoginUser = async ({ email, password }: FormData) => {
+    // console.log("email", email)
+    // console.log("password", password)
     try {
       const user = await signIn("credentials", { email, password, redirect: false });
+      // console.log("user sign in", user)
       //@ts-ignore
       if(user?.status !== 200) {
         setShowError(true);
       } else {
         setShowError(false);
-        router.push("/")
+        router.push("https://www.todorec.com.ar/")
       }
     } catch (error) {
       setShowError(true);
@@ -136,7 +139,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   if (session) {
     return {
       redirect: {
-        destination: "/",
+        destination: "https://www.todorec.com.ar/",
         permanent: false,
       },
     };
