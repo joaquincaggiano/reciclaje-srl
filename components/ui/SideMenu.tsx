@@ -34,7 +34,7 @@ export const SideMenu = () => {
   const logOutUser = () => {
     toggleSideMenu();
     logOut();
-    router.push("https://www.todorec.com.ar/");
+    router.reload();
   };
 
   const navigateTo = (url: string) => {

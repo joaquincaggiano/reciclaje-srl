@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 // import dynamic from 'next/dynamic'
 
 import { GetServerSideProps } from "next";
@@ -51,7 +51,9 @@ const LoginPage = () => {
         setShowError(true);
       } else {
         setShowError(false);
-        router.push("https://www.todorec.com.ar/")
+        // router.push("https://www.todorec.com.ar/")
+        console.log("EL ROUTER", router)
+        router.reload()
       }
     } catch (error) {
       setShowError(true);
@@ -139,7 +141,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   if (session) {
     return {
       redirect: {
-        destination: "https://www.todorec.com.ar/",
+        destination: "/admin/dashboard",
         permanent: false,
       },
     };
