@@ -34,7 +34,7 @@ export const SideMenu = () => {
   const logOutUser = () => {
     toggleSideMenu();
     logOut();
-    router.reload();
+    router.push("/");
   };
 
   const navigateTo = (url: string) => {

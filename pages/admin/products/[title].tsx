@@ -243,7 +243,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         });
       });
 
-      router.push(stateUrl || "https://www.todorec.com.ar/");
+      router.push(stateUrl || "/");
 
       toggleModalCancelChange();
     } catch (error) {

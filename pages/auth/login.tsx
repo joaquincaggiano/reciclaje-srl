@@ -51,9 +51,8 @@ const LoginPage = () => {
         setShowError(true);
       } else {
         setShowError(false);
-        // router.push("https://www.todorec.com.ar/")
         console.log("EL ROUTER", router)
-        router.reload()
+        router.push("/admin/dashboard")
       }
     } catch (error) {
       setShowError(true);
@@ -130,26 +129,26 @@ const LoginPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-  req,
-  // query,
-}) => {
-  const session = await getSession({ req });
+// export const getServerSideProps: GetServerSideProps = async ({
+//   req,
+//   // query,
+// }) => {
+//   const session = await getSession({ req });
 
-  // const { p = "/" } = query;
+//   // const { p = "/" } = query;
 
-  if (session) {
-    return {
-      redirect: {
-        destination: "/admin/dashboard",
-        permanent: false,
-      },
-    };
-  }
+//   if (session) {
+//     return {
+//       redirect: {
+//         destination: "/admin/dashboard",
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  return {
-    props: {},
-  };
-};
+//   return {
+//     props: {},
+//   };
+// };
 
 export default LoginPage;
