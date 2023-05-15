@@ -6,7 +6,8 @@ import {
   useState,
   useContext,
 } from "react";
-import { GetServerSideProps } from "next";
+import { GetStaticProps } from "next";
+import {GetStaticPaths} from 'next'
 import dynamic from 'next/dynamic';
 
 
@@ -16,7 +17,7 @@ import { useRouter } from "next/router";
 
 import { IProductSchema } from "../../../interfaces";
 
-import { dbProducts } from "@/database";
+import { dbAllProductsByTitle, dbProducts } from "@/database";
 
 import { useForm } from "react-hook-form";
 
@@ -276,7 +277,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   return (
     <MainLayout
-      title={product.title}
+      title={product?.title || "new"}
       metaHeader={
         router.asPath === "/admin/products/new"
           ? "Crear producto"
@@ -359,7 +360,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 <FormControlLabel
                   key={color}
                   control={
-                    <Checkbox checked={getValues("colors").includes(color)} />
+                    <Checkbox checked={getValues("colors")?.includes(color)} />
                   }
                   label={color}
                   onChange={() => onChangeColor(color)}
@@ -391,7 +392,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                   sx={{ mb: 3, color: "white", backgroundColor: "#008f39" }}
                   onClick={() => fileInputRef.current?.click()}
                   disabled={
-                    getValues("title").trim().length === 0 ? true : false
+                    getValues("title")?.trim().length === 0 ? true : false
                   }
                 >
                   Cargar imagen
@@ -403,7 +404,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 color="error"
                 variant="outlined"
                 sx={{
-                  display: getValues("images").length < 1 ? "flex" : "none",
+                  display: getValues("images")?.length < 1 ? "flex" : "none",
                 }}
               />
               <Chip
@@ -412,12 +413,12 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 variant="outlined"
                 sx={{
                   display:
-                    getValues("title").trim().length === 0 ? "flex" : "none",
+                    getValues("title")?.trim().length === 0 ? "flex" : "none",
                 }}
               />
 
               <Grid container spacing={2}>
-                {getValues("images").map((img) => {
+                {getValues("images")?.map((img) => {
                   return (
                     <Grid item xs={4} sm={3} key={img}>
                       <Card>
@@ -449,34 +450,84 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     </MainLayout>
   );
 };
+//@ts-ignore
+export const getStaticPaths: GetStaticPaths = async ()=>{
+  try {
+    const products = await dbAllProductsByTitle.getAllProductsByTitle()
+    console.log("products en static path", products)
+  
+    return {
+      //@ts-ignore
+      paths: products.map((product) => {
+        return {params: {title: product.title}}
+      }),
+      
+      fallback: true
+    }
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { title = "" } = query;
+  } catch(error) {
+    console.log("CATCH ERROR EN PATHS", error)
+    return {
+      paths: [{params: {title: "new"}}],
+      fallback: true
 
+    
+    }
+  }
+
+  //llamar a la db y traer todos los title de los productos
+  //mapear ese array con los title y retornar {params: title}
+  //fallback: true = new title
+}
+
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  console.log("contexto", ctx)
   let product: IProductSchema | null;
 
-  if (title === "new") {
+  //@ts-ignore
+   product = await dbProducts.getProductByTitle(ctx.params.title.toString());
+  if (!product){
     const tempProduct = JSON.parse(JSON.stringify(new Product()));
-    delete tempProduct._id;
-    product = tempProduct;
-  } else {
-    product = await dbProducts.getProductByTitle(title.toString());
+      delete tempProduct._id;
+      // tempProduct.title = "new product"
+      // tempProduct.images = ["img1.jpg", "img2.jpg"];
+      product = tempProduct;
   }
-
-  if (!product) {
-    return {
-      redirect: {
-        destination: "/admin/products",
-        permanent: false,
-      },
-    };
-  }
-
   return {
     props: {
       product,
     },
-  };
+  }
+
+
+
+  // const { title = "" } = query;
+
+  // let product: IProductSchema | null;
+
+  // if (title === "new") {
+  //   const tempProduct = JSON.parse(JSON.stringify(new Product()));
+  //   delete tempProduct._id;
+  //   product = tempProduct;
+  // } else {
+  //   product = await dbProducts.getProductByTitle(title.toString());
+  // }
+
+  // if (!product) {
+  //   return {
+  //     redirect: {
+  //       destination: "/admin/products",
+  //       permanent: false,
+  //     },
+  //   };
+  // }
+
+  // return {
+  //   props: {
+  //     product,
+  //   },
+  // };
 };
 
 export default ProductAdminPage;

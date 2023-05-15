@@ -12,6 +12,7 @@ const mongoConnection = {
 };
 
 export const connect = async () => {
+  mongoose.set('strictQuery', true)
   if (mongoConnection.isConnected) {
     console.log("Ya estabamos conectados");
     return;
