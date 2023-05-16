@@ -3,11 +3,10 @@ import { FC } from "react";
 import NextLink from "next/link";
 
 import CardContent from "@mui/material/CardContent";
-import Typography  from "@mui/material/Typography";
+import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import Link  from "@mui/material/Link";
-
+import Link from "@mui/material/Link";
 
 interface Props {
   title: string | number;

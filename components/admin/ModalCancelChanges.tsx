@@ -1,36 +1,36 @@
 import { useContext, FC } from "react";
 import Button from "@mui/material/Button";
-import Modal  from "@mui/material/Modal";
-import  Box from "@mui/material/Box";
-import Typography  from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import { UiContext } from "@/context";
 import CancelOutlined from "@mui/icons-material/CancelOutlined";
-
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "#ffff",
-  border: "5px solid #4caf50",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: "10px",
-};
 
 interface Props {
   deleteUnsavedChanges: () => Promise<void>;
 }
 
-export const ModalCancelChanges: FC<Props> = ({deleteUnsavedChanges}) => {
+export const ModalCancelChanges: FC<Props> = ({ deleteUnsavedChanges }) => {
   const { isModalCancelChange, toggleModalCancelChange } =
     useContext(UiContext);
 
   return (
     <>
       <Modal open={isModalCancelChange} onClose={toggleModalCancelChange}>
-        <Box sx={style}>
+        <Box
+          sx={{
+            position: "absolute" as "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: { xs: 300, sm: 400 },
+            bgcolor: "#ffff",
+            border: "5px solid #008f39",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: "10px",
+          }}
+        >
           <CancelOutlined
             sx={{
               position: "relative",
@@ -72,14 +72,14 @@ export const ModalCancelChanges: FC<Props> = ({deleteUnsavedChanges}) => {
               size="large"
               fullWidth
               sx={{
-                backgroundColor: "#4caf50",
+                backgroundColor: "#008f39",
                 color: "white",
                 height: "55px",
                 border: "1px solid white",
                 "&:hover": {
                   backgroundColor: "white",
-                  color: "#4caf50",
-                  border: "2px solid #4caf50",
+                  color: "#008f39",
+                  border: "2px solid #008f39",
                 },
               }}
             >
@@ -93,14 +93,14 @@ export const ModalCancelChanges: FC<Props> = ({deleteUnsavedChanges}) => {
               size="large"
               fullWidth
               sx={{
-                backgroundColor: "#4caf50",
+                backgroundColor: "#008f39",
                 color: "white",
                 height: "55px",
                 border: "1px solid white",
                 "&:hover": {
                   backgroundColor: "white",
-                  color: "#4caf50",
-                  border: "2px solid #4caf50",
+                  color: "#008f39",
+                  border: "2px solid #008f39",
                 },
               }}
             >

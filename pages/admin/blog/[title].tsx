@@ -6,8 +6,8 @@ import {
   useContext,
   useEffect,
 } from "react";
-import dynamic from 'next/dynamic'
-import { GetServerSideProps } from "next";
+import dynamic from "next/dynamic";
+import { GetStaticPaths, GetStaticProps } from "next";
 import { UiContext } from "@/context/ui";
 
 import { useRouter } from "next/router";
@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import { IBlogSchema } from "../../../interfaces";
 import { Blog } from "@/models";
 
-import { dbBlogs } from "@/database";
+import { dbAllBlogsByTitle, dbBlogs } from "@/database";
 
 import { useForm } from "react-hook-form";
 
@@ -29,19 +29,20 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
-import  Chip  from "@mui/material/Chip";
+import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import  Box from "@mui/material/Box";
-import Typography  from "@mui/material/Typography";
-import  Divider  from "@mui/material/Divider";
-import  CardMedia from "@mui/material/CardMedia";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import CardMedia from "@mui/material/CardMedia";
 
-import {MainLayout} from '../../../components/layouts'
+import { MainLayout } from "../../../components/layouts";
 
 // const DynamicMainLayout = dynamic(() =>
 //   import("../../../components/layouts").then((mod) => mod.MainLayout)
 // );
+
 const DynamicModalCancelChanges = dynamic(() =>
   import("../../../components/admin").then((mod) => mod.ModalCancelChanges)
 );
@@ -64,7 +65,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [stateUrl, setStateUrl] = useState<string>("");
 
-  const s3URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/"
+  const s3URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
   const router = useRouter();
 
@@ -105,8 +106,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
       window.removeEventListener("beforeunload", beforeunload);
       router.events.off("routeChangeStart", routeChangeStart);
     };
- 
-  }, [unsavedChanges]);   // eslint-disable-line react-hooks/exhaustive-deps
+  }, [unsavedChanges]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) {
@@ -119,14 +119,17 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
 
       formData.append(
         "type",
-        `blog/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
+        `blog/${getValues("title")?.replaceAll(" ", "-").toLowerCase()}`
       );
 
       for (let i = 0; i < e.target.files.length; i++) {
         formData.append(`images`, e.target.files[i]);
         const { data } = await axios.post("/api/admin/upload", formData);
 
-        const imageKitURL = data.url.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/blog/", "https://ik.imagekit.io/e2ouoknyw/BlogTodoRec/")
+        const imageKitURL = data.url.replace(
+          "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/blog/",
+          "https://ik.imagekit.io/e2ouoknyw/BlogTodoRec/"
+        );
 
         setValue("images", [...getValues("images"), imageKitURL], {
           shouldValidate: true,
@@ -210,7 +213,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
 
       const { data } = await axios.post("/api/admin/getFiles", {
         name: blogName,
-        type: "blog"
+        type: "blog",
       });
 
       const imagesInDB = blog.images.map((oneImage) => {
@@ -261,30 +264,17 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
   };
 
   return (
-    <MainLayout
-      title={blog.title}
-      metaHeader={
-        router.asPath === "/admin/blog/new" ? "Crear blog" : "Editar blog"
-      }
-    >
+    <MainLayout title={blog?.title} metaHeader="Editar blog">
       {/*//@ts-ignore*/}
       <DynamicModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
 
-      {router.asPath === "/admin/blog/new" ? (
-        <Box display="flex" justifyContent="flex-start" alignItems="center">
-          <Typography variant="h1" sx={{ mr: 1 }}>
-            Crear blog
-          </Typography>
-          <BorderColorOutlined />
-        </Box>
-      ) : (
-        <Box display="flex" justifyContent="flex-start" alignItems="center">
-          <Typography variant="h1" sx={{ mr: 1 }}>
-            Editar blog
-          </Typography>
-          <BorderColorOutlined />
-        </Box>
-      )}
+      <Box display="flex" justifyContent="flex-start" alignItems="center">
+        <Typography variant="h1" sx={{ mr: 1 }}>
+          Editar blog
+        </Typography>
+        <BorderColorOutlined />
+      </Box>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" justifyContent="end" sx={{ mb: 1 }}>
           <Button
@@ -364,7 +354,9 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
                 startIcon={<UploadOutlined />}
                 sx={{ mb: 3, color: "white", backgroundColor: "#008f39" }}
                 onClick={() => fileInputRef.current?.click()}
-                disabled={getValues("title").trim().length === 0 ? true : false}
+                disabled={
+                  getValues("title")?.trim().length === 0 ? true : false
+                }
               >
                 Cargar imagen
               </Button>
@@ -383,7 +375,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
                 color="error"
                 variant="outlined"
                 sx={{
-                  display: getValues("images").length < 1 ? "flex" : "none",
+                  display: getValues("images")?.length < 1 ? "flex" : "none",
                 }}
               />
               <Chip
@@ -392,11 +384,11 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
                 variant="outlined"
                 sx={{
                   display:
-                    getValues("title").trim().length === 0 ? "flex" : "none",
+                    getValues("title")?.trim().length === 0 ? "flex" : "none",
                 }}
               />
               <Grid container spacing={2}>
-                {getValues("images").map((img) => (
+                {getValues("images")?.map((img) => (
                   <Grid item xs={4} sm={3} key={img}>
                     <Card>
                       <CardMedia
@@ -426,33 +418,42 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  const { title = "" } = query;
+export const getStaticPaths: GetStaticPaths = async () => {
+  try {
+    const blogs = await dbAllBlogsByTitle.getAllBlogsByTitle();
 
-  let blog: IBlogSchema | null;
-
-  if (title === "new") {
-    const tempBlog = JSON.parse(JSON.stringify(new Blog()));
-    delete tempBlog._id;
-    // tempBlog.images = ["img1.jpg"];
-    blog = tempBlog;
-  } else {
-    blog = await dbBlogs.getBlogByTitle(title.toString());
-  }
-
-  if (!blog) {
     return {
-      redirect: {
-        destination: "/admin/blog",
-        permanent: false,
-      },
+      //@ts-ignore
+      paths: blogs.map((blog) => {
+        return { params: { title: blog.title } };
+      }),
+
+      fallback: true,
+    };
+  } catch (error) {
+    console.log("CATCH ERROR EN PATHS", error);
+    return {
+      paths: [{ params: { title: "new" } }],
+      fallback: true,
     };
   }
+};
 
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  let blog: IBlogSchema | null;
+
+  //@ts-ignore
+  blog = await dbBlogs.getBlogByTitle(ctx.params.title.toString());
+  if (!blog) {
+    const tempBlog = JSON.parse(JSON.stringify(new Blog()));
+    delete tempBlog._id;
+    blog = tempBlog;
+  }
   return {
     props: {
       blog,
     },
+    revalidate: 43200,
   };
 };
 

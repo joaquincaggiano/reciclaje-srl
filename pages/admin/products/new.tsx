@@ -6,18 +6,12 @@ import {
   useState,
   useContext,
 } from "react";
-import { GetStaticProps } from "next";
-import {GetStaticPaths} from 'next'
-import dynamic from 'next/dynamic';
 
+import dynamic from "next/dynamic";
 
 import { UiContext } from "@/context/ui";
 
 import { useRouter } from "next/router";
-
-import { IProductSchema } from "../../../interfaces";
-
-import { dbAllProductsByTitle, dbProducts } from "@/database";
 
 import { useForm } from "react-hook-form";
 
@@ -27,7 +21,7 @@ import BorderColorOutlined from "@mui/icons-material/BorderColorOutlined";
 import SaveOutlined from "@mui/icons-material/SaveOutlined";
 import UploadOutlined from "@mui/icons-material/UploadOutlined";
 
-import {capitalize} from "@mui/material/utils";
+import { capitalize } from "@mui/material/utils";
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -35,27 +29,28 @@ import FormGroup from "@mui/material/FormGroup";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Button from "@mui/material/Button";
-import  Chip  from "@mui/material/Chip";
+import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import  Box from "@mui/material/Box";
-import Typography  from "@mui/material/Typography";
-import  Divider  from "@mui/material/Divider";
-import  CardMedia from "@mui/material/CardMedia";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import CardMedia from "@mui/material/CardMedia";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import FormLabel from "@mui/material/FormLabel";
 
-import {MainLayout} from '../../../components/layouts'
+import { MainLayout } from "../../../components/layouts";
 
-const DynamicMainLayout = dynamic(() =>
-  import("../../../components/layouts").then((mod) => mod.MainLayout)
-);
+// const DynamicMainLayout = dynamic(() =>
+//   import("../../../components/layouts").then((mod) => mod.MainLayout)
+// );
+
 const DynamicModalCancelChanges = dynamic(() =>
-  import("../../../components/admin/ModalCancelChanges").then((mod) => mod.ModalCancelChanges)
+  import("../../../components/admin/ModalCancelChanges").then(
+    (mod) => mod.ModalCancelChanges
+  )
 );
-
-import { Product } from "@/models";
 
 const validCategories = ["Polietileno", "Molienda"];
 const validColors = [
@@ -86,7 +81,7 @@ const NewProductPage: FC = () => {
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [stateUrl, setStateUrl] = useState<string>("");
 
-  const s3URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/"
+  // const s3URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/"
 
   const {
     register,
@@ -125,7 +120,6 @@ const NewProductPage: FC = () => {
       window.removeEventListener("beforeunload", beforeunload);
       router.events.off("routeChangeStart", routeChangeStart);
     };
-   
   }, [unsavedChanges]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -137,7 +131,7 @@ const NewProductPage: FC = () => {
     try {
       const formData = new FormData();
 
-      if(getValues("title")) {
+      if (getValues("title")) {
         formData.append(
           "type",
           `products/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
@@ -147,13 +141,16 @@ const NewProductPage: FC = () => {
         formData.append(`images`, e.target.files[i]);
         const { data } = await axios.post("/api/admin/upload", formData);
 
-        const imageKitURL = data.url.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/products/", "https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/");
-        
-        if(!getValues("images")) {
+        const imageKitURL = data.url.replace(
+          "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/products/",
+          "https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/"
+        );
+
+        if (!getValues("images")) {
           setValue("images", [imageKitURL], {
             shouldValidate: true,
           });
-        } else{
+        } else {
           setValue("images", [...getValues("images"), imageKitURL], {
             shouldValidate: true,
           });
@@ -169,27 +166,27 @@ const NewProductPage: FC = () => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setValue("title", e.target.value, { shouldValidate: true });
-// console.log("getvaluestitle", getValues("title"))
-    // if (getValues("title")) {
-    //   setUnsavedChanges(false);
-    // } else {
-    //   setUnsavedChanges(true);
-    // }
+
+    if (getValues("title")) {
+      setUnsavedChanges(false);
+    } else {
+      setUnsavedChanges(true);
+    }
   };
 
   const onChangeColor = (color: string) => {
     const currentColors = getValues("colors");
-    if(!currentColors){
-      setValue("colors", [color], { shouldValidate: true });  
-    }else {
-      setValue("colors", [...currentColors, color], { shouldValidate: true });  
-      
+    if (!currentColors) {
+      setValue("colors", [color], { shouldValidate: true });
+    } else {
+      setValue("colors", [...currentColors, color], { shouldValidate: true });
+
       if (currentColors?.includes(color)) {
-      setValue(
-        "colors",
-        currentColors.filter((c) => c !== color),
-        { shouldValidate: true }
-      );
+        setValue(
+          "colors",
+          currentColors.filter((c) => c !== color),
+          { shouldValidate: true }
+        );
       }
     }
   };
@@ -199,7 +196,7 @@ const NewProductPage: FC = () => {
       "https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/",
       "products/"
     );
-    
+
     await axios.post("/api/admin/deleteImageFromS3", {
       key: imageName,
     });
@@ -208,7 +205,6 @@ const NewProductPage: FC = () => {
       getValues("images").filter((img) => img !== image),
       { shouldValidate: true }
     );
-    console.log("images de getValues despues del delete", getValues("images"))
   };
 
   const deleteUnsavedChanges = async () => {
@@ -218,7 +214,7 @@ const NewProductPage: FC = () => {
 
       const { data } = await axios.post("/api/admin/getFiles", {
         name: productName,
-        type: "products"
+        type: "products",
       });
 
       // const imagesInDB = product.images.map((oneImage) => {
@@ -255,9 +251,8 @@ const NewProductPage: FC = () => {
         data: form,
       });
       router.replace("/admin/products");
-      
+
       setIsSaving(false);
-     
     } catch (error) {
       console.log(error);
       setIsSaving(false);
@@ -265,21 +260,16 @@ const NewProductPage: FC = () => {
   };
 
   return (
-    <MainLayout
-      title="new"
-      metaHeader={
-      "Crear Producto"
-      }
-    >
+    <MainLayout title="new" metaHeader="Crear Producto">
       {/*//@ts-ignore*/}
       <DynamicModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
-        <Box display="flex" justifyContent="flex-start" alignItems="center">
-          <Typography variant="h1" sx={{ mr: 1 }}>
-            Crear Producto
-          </Typography>
-          <BorderColorOutlined />
-        </Box>
-      
+      <Box display="flex" justifyContent="flex-start" alignItems="center">
+        <Typography variant="h1" sx={{ mr: 1 }}>
+          Crear Producto
+        </Typography>
+        <BorderColorOutlined />
+      </Box>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" justifyContent="end" sx={{ mb: 1 }}>
           <Button
@@ -337,9 +327,7 @@ const NewProductPage: FC = () => {
               {validColors.map((color) => (
                 <FormControlLabel
                   key={color}
-                  control={
-                    <Checkbox />
-                  }
+                  control={<Checkbox />}
                   label={color}
                   onChange={() => onChangeColor(color)}
                 />
@@ -382,7 +370,10 @@ const NewProductPage: FC = () => {
                 color="error"
                 variant="outlined"
                 sx={{
-                  display: !getValues("images") || getValues("images").length === 0 ? "flex" : "none",
+                  display:
+                    !getValues("images") || getValues("images").length === 0
+                      ? "flex"
+                      : "none",
                 }}
               />
               <Chip
@@ -390,8 +381,7 @@ const NewProductPage: FC = () => {
                 color="error"
                 variant="outlined"
                 sx={{
-                  display:
-                    !getValues("title") ? "flex" : "none",
+                  display: !getValues("title") ? "flex" : "none",
                 }}
               />
 

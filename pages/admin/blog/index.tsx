@@ -17,9 +17,9 @@ export interface dataBlog {
 
 import {MainLayout} from '../../../components/layouts'
 
-const DynamicMainLayout = dynamic(() =>
-  import("../../../components/layouts").then((mod) => mod.MainLayout)
-);
+// const DynamicMainLayout = dynamic(() =>
+//   import("../../../components/layouts").then((mod) => mod.MainLayout)
+// );
 const DynamicTableComponent = dynamic(() =>
   import("../../../components/admin").then((mod) => mod.TableComponent)
 );

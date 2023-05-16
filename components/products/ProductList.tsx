@@ -13,7 +13,7 @@ export const ProductList: FC<Props> = ({ products, getImageUrl }) => {
     <Grid container spacing={4}>
       {products.map((product, i) => {
         return (
-          <ProductCard product={product} key={i} getImageUrl={getImageUrl}/>
+          <ProductCard product={product} key={i} getImageUrl={getImageUrl} />
         );
       })}
     </Grid>

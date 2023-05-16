@@ -18,7 +18,9 @@ const DynamicSideMenu = dynamic(() =>
   import("../ui").then((mod) => mod.SideMenu)
 );
 const DynamicFooter = dynamic(() => import("../ui").then((mod) => mod.Footer));
-const DynamicModalSubscribe = dynamic(() => import("../../components/mailchimp").then((mod) => mod.ModalSubscribe));
+const DynamicModalSubscribe = dynamic(() =>
+  import("../../components/mailchimp").then((mod) => mod.ModalSubscribe)
+);
 
 interface Props {
   title: string;
@@ -32,7 +34,7 @@ export const MainLayout: FC<Props> = ({
   children,
   title,
   metaHeader,
-  imageFullUrl
+  imageFullUrl,
 }) => {
   const { toggleModalOpen } = useContext(UiContext);
 
@@ -66,14 +68,20 @@ export const MainLayout: FC<Props> = ({
         <DynamicModalSubscribe />
         {children}
 
-        <Box display="flex" flexDirection="column" justifyContent="space-between" alignItems="center" sx={{
-          zIndex: "10000000000",
-          position: "fixed",
-          top: "60%",
-          left: { xs: "77%", sm: "85%", md: "90%", lg: "93%", xl: "95.4%" },
-          // height: "200px",
-          // border: "3px solid red"
-        }}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{
+            zIndex: "10000000000",
+            position: "fixed",
+            top: "60%",
+            left: { xs: "77%", sm: "85%", md: "90%", lg: "93%", xl: "95.4%" },
+            // height: "200px",
+            // border: "3px solid red"
+          }}
+        >
           <IconButton
             sx={{
               border: "1px solid #008f39",
@@ -95,12 +103,14 @@ export const MainLayout: FC<Props> = ({
           </IconButton>
 
           <IconButton
-            sx={{
-              // position: "fixed",
-              // top: { xs: "65%", xl: "63%" },
-              // left: { xs: "75%", sm: "87%", md: "90%", lg: "92.2%", xl: "95%" },
-              // zIndex: "10000000000",
-            }}
+            sx={
+              {
+                // position: "fixed",
+                // top: { xs: "65%", xl: "63%" },
+                // left: { xs: "75%", sm: "87%", md: "90%", lg: "92.2%", xl: "95%" },
+                // zIndex: "10000000000",
+              }
+            }
           >
             <NextLink
               href={`https://wa.me/${content.contact.datosContacto.whatsapp}`}

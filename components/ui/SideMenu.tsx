@@ -14,16 +14,14 @@ import GroupOutlined from "@mui/icons-material/GroupOutlined";
 import NewspaperOutlined from "@mui/icons-material/NewspaperOutlined";
 import PrecisionManufacturing from "@mui/icons-material/PrecisionManufacturing";
 
-
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import  ListSubheader from "@mui/material/ListSubheader";
+import ListSubheader from "@mui/material/ListSubheader";
 import Box from "@mui/material/Box";
-import Divider  from "@mui/material/Divider";
-
+import Divider from "@mui/material/Divider";
 
 export const SideMenu = () => {
   const { isMenuOpen, toggleSideMenu } = useContext(UiContext);

@@ -5,16 +5,15 @@ import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
-import {IconButtonProps } from "@mui/material";
-import {styled} from "@mui/material/styles";
+import { IconButtonProps } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
-import Typography  from "@mui/material/Typography";
+import Typography from "@mui/material/Typography";
 
 import { green } from "@mui/material/colors";
-
 
 import {
   Share as ShareIcon,
@@ -61,7 +60,7 @@ export const BlogCard: FC<Props> = ({ blog, getImageUrl }) => {
   const date = new Date(blog?.createdAt);
 
   const day = date.getUTCDate().toString().padStart(2, "0");
-  const month = (date.getUTCMonth() + 1).toString().padStart(2, "0"); 
+  const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
   const year = date.getUTCFullYear().toString().slice(-2);
 
   const actualDate = `${day}-${month}-${year}`;
@@ -98,9 +97,7 @@ export const BlogCard: FC<Props> = ({ blog, getImageUrl }) => {
             <ShareIcon />
           </IconButton>
 
-          {openShareOptions && (
-            <ShareComponent link={blog}/>
-          )}
+          {openShareOptions && <ShareComponent link={blog} />}
 
           <ExpandMore
             expand={expanded}

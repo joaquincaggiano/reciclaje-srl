@@ -1,11 +1,10 @@
 import { useState } from "react";
 
 import Button from "@mui/material/Button";
-import  Chip  from "@mui/material/Chip";
+import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
-import Typography  from "@mui/material/Typography";
+import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-
 
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -35,7 +34,9 @@ export const Subscribe = () => {
       setState("Success");
       setEmail("");
       setMessage("Fabuloso, has sido suscripto!");
-      setTimeout(() => {setState("idle")}, 2000)
+      setTimeout(() => {
+        setState("idle");
+      }, 2000);
     } catch (error) {
       console.log(error);
       setState("Error");
@@ -106,7 +107,11 @@ export const Subscribe = () => {
                 height: "55px",
                 border: "1px solid #008f39",
                 width: { xs: "100%", sm: "60%" },
-                "&:hover": { backgroundColor: "#008f39", color: "white", border: "1px solid white", },
+                "&:hover": {
+                  backgroundColor: "#008f39",
+                  color: "white",
+                  border: "1px solid white",
+                },
               }}
             >
               Suscribirse

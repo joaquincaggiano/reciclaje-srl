@@ -1,4 +1,4 @@
-import Grid  from "@mui/material/Grid";
+import Grid from "@mui/material/Grid";
 import { FC } from "react";
 import { IServiceSchema } from "../../interfaces/services";
 import { ServiceCard } from ".";

@@ -1,22 +1,18 @@
 import {
   ChangeEvent,
   FC,
-  useContext,
-  useEffect,
   useRef,
   useState,
+  useContext,
+  useEffect,
 } from "react";
 import dynamic from "next/dynamic";
 
-import { GetStaticPaths, GetStaticProps } from "next";
 import { UiContext } from "@/context/ui";
 
 import { useRouter } from "next/router";
 
-import { IServiceSchema } from "../../../interfaces";
-import { Service } from "@/models";
-
-import { dbAllServicesByTitle, dbServices } from "@/database";
+import { IBlogSchema } from "../../../interfaces";
 
 import { useForm } from "react-hook-form";
 
@@ -26,6 +22,9 @@ import BorderColorOutlined from "@mui/icons-material/BorderColorOutlined";
 import SaveOutlined from "@mui/icons-material/SaveOutlined";
 import UploadOutlined from "@mui/icons-material/UploadOutlined";
 
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
@@ -34,19 +33,15 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import CardMedia from "@mui/material/CardMedia";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import FormLabel from "@mui/material/FormLabel";
 
 import { MainLayout } from "../../../components/layouts";
 
 // const DynamicMainLayout = dynamic(() =>
 //   import("../../../components/layouts").then((mod) => mod.MainLayout)
 // );
+
 const DynamicModalCancelChanges = dynamic(() =>
-  import("../../../components/admin/ModalCancelChanges").then(
-    (mod) => mod.ModalCancelChanges
-  )
+  import("../../../components/admin").then((mod) => mod.ModalCancelChanges)
 );
 
 interface FormData {
@@ -54,17 +49,16 @@ interface FormData {
   title: string;
   images: string[];
   description: string;
+  info: string;
 }
 
-interface Props {
-  service: IServiceSchema;
-}
-
-const ServiceAdminPage: FC<Props> = ({ service }) => {
+const BlogAdminPage: FC = () => {
   const { toggleModalCancelChange } = useContext(UiContext);
   const [isSaving, setIsSaving] = useState(false);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [stateUrl, setStateUrl] = useState<string>("");
+
+  const s3URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
   const router = useRouter();
 
@@ -76,9 +70,7 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
     formState: { errors },
     getValues,
     setValue,
-  } = useForm<FormData>({
-    defaultValues: service,
-  });
+  } = useForm<FormData>();
 
   useEffect(() => {
     const message = "no te vayas plis";
@@ -118,22 +110,35 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
     try {
       const formData = new FormData();
 
-      formData.append(
-        "type",
-        `services/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
-      );
+      if (getValues("title")) {
+        formData.append(
+          "type",
+          `blog/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
+        );
+      }
 
       for (let i = 0; i < e.target.files.length; i++) {
         formData.append(`images`, e.target.files[i]);
         const { data } = await axios.post("/api/admin/upload", formData);
 
         const imageKitURL = data.url.replace(
-          "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/services/",
-          "https://ik.imagekit.io/e2ouoknyw/ServiceTodoRec/"
+          "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/blog/",
+          "https://ik.imagekit.io/e2ouoknyw/BlogTodoRec/"
         );
-        setValue("images", [...getValues("images"), imageKitURL], {
-          shouldValidate: true,
-        });
+
+        //   setValue("images", [...getValues("images"), imageKitURL], {
+        //     shouldValidate: true,
+        //   });
+        //   setUnsavedChanges(true);
+        if (!getValues("images")) {
+          setValue("images", [imageKitURL], {
+            shouldValidate: true,
+          });
+        } else {
+          setValue("images", [...getValues("images"), imageKitURL], {
+            shouldValidate: true,
+          });
+        }
         setUnsavedChanges(true);
       }
     } catch (error) {
@@ -144,11 +149,21 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
   const handleTitleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setValue("title", e.target.value, {
-      shouldValidate: true,
-    });
+    setValue("title", e.target.value, { shouldValidate: true });
 
-    if (service.title === getValues("title")) {
+    if (getValues("title")) {
+      setUnsavedChanges(false);
+    } else {
+      setUnsavedChanges(true);
+    }
+  };
+
+  const handleInfoChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setValue("info", e.target.value, { shouldValidate: true });
+
+    if (getValues("info")) {
       setUnsavedChanges(false);
     } else {
       setUnsavedChanges(true);
@@ -158,35 +173,21 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
   const handleDescriptionChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setValue("description", e.target.value, {
-      shouldValidate: true,
-    });
+    setValue("description", e.target.value, { shouldValidate: true });
 
-    if (service.description === getValues("description")) {
+    if (getValues("description")) {
       setUnsavedChanges(false);
     } else {
       setUnsavedChanges(true);
     }
   };
 
-  function compareArrays(arr1: string[], arr2: string[]) {
-    if (arr1.length === arr2.length) {
-      return arr1.every(function (element, index) {
-        if (element === arr2[index]) {
-          setUnsavedChanges(false);
-        } else {
-          setUnsavedChanges(true);
-        }
-      });
-    } else {
-      return setUnsavedChanges(true);
-    }
-  }
+ 
 
   const onDeleteImage = async (image: string) => {
     const imageName = image.replace(
-      "https://ik.imagekit.io/e2ouoknyw/ServiceTodoRec/",
-      "services/"
+      "https://ik.imagekit.io/e2ouoknyw/BlogTodoRec/",
+      "blog/"
     );
     await axios.post("/api/admin/deleteImageFromS3", {
       key: imageName,
@@ -196,40 +197,28 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
       getValues("images").filter((img) => img !== image),
       { shouldValidate: true }
     );
-
-    compareArrays(service.images, getValues("images"));
   };
 
   const deleteUnsavedChanges = async () => {
     try {
       setUnsavedChanges(false);
-      const serviceName = service.title.replaceAll(" ", "-").toLowerCase();
+      const blogName = getValues("title").replaceAll(" ", "-").toLowerCase();
 
       const { data } = await axios.post("/api/admin/getFiles", {
-        name: serviceName,
-        type: "services",
+        name: blogName,
+        type: "blog",
       });
 
-      const url = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
-      const imagesInDB = service.images.map((oneImage) => {
-        return oneImage.replace(url, "");
-      });
-
-      const imagesInS3 = data.objects.filter(
-        (img: string) => !imagesInDB.includes(img)
-      );
-
-      await imagesInS3.map((eachImage: string) => {
+      await data.objects.map((eachImage: string) => {
         axios.post("/api/admin/deleteImageFromS3", {
           key: eachImage,
         });
       });
 
-      router.push(stateUrl || "https://www.todorec.com.ar/");
+      router.push(stateUrl || "/");
 
       toggleModalCancelChange();
     } catch (error) {
-      console.log("ALGO SALIÓ MAL");
       throw new Error("No se pudieron borrar las imagenes");
     }
   };
@@ -242,30 +231,26 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
     try {
       setUnsavedChanges(false);
       const { data } = await axios({
-        url: "/api/admin/services",
-        method: form._id ? "PUT" : "POST",
+        url: "/api/admin/blog",
+        method: "POST",
         data: form,
       });
-      router.replace("/admin/services");
-
-      if (!form._id) {
-        router.replace(`/admin/services/${form.title}`);
-      } else {
-        setIsSaving(false);
-      }
+      router.replace(`/admin/blog`);
+      setIsSaving(false);
     } catch (error) {
       console.log(error);
       setIsSaving(false);
     }
   };
+
   return (
-    <MainLayout title={service?.title} metaHeader="Editar servicio">
+    <MainLayout title="new" metaHeader="Crear Blog">
       {/*//@ts-ignore*/}
       <DynamicModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
 
       <Box display="flex" justifyContent="flex-start" alignItems="center">
         <Typography variant="h1" sx={{ mr: 1 }}>
-          Editar servicio
+          Crear blog
         </Typography>
         <BorderColorOutlined />
       </Box>
@@ -275,11 +260,7 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
           <Button
             color="secondary"
             startIcon={<SaveOutlined />}
-            sx={{
-              width: "150px",
-              color: "white",
-              backgroundColor: "#008f39",
-            }}
+            sx={{ width: "150px", color: "white", backgroundColor: "#008f39" }}
             type="submit"
             disabled={isSaving}
           >
@@ -297,14 +278,28 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
               sx={{ mb: 1 }}
               {...register("title", {
                 required: "Este campo es requerido",
-                minLength: {
-                  value: 2,
-                  message: "Mínimo 2 caracteres",
-                },
+                minLength: { value: 2, message: "Mínimo 2 caracteres" },
               })}
               error={!!errors.title}
               helperText={errors.title?.message}
               onChange={(e) => handleTitleChange(e)}
+            />
+
+            <TextField
+              label="Información"
+              variant="filled"
+            //   value={getValues("info") || ""}
+              fullWidth
+              multiline
+              maxRows={3}
+              sx={{ mb: 1 }}
+              {...register("info", {
+                required: "Este campo es requerido",
+                minLength: { value: 10, message: "Mínimo 10 caracteres" },
+              })}
+              error={!!errors.info}
+              helperText={errors.info?.message}
+              onChange={(e) => handleInfoChange(e)}
             />
 
             <TextField
@@ -313,15 +308,10 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
               fullWidth
               multiline
               maxRows={3}
-              value={getValues("description") || ""}
-              // defaultValue={"Aqui va la descripcion del servicio"}
               sx={{ mb: 1 }}
               {...register("description", {
                 required: "Este campo es requerido",
-                minLength: {
-                  value: 10,
-                  message: "Mínimo 10 caracteres",
-                },
+                minLength: { value: 10, message: "Mínimo 10 caracteres" },
               })}
               error={!!errors.description}
               helperText={errors.description?.message}
@@ -341,15 +331,9 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
                 color="secondary"
                 fullWidth
                 startIcon={<UploadOutlined />}
-                sx={{
-                  mb: 3,
-                  color: "white",
-                  backgroundColor: "#008f39",
-                }}
+                sx={{ mb: 3, color: "white", backgroundColor: "#008f39" }}
                 onClick={() => fileInputRef.current?.click()}
-                disabled={
-                  getValues("title")?.trim().length === 0 ? true : false
-                }
+                disabled={getValues("title")?.trim().length === 0 ? true : false}
               >
                 Cargar imagen
               </Button>
@@ -368,19 +352,20 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
                 color="error"
                 variant="outlined"
                 sx={{
-                  display: getValues("images")?.length < 1 ? "flex" : "none",
-                }}
+                    display:
+                      !getValues("images") || getValues("images").length === 0
+                        ? "flex"
+                        : "none",
+                  }}
               />
               <Chip
                 label="Es necesario incluir un título para subir una imagen"
                 color="error"
                 variant="outlined"
                 sx={{
-                  display:
-                    getValues("title")?.trim().length === 0 ? "flex" : "none",
-                }}
+                    display: !getValues("title") ? "flex" : "none",
+                  }}
               />
-
               <Grid container spacing={2}>
                 {getValues("images")?.map((img) => (
                   <Grid item xs={4} sm={3} key={img}>
@@ -412,44 +397,4 @@ const ServiceAdminPage: FC<Props> = ({ service }) => {
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  try {
-    const services = await dbAllServicesByTitle.getAllServicesByTitle();
-    console.log("services en static path", services);
-
-    return {
-      //@ts-ignore
-      paths: services.map((service) => {
-        return { params: { title: service.title } };
-      }),
-
-      fallback: true,
-    };
-  } catch (error) {
-    console.log("CATCH ERROR EN PATHS", error);
-    return {
-      paths: [{ params: { title: "new" } }],
-      fallback: true,
-    };
-  }
-};
-
-export const getStaticProps: GetStaticProps = async (ctx) => {
-  let service: IServiceSchema | null;
-
-  //@ts-ignore
-  service = await dbServices.getServiceByTitle(ctx.params.title.toString());
-  if (!service) {
-    const tempsService = JSON.parse(JSON.stringify(new Service()));
-    delete tempsService._id;
-    service = tempsService;
-  }
-  return {
-    props: {
-      service,
-    },
-    revalidate: 43200,
-  };
-};
-
-export default ServiceAdminPage;
+export default BlogAdminPage;

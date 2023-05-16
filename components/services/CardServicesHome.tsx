@@ -7,12 +7,10 @@ import { FC } from "react";
 import { IServiceSchema } from "@/interfaces";
 
 interface Props {
-  service: IServiceSchema
+  service: IServiceSchema;
 }
 
-export const CardServicesHome: FC<Props> = ({
-  service 
-}) => {
+export const CardServicesHome: FC<Props> = ({ service }) => {
   return (
     <Grid
       item

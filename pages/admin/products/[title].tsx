@@ -7,9 +7,8 @@ import {
   useContext,
 } from "react";
 import { GetStaticProps } from "next";
-import {GetStaticPaths} from 'next'
-import dynamic from 'next/dynamic';
-
+import { GetStaticPaths } from "next";
+import dynamic from "next/dynamic";
 
 import { UiContext } from "@/context/ui";
 
@@ -27,7 +26,7 @@ import BorderColorOutlined from "@mui/icons-material/BorderColorOutlined";
 import SaveOutlined from "@mui/icons-material/SaveOutlined";
 import UploadOutlined from "@mui/icons-material/UploadOutlined";
 
-import {capitalize} from "@mui/material/utils";
+import { capitalize } from "@mui/material/utils";
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -35,24 +34,26 @@ import FormGroup from "@mui/material/FormGroup";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Button from "@mui/material/Button";
-import  Chip  from "@mui/material/Chip";
+import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
-import  Box from "@mui/material/Box";
-import Typography  from "@mui/material/Typography";
-import  Divider  from "@mui/material/Divider";
-import  CardMedia from "@mui/material/CardMedia";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
+import CardMedia from "@mui/material/CardMedia";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import FormLabel from "@mui/material/FormLabel";
 
-import {MainLayout} from '../../../components/layouts'
+import { MainLayout } from "../../../components/layouts";
 
-const DynamicMainLayout = dynamic(() =>
-  import("../../../components/layouts").then((mod) => mod.MainLayout)
-);
+// const DynamicMainLayout = dynamic(() =>
+//   import("../../../components/layouts").then((mod) => mod.MainLayout)
+// );
 const DynamicModalCancelChanges = dynamic(() =>
-  import("../../../components/admin/ModalCancelChanges").then((mod) => mod.ModalCancelChanges)
+  import("../../../components/admin/ModalCancelChanges").then(
+    (mod) => mod.ModalCancelChanges
+  )
 );
 
 import { Product } from "@/models";
@@ -90,7 +91,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   const [unsavedChanges, setUnsavedChanges] = useState(false);
   const [stateUrl, setStateUrl] = useState<string>("");
 
-  const s3URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/"
+  const s3URL = "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/";
 
   const {
     register,
@@ -129,7 +130,6 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       window.removeEventListener("beforeunload", beforeunload);
       router.events.off("routeChangeStart", routeChangeStart);
     };
-   
   }, [unsavedChanges]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const selectFile = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -150,7 +150,11 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         formData.append(`images`, e.target.files[i]);
         const { data } = await axios.post("/api/admin/upload", formData);
 
-        const imageKitURL = data.url.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/products/", "https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/")
+        const imageKitURL = data.url.replace(
+          "https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/products/",
+          "https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/"
+        );
+
         setValue("images", [...getValues("images"), imageKitURL], {
           shouldValidate: true,
         });
@@ -207,7 +211,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       "https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/",
       "products/"
     );
-    
+
     await axios.post("/api/admin/deleteImageFromS3", {
       key: imageName,
     });
@@ -227,7 +231,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
       const { data } = await axios.post("/api/admin/getFiles", {
         name: productName,
-        type: "products"
+        type: "products",
       });
 
       const imagesInDB = product.images.map((oneImage) => {
@@ -276,32 +280,17 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
   };
 
   return (
-    <MainLayout
-      title={product?.title || "new"}
-      metaHeader={
-        router.asPath === "/admin/products/new"
-          ? "Crear producto"
-          : "Editar producto"
-      }
-    >
+    <MainLayout title={product?.title} metaHeader="Editar producto">
       {/*//@ts-ignore*/}
       <DynamicModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
 
-      {router.asPath === "/admin/products/new" ? (
-        <Box display="flex" justifyContent="flex-start" alignItems="center">
-          <Typography variant="h1" sx={{ mr: 1 }}>
-            Crear Producto
-          </Typography>
-          <BorderColorOutlined />
-        </Box>
-      ) : (
-        <Box display="flex" justifyContent="flex-start" alignItems="center">
-          <Typography variant="h1" sx={{ mr: 1 }}>
-            Editar Producto
-          </Typography>
-          <BorderColorOutlined />
-        </Box>
-      )}
+      <Box display="flex" justifyContent="flex-start" alignItems="center">
+        <Typography variant="h1" sx={{ mr: 1 }}>
+          Editar Producto
+        </Typography>
+        <BorderColorOutlined />
+      </Box>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" justifyContent="end" sx={{ mb: 1 }}>
           <Button
@@ -450,58 +439,45 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     </MainLayout>
   );
 };
-//@ts-ignore
-export const getStaticPaths: GetStaticPaths = async ()=>{
+
+export const getStaticPaths: GetStaticPaths = async () => {
   try {
-    const products = await dbAllProductsByTitle.getAllProductsByTitle()
-    console.log("products en static path", products)
-  
+    const products = await dbAllProductsByTitle.getAllProductsByTitle();
+    console.log("products en static path", products);
+
     return {
       //@ts-ignore
       paths: products.map((product) => {
-        return {params: {title: product.title}}
+        return { params: { title: product.title } };
       }),
-      
-      fallback: true
-    }
 
-  } catch(error) {
-    console.log("CATCH ERROR EN PATHS", error)
+      fallback: true,
+    };
+  } catch (error) {
+    console.log("CATCH ERROR EN PATHS", error);
     return {
-      paths: [{params: {title: "new"}}],
-      fallback: true
-
-    
-    }
+      paths: [{ params: { title: "new" } }],
+      fallback: true,
+    };
   }
-
-  //llamar a la db y traer todos los title de los productos
-  //mapear ese array con los title y retornar {params: title}
-  //fallback: true = new title
-}
-
+};
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
-  console.log("contexto", ctx)
   let product: IProductSchema | null;
 
   //@ts-ignore
-   product = await dbProducts.getProductByTitle(ctx.params.title.toString());
-  if (!product){
+  product = await dbProducts.getProductByTitle(ctx.params.title.toString());
+  if (!product) {
     const tempProduct = JSON.parse(JSON.stringify(new Product()));
-      delete tempProduct._id;
-      // tempProduct.title = "new product"
-      // tempProduct.images = ["img1.jpg", "img2.jpg"];
-      product = tempProduct;
+    delete tempProduct._id;
+    product = tempProduct;
   }
   return {
     props: {
       product,
     },
-    revalidate: 60
-  }
-
-
+    revalidate: 43200,
+  };
 
   // const { title = "" } = query;
 

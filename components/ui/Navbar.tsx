@@ -2,30 +2,29 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 
 import AppBar from "@mui/material/AppBar";
-import  Toolbar from "@mui/material/Toolbar";
+import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
-import Link  from "@mui/material/Link";
+import Link from "@mui/material/Link";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 
-
-
 import { MenuOutlined } from "@mui/icons-material";
 
-
-import { useContext } from 'react';
-import { UiContext } from '../../context/ui';
+import { useContext } from "react";
+import { UiContext } from "../../context/ui";
 
 export const Navbar = () => {
   const { asPath } = useRouter();
 
-  const { toggleSideMenu } = useContext( UiContext );
+  const { toggleSideMenu } = useContext(UiContext);
 
   return (
     <AppBar position="static">
       <Toolbar>
         <NextLink href="/" passHref legacyBehavior>
-          <Link sx={{ mr: "10px", color: "white", fontSize: "20px" }}>TODO-REC</Link>
+          <Link sx={{ mr: "10px", color: "white", fontSize: "20px" }}>
+            TODO-REC
+          </Link>
         </NextLink>
 
         <Box flex={1} />
@@ -82,11 +81,7 @@ export const Navbar = () => {
 
         <Box flex={1} />
 
-        <IconButton
-          size="large"
-          color="info"
-          onClick={toggleSideMenu}
-        >
+        <IconButton size="large" color="info" onClick={toggleSideMenu}>
           <MenuOutlined />
         </IconButton>
       </Toolbar>

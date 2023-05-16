@@ -14,7 +14,6 @@ import Paper from "@mui/material/Paper";
 
 import { dataUsers } from "@/pages/admin/users";
 
-
 interface Props {
   data: dataUsers[];
 }
@@ -41,13 +40,16 @@ export const UsersTable: FC<Props> = ({ data }) => {
 
   const rowsToShow = data!.slice(startIndex, endIndex);
 
-  const rowNames = data.length > 0 ? (Object.keys(data[0]).map((key, i) => {
-      if (key === "id"){
-        return;
-      }else{
-        return <TableCell key={i}>{key}</TableCell>;
-      }
-    })) : ("no rows to show");
+  const rowNames =
+    data.length > 0
+      ? Object.keys(data[0]).map((key, i) => {
+          if (key === "id") {
+            return;
+          } else {
+            return <TableCell key={i}>{key}</TableCell>;
+          }
+        })
+      : "no rows to show";
 
   return (
     <Grid container className="fadeIn">
@@ -55,17 +57,13 @@ export const UsersTable: FC<Props> = ({ data }) => {
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
-              <TableRow>
-                {rowNames}
-              </TableRow>
+              <TableRow>{rowNames}</TableRow>
             </TableHead>
             <TableBody>
               {rowsToShow.map((row: any, index) => (
                 <TableRow key={index}>
-              
-                  <TableCell >{row.email}</TableCell>
-                  <TableCell >{row.status}</TableCell>
-
+                  <TableCell>{row.email}</TableCell>
+                  <TableCell>{row.status}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

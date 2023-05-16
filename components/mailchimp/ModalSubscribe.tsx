@@ -1,37 +1,24 @@
-import { useState, useContext } from 'react';
+import { useState, useContext } from "react";
 
 import Button from "@mui/material/Button";
-import  Chip  from "@mui/material/Chip";
+import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import Typography  from "@mui/material/Typography";
-import Modal  from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { validations } from "@/utils";
 import { CancelOutlined } from "@mui/icons-material";
-import { UiContext } from '@/context';
+import { UiContext } from "@/context";
 
 type FormData = {
   email: string;
 };
 
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "#ffff",
-  border: "5px solid #008f39",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: "10px",
-};
-
 export const ModalSubscribe = () => {
-  const {isModalOpen, toggleModalOpen} = useContext(UiContext)
+  const { isModalOpen, toggleModalOpen } = useContext(UiContext);
 
   // const [open, setOpen] = useState<boolean>(true);
   const [email, setEmail] = useState<string>("");
@@ -50,14 +37,14 @@ export const ModalSubscribe = () => {
     setState("Loading");
 
     try {
-      const response = await axios.post("/api/mailchimp/subscribe", {email});
+      const response = await axios.post("/api/mailchimp/subscribe", { email });
       console.log(response);
       setState("Success");
       setMessage("Fabuloso, has sido suscripto!");
       setEmail("");
       setTimeout(() => {
         setState("idle");
-        toggleModalOpen()
+        toggleModalOpen();
       }, 2000);
     } catch (error) {
       console.log(error);
@@ -72,7 +59,20 @@ export const ModalSubscribe = () => {
   return (
     <Modal open={isModalOpen} onClose={toggleModalOpen}>
       <form onSubmit={handleSubmit(onSubscribe)} noValidate>
-        <Box sx={style}>
+        <Box
+          sx={{
+            position: "absolute" as "absolute",
+            top: "50%",
+            left: "50%",
+            Ptransform: "translate(-50%, -50%)",
+            width: { xs: 300, sm: 400 },
+            bgcolor: "#ffff",
+            border: "5px solid #008f39",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: "10px",
+          }}
+        >
           <CancelOutlined
             sx={{
               position: "relative",

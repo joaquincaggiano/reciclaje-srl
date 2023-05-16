@@ -5,7 +5,7 @@ import { Footer, Navbar, SideMenu } from "../ui";
 
 interface Props {
   title: string;
-  children: ReactNode
+  children: ReactNode;
 }
 
 export const AuthLayout: FC<Props> = ({ children, title }) => {

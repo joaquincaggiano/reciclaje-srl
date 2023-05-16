@@ -21,8 +21,6 @@ import Paper from "@mui/material/Paper";
 import { dataBlog } from "@/pages/admin/blog";
 import { dataProducts } from "@/pages/admin/products";
 import { dataServices } from "@/pages/admin/services";
-import { dataUsers } from "@/pages/admin/users";
-
 
 interface Props {
   data: dataBlog[] | dataProducts[] | dataServices[];
@@ -60,7 +58,7 @@ export const TableComponent: FC<Props> = ({ data, typeS3, urlKit }) => {
       if (imageToDelete.status === 200) {
         img.map(async (eachImage) => {
           const imageUrlKit = "https://ik.imagekit.io/e2ouoknyw/" + urlKit;
-          const imageName = eachImage.split(imageUrlKit).join(typeS3)
+          const imageName = eachImage.split(imageUrlKit).join(typeS3);
           await axios.post("/api/admin/deleteImageFromS3", {
             key: imageName,
           });
@@ -72,22 +70,28 @@ export const TableComponent: FC<Props> = ({ data, typeS3, urlKit }) => {
     }
   };
 
-  const rowNames = data.length > 0 ? (Object.keys(data[0]).map((key, i) => {
-      if (key === "id"){
-        return;
-      }else{
-        return <TableCell key={i}>{key}</TableCell>;
-      }
-    })) : ("no rows to show");
+  const rowNames =
+    data.length > 0
+      ? Object.keys(data[0]).map((key, i) => {
+          if (key === "id") {
+            return;
+          } else {
+            return <TableCell key={i}>{key}</TableCell>;
+          }
+        })
+      : "no rows to show";
 
-    const columnArray:string[] = []
-  const columnFills = data.length > 0 ?  (Object.keys(data[0]).map((key, i) => {
-    if (key == "id" || key == "images" || key == "title"){
-      return;
-    }else{
-      return columnArray.push(key)
-    }
-  })) : ("no columns to show");
+  const columnArray: string[] = [];
+  const columnFills =
+    data.length > 0
+      ? Object.keys(data[0]).map((key, i) => {
+          if (key == "id" || key == "images" || key == "title") {
+            return;
+          } else {
+            return columnArray.push(key);
+          }
+        })
+      : "no columns to show";
 
   return (
     <Grid container className="fadeIn">
@@ -104,21 +108,21 @@ export const TableComponent: FC<Props> = ({ data, typeS3, urlKit }) => {
               {rowsToShow.map((row, index) => (
                 <TableRow key={index}>
                   {/* @ts-ignore */}
-                  {row!.images?.length > 0 && 
-                  <TableCell>
-                    <Image
-                     //@ts-ignore
-                      src={row.images[0]}
-                       //@ts-ignore
-                      alt={row.title}
-                      width={100}
-                      height={80}
-                    />
-                  </TableCell>
-                  }
+                  {row!.images?.length > 0 && (
+                    <TableCell>
+                      <Image
+                        //@ts-ignore
+                        src={row.images[0]}
+                        //@ts-ignore
+                        alt={row.title}
+                        width={100}
+                        height={80}
+                      />
+                    </TableCell>
+                  )}
                   <TableCell>
                     <NextLink
-                     //@ts-ignore
+                      //@ts-ignore
                       href={`/admin/${typeS3}/${row.title}`}
                       passHref
                       legacyBehavior
@@ -127,14 +131,14 @@ export const TableComponent: FC<Props> = ({ data, typeS3, urlKit }) => {
                       <Link underline="always">{row.title}</Link>
                     </NextLink>
                   </TableCell>
-                  {columnArray.map((eachKey, i)=>{
+                  {columnArray.map((eachKey, i) => {
                     //@ts-ignore
-                    return <TableCell key={i}>{row[eachKey]}</TableCell>
+                    return <TableCell key={i}>{row[eachKey]}</TableCell>;
                   })}
                   {/* @ts-ignore */}
                   <TableCell>
                     <Button
-                     //@ts-ignore
+                      //@ts-ignore
                       onClick={() => deleteButton(row.id, row.images)}
                       color="error"
                       sx={{

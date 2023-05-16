@@ -5,7 +5,7 @@ import { BlogCard } from "./BlogCard";
 import { IBlogSchema } from "@/interfaces";
 
 import Grid from "@mui/material/Grid";
-import Typography  from "@mui/material/Typography";
+import Typography from "@mui/material/Typography";
 
 import { NotBlogsMessage } from "./NotBlogsMessage";
 

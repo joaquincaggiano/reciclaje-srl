@@ -1,17 +1,17 @@
 import { FC, useState } from "react";
-import { TooltipProps, tooltipClasses} from "@mui/material";
+import { TooltipProps, tooltipClasses } from "@mui/material";
 
 import Grid from "@mui/material/Grid";
-import Typography  from "@mui/material/Typography";
+import Typography from "@mui/material/Typography";
 import CardMedia from "@mui/material/CardMedia";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
-import  Tooltip from "@mui/material/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 import Collapse from "@mui/material/Collapse";
-import {IconButtonProps } from "@mui/material";
-import {styled} from "@mui/material/styles";
+import { IconButtonProps } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 
@@ -68,13 +68,12 @@ export const ServiceCard: FC<Props> = ({ service }) => {
           // minHeight: "600px",
           boxShadow: "0px 0px 0px 0px",
           border: "2px solid #12B454",
-          "&:hover": {boxShadow: "0px 0px 5px 6px rgba(18,180,84,0.75)"}
-          
+          "&:hover": { boxShadow: "0px 0px 5px 6px rgba(18,180,84,0.75)" },
         }}
         id={`${service.title}`}
       >
-      {/* #008f39 */}
-        <CardContent sx={{backgroundColor: "#12B454"}}>
+        {/* #008f39 */}
+        <CardContent sx={{ backgroundColor: "#12B454" }}>
           <Typography
             variant="h2"
             component="div"
@@ -92,7 +91,9 @@ export const ServiceCard: FC<Props> = ({ service }) => {
         />
         <CardActions disableSpacing>
           {!expanded && (
-            <Typography sx={{fontSize: "24px"}}>{service.description.slice(0, 45)}...</Typography>
+            <Typography sx={{ fontSize: "24px" }}>
+              {service.description.slice(0, 45)}...
+            </Typography>
           )}
 
           <ExpandMore
@@ -108,7 +109,12 @@ export const ServiceCard: FC<Props> = ({ service }) => {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph sx={{fontSize: "24px", textAlign: {md: "justify"}}}>{service.description}</Typography>
+            <Typography
+              paragraph
+              sx={{ fontSize: "24px", textAlign: { md: "justify" } }}
+            >
+              {service.description}
+            </Typography>
           </CardContent>
         </Collapse>
       </Card>

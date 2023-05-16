@@ -65,7 +65,7 @@ export const Footer = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            sx={{ mr: 3, mb: {xs: 2, sm: 0, lg: 2} }}
+            sx={{ mr: 3, mb: { xs: 2, sm: 0, lg: 2 } }}
           >
             <NextLink
               href={`https://wa.me/${content.contact.datosContacto.whatsapp}`}
@@ -139,14 +139,22 @@ export const Footer = () => {
           }}
         >
           © 2023 |{" "}
-          <NextLink href="https://github.com/CataQuarleri" passHref legacyBehavior>
-            <Link sx={{color: "black"}} target="_blank" rel="noreferrer">
+          <NextLink
+            href="https://github.com/CataQuarleri"
+            passHref
+            legacyBehavior
+          >
+            <Link sx={{ color: "black" }} target="_blank" rel="noreferrer">
               Cata Quarleri
             </Link>
           </NextLink>{" "}
           -{" "}
-          <NextLink href="https://github.com/joaquincaggiano" passHref legacyBehavior>
-            <Link sx={{color: "black"}} target="_blank" rel="noreferrer">
+          <NextLink
+            href="https://github.com/joaquincaggiano"
+            passHref
+            legacyBehavior
+          >
+            <Link sx={{ color: "black" }} target="_blank" rel="noreferrer">
               Joaquín Caggiano
             </Link>
           </NextLink>
