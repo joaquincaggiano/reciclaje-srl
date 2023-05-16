@@ -78,11 +78,7 @@ interface FormData {
   category: string;
 }
 
-interface Props {
-  product: IProductSchema;
-}
-
-const ProductAdminPage: FC<Props> = ({ product }) => {
+const NewProductPage: FC = () => {
   const router = useRouter();
   const { toggleModalCancelChange } = useContext(UiContext);
 
@@ -98,7 +94,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     formState: { errors },
     getValues,
     setValue,
-  } = useForm<FormData>({ defaultValues: product });
+  } = useForm<FormData>();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -141,23 +137,31 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     try {
       const formData = new FormData();
 
-      formData.append(
-        "type",
-        `products/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
-      );
-
+      if(getValues("title")) {
+        formData.append(
+          "type",
+          `products/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
+        );
+      }
       for (let i = 0; i < e.target.files.length; i++) {
         formData.append(`images`, e.target.files[i]);
         const { data } = await axios.post("/api/admin/upload", formData);
 
-        const imageKitURL = data.url.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/products/", "https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/")
-        setValue("images", [...getValues("images"), imageKitURL], {
-          shouldValidate: true,
-        });
+        const imageKitURL = data.url.replace("https://todorecsrl-test-dev.s3.sa-east-1.amazonaws.com/products/", "https://ik.imagekit.io/e2ouoknyw/ProductTodoRec/");
+        
+        if(!getValues("images")) {
+          setValue("images", [imageKitURL], {
+            shouldValidate: true,
+          });
+        } else{
+          setValue("images", [...getValues("images"), imageKitURL], {
+            shouldValidate: true,
+          });
+        }
         setUnsavedChanges(true);
       }
     } catch (error) {
-      console.log(error);
+      console.log("error en catch selectFiles", error);
     }
   };
 
@@ -165,41 +169,29 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setValue("title", e.target.value, { shouldValidate: true });
-
-    if (product.title === getValues("title")) {
-      setUnsavedChanges(false);
-    } else {
-      setUnsavedChanges(true);
-    }
+// console.log("getvaluestitle", getValues("title"))
+    // if (getValues("title")) {
+    //   setUnsavedChanges(false);
+    // } else {
+    //   setUnsavedChanges(true);
+    // }
   };
-
-  function compareArrays(arr1: string[], arr2: string[]) {
-    if (arr1.length === arr2.length) {
-      return arr1.every(function (element, index) {
-        if (element === arr2[index]) {
-          setUnsavedChanges(false);
-        } else {
-          setUnsavedChanges(true);
-        }
-      });
-    } else {
-      return setUnsavedChanges(true);
-    }
-  }
 
   const onChangeColor = (color: string) => {
     const currentColors = getValues("colors");
-    if (currentColors.includes(color)) {
+    if(!currentColors){
+      setValue("colors", [color], { shouldValidate: true });  
+    }else {
+      setValue("colors", [...currentColors, color], { shouldValidate: true });  
+      
+      if (currentColors?.includes(color)) {
       setValue(
         "colors",
         currentColors.filter((c) => c !== color),
         { shouldValidate: true }
       );
-      return compareArrays(product.colors, getValues("colors"));
+      }
     }
-    setValue("colors", [...currentColors, color], { shouldValidate: true });
-
-    compareArrays(product.colors, getValues("colors"));
   };
 
   const onDeleteImage = async (image: string) => {
@@ -216,29 +208,28 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       getValues("images").filter((img) => img !== image),
       { shouldValidate: true }
     );
-
-    compareArrays(product.images, getValues("images"));
+    console.log("images de getValues despues del delete", getValues("images"))
   };
 
   const deleteUnsavedChanges = async () => {
     try {
       setUnsavedChanges(false);
-      const productName = product.title.replaceAll(" ", "-").toLowerCase();
+      const productName = getValues("title").replaceAll(" ", "-").toLowerCase();
 
       const { data } = await axios.post("/api/admin/getFiles", {
         name: productName,
         type: "products"
       });
 
-      const imagesInDB = product.images.map((oneImage) => {
-        return oneImage.replace(s3URL, "");
-      });
+      // const imagesInDB = product.images.map((oneImage) => {
+      //   return oneImage.replace(s3URL, "");
+      // });
 
-      const imagesInS3 = data.objects.filter(
-        (img: string) => !imagesInDB.includes(img)
-      );
+      // const imagesInS3 = data.objects.filter(
+      //   (img: string) => !imagesInDB.includes(img)
+      // );
 
-      await imagesInS3.map((eachImage: string) => {
+      await data.objects.map((eachImage: string) => {
         axios.post("/api/admin/deleteImageFromS3", {
           key: eachImage,
         });
@@ -260,15 +251,13 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
       setUnsavedChanges(false);
       const { data } = await axios({
         url: "/api/admin/products",
-        method: form._id ? "PUT" : "POST",
+        method: "POST",
         data: form,
       });
       router.replace("/admin/products");
-      if (!form._id) {
-        router.replace(`/admin/products/${form.title}`);
-      } else {
-        setIsSaving(false);
-      }
+      
+      setIsSaving(false);
+     
     } catch (error) {
       console.log(error);
       setIsSaving(false);
@@ -277,31 +266,20 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
 
   return (
     <MainLayout
-      title={product?.title || "new"}
+      title="new"
       metaHeader={
-        router.asPath === "/admin/products/new"
-          ? "Crear producto"
-          : "Editar producto"
+      "Crear Producto"
       }
     >
       {/*//@ts-ignore*/}
       <DynamicModalCancelChanges deleteUnsavedChanges={deleteUnsavedChanges} />
-
-      {router.asPath === "/admin/products/new" ? (
         <Box display="flex" justifyContent="flex-start" alignItems="center">
           <Typography variant="h1" sx={{ mr: 1 }}>
             Crear Producto
           </Typography>
           <BorderColorOutlined />
         </Box>
-      ) : (
-        <Box display="flex" justifyContent="flex-start" alignItems="center">
-          <Typography variant="h1" sx={{ mr: 1 }}>
-            Editar Producto
-          </Typography>
-          <BorderColorOutlined />
-        </Box>
-      )}
+      
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box display="flex" justifyContent="end" sx={{ mb: 1 }}>
           <Button
@@ -338,7 +316,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
               <FormLabel>Categoría</FormLabel>
               <RadioGroup
                 row
-                value={getValues("category")}
+                defaultValue="Polietileno"
                 onChange={(e) =>
                   setValue("category", e.target.value, { shouldValidate: true })
                 }
@@ -360,7 +338,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 <FormControlLabel
                   key={color}
                   control={
-                    <Checkbox checked={getValues("colors")?.includes(color)} />
+                    <Checkbox />
                   }
                   label={color}
                   onChange={() => onChangeColor(color)}
@@ -404,7 +382,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 color="error"
                 variant="outlined"
                 sx={{
-                  display: getValues("images")?.length < 1 ? "flex" : "none",
+                  display: !getValues("images") || getValues("images").length === 0 ? "flex" : "none",
                 }}
               />
               <Chip
@@ -413,7 +391,7 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                 variant="outlined"
                 sx={{
                   display:
-                    getValues("title")?.trim().length === 0 ? "flex" : "none",
+                    !getValues("title") ? "flex" : "none",
                 }}
               />
 
@@ -450,85 +428,5 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
     </MainLayout>
   );
 };
-//@ts-ignore
-export const getStaticPaths: GetStaticPaths = async ()=>{
-  try {
-    const products = await dbAllProductsByTitle.getAllProductsByTitle()
-    console.log("products en static path", products)
-  
-    return {
-      //@ts-ignore
-      paths: products.map((product) => {
-        return {params: {title: product.title}}
-      }),
-      
-      fallback: true
-    }
 
-  } catch(error) {
-    console.log("CATCH ERROR EN PATHS", error)
-    return {
-      paths: [{params: {title: "new"}}],
-      fallback: true
-
-    
-    }
-  }
-
-  //llamar a la db y traer todos los title de los productos
-  //mapear ese array con los title y retornar {params: title}
-  //fallback: true = new title
-}
-
-
-export const getStaticProps: GetStaticProps = async (ctx) => {
-  console.log("contexto", ctx)
-  let product: IProductSchema | null;
-
-  //@ts-ignore
-   product = await dbProducts.getProductByTitle(ctx.params.title.toString());
-  if (!product){
-    const tempProduct = JSON.parse(JSON.stringify(new Product()));
-      delete tempProduct._id;
-      // tempProduct.title = "new product"
-      // tempProduct.images = ["img1.jpg", "img2.jpg"];
-      product = tempProduct;
-  }
-  return {
-    props: {
-      product,
-    },
-    revalidate: 60
-  }
-
-
-
-  // const { title = "" } = query;
-
-  // let product: IProductSchema | null;
-
-  // if (title === "new") {
-  //   const tempProduct = JSON.parse(JSON.stringify(new Product()));
-  //   delete tempProduct._id;
-  //   product = tempProduct;
-  // } else {
-  //   product = await dbProducts.getProductByTitle(title.toString());
-  // }
-
-  // if (!product) {
-  //   return {
-  //     redirect: {
-  //       destination: "/admin/products",
-  //       permanent: false,
-  //     },
-  //   };
-  // }
-
-  // return {
-  //   props: {
-  //     product,
-  //   },
-  // };
-};
-
-export default ProductAdminPage;
+export default NewProductPage;

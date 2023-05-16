@@ -32,7 +32,7 @@ interface Props {
 
 export const TableComponent: FC<Props> = ({ data, typeS3, urlKit }) => {
   const [currentPage, setCurrentPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const router = useRouter();
 
@@ -132,7 +132,7 @@ export const TableComponent: FC<Props> = ({ data, typeS3, urlKit }) => {
                     return <TableCell key={i}>{row[eachKey]}</TableCell>
                   })}
                   {/* @ts-ignore */}
-                  <TableCell onClick={() => deleteButton(row.id, row.images)}>
+                  <TableCell>
                     <Button
                      //@ts-ignore
                       onClick={() => deleteButton(row.id, row.images)}
