@@ -17,6 +17,19 @@ type FormData = {
   email: string;
 };
 
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: { xs: 300, sm: 400 },
+  bgcolor: "#ffff",
+  border: "5px solid #008f39",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: "10px",
+};
+
 export const ModalSubscribe = () => {
   const { isModalOpen, toggleModalOpen } = useContext(UiContext);
 
@@ -60,18 +73,7 @@ export const ModalSubscribe = () => {
     <Modal open={isModalOpen} onClose={toggleModalOpen}>
       <form onSubmit={handleSubmit(onSubscribe)} noValidate>
         <Box
-          sx={{
-            position: "absolute" as "absolute",
-            top: "50%",
-            left: "50%",
-            Ptransform: "translate(-50%, -50%)",
-            width: { xs: 300, sm: 400 },
-            bgcolor: "#ffff",
-            border: "5px solid #008f39",
-            boxShadow: 24,
-            p: 4,
-            borderRadius: "10px",
-          }}
+          sx={style}
         >
           <CancelOutlined
             sx={{

@@ -6,6 +6,19 @@ import Typography from "@mui/material/Typography";
 import { UiContext } from "@/context";
 import CancelOutlined from "@mui/icons-material/CancelOutlined";
 
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: { xs: 300, sm: 400 },
+  bgcolor: "#ffff",
+  border: "5px solid #008f39",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: "10px",
+};
+
 interface Props {
   deleteUnsavedChanges: () => Promise<void>;
 }
@@ -18,18 +31,7 @@ export const ModalCancelChanges: FC<Props> = ({ deleteUnsavedChanges }) => {
     <>
       <Modal open={isModalCancelChange} onClose={toggleModalCancelChange}>
         <Box
-          sx={{
-            position: "absolute" as "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: { xs: 300, sm: 400 },
-            bgcolor: "#ffff",
-            border: "5px solid #008f39",
-            boxShadow: 24,
-            p: 4,
-            borderRadius: "10px",
-          }}
+          sx={style}
         >
           <CancelOutlined
             sx={{
