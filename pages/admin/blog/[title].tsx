@@ -119,7 +119,7 @@ const BlogAdminPage: FC<Props> = ({ blog }) => {
 
       formData.append(
         "type",
-        `blog/${getValues("title")?.replaceAll(" ", "-").toLowerCase()}`
+        `blog/${getValues("title").replaceAll(" ", "-").toLowerCase()}`
       );
 
       for (let i = 0; i < e.target.files.length; i++) {
