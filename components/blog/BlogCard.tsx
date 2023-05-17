@@ -88,7 +88,7 @@ export const BlogCard: FC<Props> = ({ blog, getImageUrl }) => {
         />
         <CardContent>
           <Typography variant="body2" color="text.secondary">
-            {blog.description}
+            {blog.info}
           </Typography>
         </CardContent>
 
@@ -111,7 +111,7 @@ export const BlogCard: FC<Props> = ({ blog, getImageUrl }) => {
 
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph>{blog.info}</Typography>
+            <Typography paragraph>{blog.description}</Typography>
           </CardContent>
         </Collapse>
       </Card>
