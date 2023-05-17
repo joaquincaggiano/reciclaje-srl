@@ -13,6 +13,7 @@ import CategoryOutlined from "@mui/icons-material/CategoryOutlined";
 import GroupOutlined from "@mui/icons-material/GroupOutlined";
 import NewspaperOutlined from "@mui/icons-material/NewspaperOutlined";
 import PrecisionManufacturing from "@mui/icons-material/PrecisionManufacturing";
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -61,6 +62,17 @@ export const SideMenu = () => {
               <Divider />
             </>
           )}
+          <ListItem
+            button
+            sx={{ display: { xs: "flex", md: "none" } }}
+            onClick={() => navigateTo("/")}
+          >
+            <ListItemIcon>
+              <HomeOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Inicio"} />
+          </ListItem>
+
           <ListItem
             button
             sx={{ display: { xs: "flex", md: "none" } }}
