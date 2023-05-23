@@ -1,6 +1,5 @@
 import { NextPage } from "next";
 import NextLink from "next/link";
-import dynamic from 'next/dynamic'
 import { content } from "../../utils";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
@@ -11,10 +10,6 @@ import EmailOutlined from "@mui/icons-material/EmailOutlined";
 import LocalPhoneOutlined from "@mui/icons-material/LocalPhoneOutlined";
 
 import {MainLayout} from '../../components/layouts'
-
-const DynamicMainLayout = dynamic(() =>
-  import("../../components/layouts").then((mod) => mod.MainLayout)
-);
 
 const ContactPage: NextPage = () => {
   return (

@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useReducer } from "react";
+import { FC, PropsWithChildren, useReducer, useState } from "react";
 import { UiContext, uiReducer } from "./";
 
 export interface UiState {
@@ -15,6 +15,7 @@ const UI_INITIAL_STATE: UiState = {
 
 export const UiProvider: FC<PropsWithChildren> = ({ children }) => {
   const [state, dispatch] = useReducer(uiReducer, UI_INITIAL_STATE);
+  const [loading, setLoading] = useState(true)
 
   const toggleSideMenu = () => {
     dispatch({ type: "[UI] - ToggleMenu" });
@@ -28,6 +29,8 @@ export const UiProvider: FC<PropsWithChildren> = ({ children }) => {
     dispatch({ type: "[UI] - ToggleModalCancelChange" });
   };
 
+ 
+
   return (
     <UiContext.Provider
       value={{
@@ -36,7 +39,8 @@ export const UiProvider: FC<PropsWithChildren> = ({ children }) => {
         // Methods
         toggleSideMenu,
         toggleModalOpen,
-        toggleModalCancelChange
+        toggleModalCancelChange,
+        
       }}
     >
       {children}

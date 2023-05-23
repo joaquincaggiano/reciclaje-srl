@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, Suspense } from "react";
 import dynamic from "next/dynamic";
 import { useContext } from "react";
 import { UiContext } from "@/context";
@@ -12,14 +12,15 @@ import IconButton from "@mui/material/IconButton";
 import EmailOutlined from "@mui/icons-material/EmailOutlined";
 import { content } from "@/utils";
 import { Box } from "@mui/material";
+import { FullScreenLoading } from "../ui";
 
-const DynamicNavbar = dynamic(() => import("../ui").then((mod) => mod.Navbar));
+const DynamicNavbar = dynamic(() => import("../ui").then((mod) => mod.Navbar), {suspense: true});
 const DynamicSideMenu = dynamic(() =>
-  import("../ui").then((mod) => mod.SideMenu)
+  import("../ui").then((mod) => mod.SideMenu), {suspense: true}
 );
-const DynamicFooter = dynamic(() => import("../ui").then((mod) => mod.Footer));
+const DynamicFooter = dynamic(() => import("../ui").then((mod) => mod.Footer), {suspense: true});
 const DynamicModalSubscribe = dynamic(() =>
-  import("../../components/mailchimp").then((mod) => mod.ModalSubscribe)
+  import("../../components/mailchimp").then((mod) => mod.ModalSubscribe), {suspense: true}
 );
 
 interface Props {
@@ -66,7 +67,10 @@ export const MainLayout: FC<Props> = ({
         }}
       >
         <DynamicModalSubscribe />
+        <Suspense fallback={<FullScreenLoading />}>
+       
         {children}
+        </Suspense>
 
         <Box
           display="flex"
@@ -85,10 +89,6 @@ export const MainLayout: FC<Props> = ({
           <IconButton
             sx={{
               border: "1px solid #008f39",
-              // zIndex: "10000000000",
-              // position: "fixed",
-              // top: "73%",
-              // left: { xs: "77%", sm: "88%", md: "91%", lg: "93%", xl: "95.4%" },
               "&:hover": { backgroundColor: "#008f39" },
             }}
             onClick={toggleModalOpen}
@@ -102,16 +102,7 @@ export const MainLayout: FC<Props> = ({
             />
           </IconButton>
 
-          <IconButton
-            sx={
-              {
-                // position: "fixed",
-                // top: { xs: "65%", xl: "63%" },
-                // left: { xs: "75%", sm: "87%", md: "90%", lg: "92.2%", xl: "95%" },
-                // zIndex: "10000000000",
-              }
-            }
-          >
+          <IconButton>
             <NextLink
               href={`https://wa.me/${content.contact.datosContacto.whatsapp}`}
               passHref

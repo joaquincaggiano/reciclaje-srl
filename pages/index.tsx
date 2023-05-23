@@ -5,11 +5,11 @@ import dynamic from "next/dynamic";
 
 // import { useServices } from "@/hooks/useServices";
 
-// import {MainLayout} from '../components/layouts'
+import {MainLayout} from '../components/layouts'
 
-const DynamicMainLayout = dynamic(() =>
-  import("../components/layouts").then((mod) => mod.MainLayout)
-);
+// const DynamicMainLayout = dynamic(() =>
+//   import("../components/layouts").then((mod) => mod.MainLayout)
+// );
 const DynamicCardServicesHome = dynamic(() =>
   import("../components/services").then((mod) => mod.CardServicesHome)
 );
@@ -70,7 +70,7 @@ const HomePage: NextPage = () => {
   }
 
   return (
-    <DynamicMainLayout
+    <MainLayout
       title={content.home.title}
       metaHeader={content.home.metaHeader}
     >
@@ -150,7 +150,7 @@ const HomePage: NextPage = () => {
         height="450"
         loading="lazy"
       ></iframe>
-    </DynamicMainLayout>
+    </MainLayout>
   );
 };
 

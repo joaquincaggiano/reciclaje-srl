@@ -10,10 +10,6 @@ import Typography  from "@mui/material/Typography";
 
 import {MainLayout} from '../../components/layouts'
 
-const DynamicMainLayout = dynamic(() =>
-  import("../../components/layouts").then((mod) => mod.MainLayout)
-);
-
 const AboutUsPage: NextPage = () => {
   const lines = content.aboutUs.description.split("\n").map((line, index) => (
     <div key={index} className="MuiTypography-gutterBottom">
